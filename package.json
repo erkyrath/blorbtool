@@ -1,0 +1,19 @@
+{
+  "name": "blorbtool",
+  "version": "0.0.1",
+  "description": "BlorbTool: interactive in-browser Blorb editing",
+  "author": "Andrew Plotkin <erkyrath@eblong.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/erkyrath/blorbtool/issues"
+  },
+  "homepage": "https://github.com/erkyrath/blorbtool",
+  "dependencies": {
+    "react": "^18.3",
+    "react-dom": "^18.3",
+    "typescript": "^5.7"
+  },
+  "devDependencies": {
+    "@types/node": "^22.10.1"
+  }
+}
