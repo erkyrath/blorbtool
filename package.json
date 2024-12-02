@@ -10,10 +10,10 @@
   "homepage": "https://github.com/erkyrath/blorbtool",
   "dependencies": {
     "react": "^18.3",
-    "react-dom": "^18.3",
-    "typescript": "^5.7"
+    "react-dom": "^18.3"
   },
   "devDependencies": {
+    "typescript": "^5.7",
     "@types/node": "^22.10.1"
   }
 }
