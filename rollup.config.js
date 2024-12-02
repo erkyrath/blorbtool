@@ -1,3 +1,5 @@
+import terser from '@rollup/plugin-terser';
+
 export default {
     input: 'lib/test.js',
     output: {
@@ -5,5 +7,8 @@ export default {
         name: 'bundle',
         format: 'iife'
     },
+    plugins: [
+        terser()
+    ]
 }
 
