@@ -1,4 +1,4 @@
-import { getuser } from './thing.js';
+import { getuser } from './thing';
 
 function greeter(person: string) {
   return "Hello, " + person;
