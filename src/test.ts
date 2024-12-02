@@ -5,6 +5,6 @@ function greeter(person: string) {
 }
 
 export function init() {
-    let user = getuser();
+    let user: string = getuser();
     document.body.textContent = greeter(user);
 }

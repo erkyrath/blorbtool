@@ -1,6 +1,6 @@
 let user = "Jane User";
 
-export function getuser() {
+export function getuser(): string {
     return user;
 }
 
