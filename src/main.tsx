@@ -2,6 +2,8 @@ import React from 'react';
 import { useState, useReducer } from 'react';
 import { Root, createRoot } from 'react-dom/client';
 
+import { parse_blorb } from './parseblorb';
+
 let root: Root|null = null;
 
 export function init()
