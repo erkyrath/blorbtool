@@ -6,8 +6,7 @@ let root: Root|null = null;
 
 export function init()
 {
-    document.body.innerHTML = '<div id="app"></div>';
-    const appel = document.getElementById('app') as HTMLElement;
+    const appel = document.getElementById('appbody') as HTMLElement;
     root = createRoot(appel);
     if (root)
         root.render( <MyApp /> );
