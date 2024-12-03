@@ -3,6 +3,9 @@ import { nodeResolve } from '@rollup/plugin-node-resolve';
 import replace from '@rollup/plugin-replace';
 import terser from '@rollup/plugin-terser';
 
+const release = false;
+const nodeenv = (release ? 'production' : 'development')
+
 export default {
     input: 'lib/main.js',
     output: {
@@ -13,11 +16,11 @@ export default {
     plugins: [
         replace({
             'preventAssignment': true,
-            'process.env.NODE_ENV': JSON.stringify('production')
+            'process.env.NODE_ENV': JSON.stringify(nodeenv)
         }),
         commonjs(),
         nodeResolve(),
-        //terser()
+        (release ? terser() : null),
     ]
 }
 
