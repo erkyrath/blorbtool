@@ -4,6 +4,9 @@
   "description": "BlorbTool: interactive in-browser Blorb editing",
   "author": "Andrew Plotkin <erkyrath@eblong.com>",
   "license": "MIT",
+  "scripts": {
+    "build": "npx tsc && npx rollup -c"
+  },
   "bugs": {
     "url": "https://github.com/erkyrath/blorbtool/issues"
   },
