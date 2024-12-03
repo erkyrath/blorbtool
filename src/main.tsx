@@ -23,19 +23,24 @@ function MyApp()
         { title: 'Apple', id: 3 },
     ];
     
-    const [count, setCount] = useState(1);
+    const [count, setCount] = useState(1+initialProducts.length);
     const [products, dispProducts] = useReducer(reduceProducts, initialProducts);
 
     function handleButtonClick()
     {
-        setCount(count + 1);
-        dispProducts({ type:'add', product:{ title:'Thing', id:count+11 } });
+        dispProducts({ type:'add', product:{ title:'Thing', id:count } });
+        setCount(count+1);
+    }
+    function handleDelClick()
+    {
+        dispProducts({ type:'del', index:0 });
     }
 
     return (
         <div>
             <h1>Welcome to my app</h1>
-            <MyButton count={ count } onClick={ handleButtonClick } />
+            <AddButton count={ count } onClick={ handleButtonClick } />
+            <DelButton onClick={ handleDelClick } />
             <MyList ls={ products } />
         </div>
     );
@@ -46,15 +51,29 @@ function reduceProducts(products:Product[], act:any) : Product[]
     if (act.type == 'add') {
         return [ ...products, act.product ];
     }
+    if (act.type == 'del') {
+        let ls = [ ...products ];
+        ls.splice(act.index, 1);
+        return ls;
+    }
     
     return products;
 }
 
-function MyButton({ count, onClick } : { count:number, onClick:MouseEv } )
+function AddButton({ count, onClick } : { count:number, onClick:MouseEv } )
 {
     return (
         <button className="Button" onClick={ onClick }>
-            Counter: { count }
+            Add product { count }
+        </button>
+    );
+}
+
+function DelButton({ onClick } : { onClick:MouseEv } )
+{
+    return (
+        <button className="Button" onClick={ onClick }>
+            Del first product
         </button>
     );
 }
