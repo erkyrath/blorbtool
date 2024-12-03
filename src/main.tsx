@@ -1,5 +1,5 @@
 import React from 'react';
-import { useState } from 'react';
+import { useState, useReducer } from 'react';
 import { Root, createRoot } from 'react-dom/client';
 
 let root: Root|null = null;
@@ -24,12 +24,12 @@ function MyApp()
     ];
     
     const [count, setCount] = useState(1);
-    const [products, setProducts] = useState(initialProducts);
+    const [products, dispProducts] = useReducer(reduceProducts, initialProducts);
 
     function handleButtonClick()
     {
         setCount(count + 1);
-        setProducts([ ...products, { title:'Thing', id:count+11 } ]);
+        dispProducts({ type:'add', product:{ title:'Thing', id:count+11 } });
     }
 
     return (
@@ -41,7 +41,14 @@ function MyApp()
     );
 }
 
-type MouseEv = React.MouseEventHandler<HTMLButtonElement>;
+function reduceProducts(products:Product[], act:any) : Product[]
+{
+    if (act.type == 'add') {
+        return [ ...products, act.product ];
+    }
+    
+    return products;
+}
 
 function MyButton({ count, onClick } : { count:number, onClick:MouseEv } )
 {
@@ -66,3 +73,6 @@ function MyList({ ls } : { ls:Product[] } )
         </ul>
     );
 }
+
+type MouseEv = React.MouseEventHandler<HTMLButtonElement>;
+
