@@ -36,12 +36,12 @@ function MyApp()
     }
 
     return (
-        <div>
+        <>
             <h1>Welcome to my app</h1>
             <AddButton count={ count } onClick={ handleButtonClick } />
             <DelButton onClick={ handleDelClick } />
             <MyList ls={ products } />
-        </div>
+        </>
     );
 }
 
