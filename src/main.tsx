@@ -13,21 +13,30 @@ export function init()
         root.render( <MyApp /> );
 }
 
+type Product = { title:string, id:number };
+
 function MyApp()
 {
-    const [count, setCount] = useState(1);
+    const initialProducts = [
+        { title: 'Cabbage', id: 1 },
+        { title: 'Garlic', id: 2 },
+        { title: 'Apple', id: 3 },
+    ];
     
+    const [count, setCount] = useState(1);
+    const [products, setProducts] = useState(initialProducts);
+
     function handleButtonClick()
     {
-        console.log('### click');
         setCount(count + 1);
+        setProducts([ ...products, { title:'Thing', id:count+11 } ]);
     }
 
     return (
         <div>
             <h1>Welcome to my app</h1>
             <MyButton count={ count } onClick={ handleButtonClick } />
-            <MyList />
+            <MyList ls={ products } />
         </div>
     );
 }
@@ -43,15 +52,9 @@ function MyButton({ count, onClick } : { count:number, onClick:MouseEv } )
     );
 }
 
-const products = [
-    { title: 'Cabbage', id: 1 },
-    { title: 'Garlic', id: 2 },
-    { title: 'Apple', id: 3 },
-];
-
-function MyList()
+function MyList({ ls } : { ls:Product[] } )
 {
-    const ells = products.map(product =>
+    const ells = ls.map(product =>
         <li key={ product.id }>
             <em>{ product.id }</em>: { product.title }
         </li>
