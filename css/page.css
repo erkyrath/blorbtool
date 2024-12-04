@@ -43,6 +43,19 @@ body {
     font-size: 85%;
 }
 
+.BlorbInfo {
+    margin: 16px 8px;
+}
+
+.BlorbInfo .BlorbTitle {
+    font-size: 110%;
+}
+
+.BlorbInfo .BlorbGloss {
+    text-align: right;
+    font-size: 85%;
+}
+
 .DisplayCol {
     position: absolute;
     left: 33%;
