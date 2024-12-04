@@ -20,6 +20,27 @@ body {
     box-sizing: border-box;
 }
 
+.ChunkList li {
+    background: white;
+    margin-top: 8px;
+    margin-bottom: 8px;
+    padding: 4px 8px;
+}
+
+.ChunkList li.Selected {
+    background: #78F;
+    color: white;
+}
+
+.ChunkList .ChunkTitle {
+    font-size: 125%;
+}
+
+.ChunkList .ChunkGloss {
+    float: right;
+    font-size: 85%;
+}
+
 .DisplayCol {
     position: absolute;
     left: 33%;
@@ -35,3 +56,10 @@ body {
     margin: 0px;
     padding: 0px;
 }
+
+code.IType {
+    background: #00008811;
+    white-space: pre;
+    padding: 1px 2px;
+}
+
