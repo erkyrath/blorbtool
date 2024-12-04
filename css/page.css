@@ -1,6 +1,7 @@
 
 body {
     margin: 0px;
+    font-family: "Merriweather";
 }
 
 #appbody {
@@ -34,7 +35,7 @@ body {
 }
 
 .ChunkList .ChunkTitle {
-    font-size: 125%;
+    font-size: 110%;
 }
 
 .ChunkList .ChunkGloss {
