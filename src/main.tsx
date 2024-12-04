@@ -2,7 +2,7 @@ import React from 'react';
 import { useState, useReducer } from 'react';
 import { Root, createRoot } from 'react-dom/client';
 
-import { Chunk, Blorb, new_blorb } from './parseblorb';
+import { Chunk, Blorb, new_blorb } from './blorb';
 import { parse_blorb } from './parseblorb';
 
 let initialBlorb: Blorb|undefined;
