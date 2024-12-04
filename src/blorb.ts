@@ -1,22 +1,11 @@
 import { u8ToString, stringToU8 } from './datutil';
 
-let keycounter = 0;
-
-export type Chunk = {
-    // unique identifier for this chunk -- internal use only
-    reactkey: number, 
-    
+export type ChunkType = {
     stype: string, // four characters
     utype: Uint8Array, // four bytes
-    isform: boolean, // true if stype is 'FORM'
+}
 
-    data: Uint8Array,
-
-    // The pos is recomputed every time the blorb updates.
-    pos: number,
-};
-
-export function new_chunk(type:string|Uint8Array, data:Uint8Array) : Chunk
+function make_chunk_type(type:string|Uint8Array) : ChunkType
 {
     let stype: string;
     let utype: Uint8Array;
@@ -30,11 +19,32 @@ export function new_chunk(type:string|Uint8Array, data:Uint8Array) : Chunk
         stype = u8ToString(type);
     }
 
+    return { stype:stype, utype:utype };
+}
+
+let keycounter = 0;
+
+export type Chunk = {
+    // unique identifier for this chunk -- internal use only
+    reactkey: number, 
+
+    type: ChunkType,
+    isform: boolean, // true if stype is 'FORM'
+
+    data: Uint8Array,
+
+    // The pos is recomputed every time the blorb updates.
+    pos: number,
+};
+
+export function new_chunk(type:string|Uint8Array, data:Uint8Array) : Chunk
+{
+    let ctype = make_chunk_type(type);
+    
     return {
         reactkey: keycounter++,
-        stype: stype,
-        utype: utype,
-        isform: (stype==='FORM'),
+        type: ctype,
+        isform: (ctype.stype==='FORM'),
         data: data,
         pos: 0,
     }
@@ -47,7 +57,7 @@ export function chunk_readable_desc(chunk: Chunk) : string
 	return 'Unrecognized form chunk';
     }
     
-    switch (chunk.stype) {
+    switch (chunk.type.stype) {
     case 'RIdx': return 'Resource index';
     case 'IFmd': return 'Metadata';
     case 'JPEG': return 'Image \u2013 JPEG';
@@ -80,7 +90,7 @@ export function blorb_recompute_positions(blorb: Blorb) : Blorb
         return blorb;
 
     let ridx = blorb.chunks[0];
-    if (ridx.stype != 'RIdx') {
+    if (ridx.type.stype != 'RIdx') {
         console.log('### first chunk is not an index');
         return blorb;
     }
