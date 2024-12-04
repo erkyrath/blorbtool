@@ -37,6 +37,21 @@ export type Chunk = {
     pos: number,
 };
 
+type ChunkResIndex = {
+    // unique identifier for this chunk -- internal use only
+    reactkey: number, 
+
+    type: ChunkType,
+    formtype: ChunkType|undefined, // set if type is 'FORM'
+
+    data: Uint8Array,
+
+    // The pos is recomputed every time the blorb updates.
+    pos: number,
+
+    flag: boolean;
+};
+
 export function new_chunk(type:string|Uint8Array, data:Uint8Array) : Chunk
 {
     let ctype = make_chunk_type(type);
@@ -111,7 +126,7 @@ export function chunk_readable_desc(chunk: Chunk) : string
 
 export type Blorb = {
     filename: string|undefined;
-    chunks: Chunk[];
+    chunks: ReadonlyArray<Chunk>;
     totallen: number;
 };
 
@@ -136,7 +151,7 @@ export function blorb_recompute_positions(blorb: Blorb) : Blorb
     }
 
     let pos = 12;
-    let newls = [];
+    let newls: Chunk[] = [];
     for (let chunk of blorb.chunks) {
         if (chunk.pos == pos) {
             newls.push(chunk);

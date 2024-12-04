@@ -69,7 +69,7 @@ export function parse_blorb(dat: Uint8Array, filename?: string) : Blorb
 
     let blorb = {
         filename: filename,
-        chunks: chunks,
+        chunks: (chunks as ReadonlyArray<Chunk>),
         totallen: pos,
     };
     blorb = blorb_recompute_positions(blorb);
