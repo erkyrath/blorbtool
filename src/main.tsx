@@ -3,6 +3,7 @@ import { useState, useReducer } from 'react';
 import { Root, createRoot } from 'react-dom/client';
 
 import { Chunk, Blorb, new_blorb } from './blorb';
+import { chunk_readable_desc } from './blorb';
 import { parse_blorb } from './parseblorb';
 import { pretty_size } from './readable';
 
@@ -54,7 +55,7 @@ function ChunkListEntry(chunk: Chunk, blorb: Blorb)
 {
     return (
         <li key={ chunk.reactkey }>
-            <div className="ChunkTitle">###CHUNK</div>
+            <div className="ChunkTitle">{ chunk_readable_desc(chunk) }</div>
 	        <div className="ChunkGloss">{ pretty_size(chunk.data.length) }</div>
             <div className="ChunkType">
                 <code className="IType">{ chunk.stype }</code>

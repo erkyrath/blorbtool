@@ -40,6 +40,25 @@ export function new_chunk(type:string|Uint8Array, data:Uint8Array) : Chunk
     }
 }
 
+export function chunk_readable_desc(chunk: Chunk) : string
+{
+    if (chunk.isform) {
+	//###
+	return 'Unrecognized form chunk';
+    }
+    
+    switch (chunk.stype) {
+    case 'RIdx': return 'Resource index';
+    case 'IFmd': return 'Metadata';
+    case 'JPEG': return 'Image \u2013 JPEG';
+    case 'PNG ': return 'Image \u2013 PNG';
+    case 'GLUL': return 'Game file \u2013 Glulx';
+    }
+    
+    return 'Unrecognized chunk';
+}
+
+
 export type Blorb = {
     filename: string|undefined;
     chunks: Chunk[];
