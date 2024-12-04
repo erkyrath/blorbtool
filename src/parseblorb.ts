@@ -81,10 +81,19 @@ export function parse_blorb(dat: Uint8Array) : Blorb
             break;
         }
 
-        let cdat = dat.slice(pos, pos+clen);
-        console.log('###', ctype, clen, pos-8);
+        let chunk: Chunk;
+        if (ctype == 'FORM') {
+            let formtype = u8ToString(dat, pos, 4);
+            let cdat = dat.slice(pos-8, pos+clen);
+            console.log('###', ctype, formtype, clen+'+8', pos-8);
+            chunk = new_chunk(uctype, cdat);
+        }
+        else {
+            let cdat = dat.slice(pos, pos+clen);
+            console.log('###', ctype, clen, pos-8);
+            chunk = new_chunk(uctype, cdat);
+        }
 
-        let chunk = new_chunk(uctype, cdat);
         chunks.push(chunk);
 
         pos += clen;
