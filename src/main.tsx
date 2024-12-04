@@ -59,7 +59,7 @@ function ChunkListEntry(chunk: Chunk, blorb: Blorb)
                 <code className="IType">{ chunk.stype }</code>
                 { chunk.isform ? (
                     <>
-                        &nbsp;(<code className="IType">ABCD</code> 999)
+                        {' '}(<code className="IType">ABCD</code> 999)
                     </>
                 ) : null }
             </div>
