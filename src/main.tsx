@@ -53,7 +53,7 @@ function MyApp()
 function ChunkListEntry(chunk: Chunk, blorb: Blorb)
 {
     return (
-        <li>
+        <li key={ chunk.reactkey }>
             <div className="ChunkTitle">###CHUNK</div>
 	        <div className="ChunkGloss">{ pretty_size(chunk.data.length) }</div>
             <div className="ChunkType">
