@@ -5,7 +5,7 @@ function stringToU8(str: string) : Uint8Array
 }
 
 function u8ToString(arr: Uint8Array,
-    pos: number|undefined, len: number|undefined) : string
+    pos?: number, len?: number) : string
 {
     if (pos !== undefined || len !== undefined) {
         let rpos = pos || 0;
@@ -28,6 +28,27 @@ type Chunk = {
     
     data: Uint8Array,
 };
+
+function new_chunk(type:string|Uint8Array, data:Uint8Array) : Chunk
+{
+    let stype: string;
+    let utype: Uint8Array;
+    
+    if (typeof type === 'string') {
+        stype = type;
+        utype = stringToU8(type);
+    }
+    else {
+        utype = type;
+        stype = u8ToString(type);
+    }
+
+    return {
+        stype: stype,
+        utype: utype,
+        data: data,
+    }
+}
 
 type Blorb = {
     chunks: Chunk[];
@@ -72,7 +93,8 @@ export function parse_blorb(dat: Uint8Array) : Blorb
             console.log('### Blorb data looks truncated');
             break;
         }
-        let ctype = u8ToString(dat, pos, 4);
+        let uctype = dat.slice(pos, pos+4);
+        let ctype = u8ToString(uctype);
         let clen = u8read4(dat, pos+4);
         pos += 8;
 
@@ -84,12 +106,15 @@ export function parse_blorb(dat: Uint8Array) : Blorb
         let cdat = dat.slice(pos, pos+clen);
         console.log('###', ctype, clen, pos-8);
 
+        let chunk = new_chunk(uctype, cdat);
+        chunks.push(chunk);
+
         pos += clen;
         if (pos & 1)
             pos++;
     }
 
-    let blorb = { chunks: [] };
+    let blorb = { chunks: chunks };
     console.log('### blorb:', blorb);
     return blorb;
 }
