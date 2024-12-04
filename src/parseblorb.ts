@@ -153,6 +153,16 @@ export function parse_blorb(dat: Uint8Array) : Blorb
     let blorb = { chunks:chunks, totallen:pos };
     blorb = blorb_recompute_positions(blorb);
 
+    for (let chunk of blorb.chunks) {
+        let pos = origposmap.get(chunk.reactkey);
+        if (pos != chunk.pos) {
+            console.log('### chunk position was wrong');
+        }
+    }
+    if (blorb.totallen != len) {
+        console.log('### inconsistent blorb length');
+    }
+
     return blorb;
 }
 
