@@ -24,3 +24,32 @@
     font-weight: bold;
     src: url("../font/Merriweather-BoldItalic.ttf") format("truetype");
 }
+
+
+@font-face {
+    font-family: "Source Code Pro";
+    font-weight: normal;
+    font-style: normal;
+    src: url("../font/SourceCodePro-Regular.ttf") format("truetype");
+}
+
+@font-face {
+    font-family: "Source Code Pro";
+    font-weight: bold;
+    font-style: normal;
+    src: url("../font/SourceCodePro-Bold.ttf") format("truetype");
+}
+
+@font-face {
+    font-family: "Source Code Pro";
+    font-weight: normal;
+    font-style: italic;
+    src: url("../font/SourceCodePro-Italic.ttf") format("truetype");
+}
+
+@font-face {
+    font-family: "Source Code Pro";
+    font-weight: bold;
+    font-style: italic;
+    src: url("../font/SourceCodePro-BoldItalic.ttf") format("truetype");
+}

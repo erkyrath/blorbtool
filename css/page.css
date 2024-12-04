@@ -71,6 +71,10 @@ body {
     padding: 0px;
 }
 
+code {
+    font-family: "Source Code Pro";
+}
+
 code.IType {
     background: #00008811;
     white-space: pre;
