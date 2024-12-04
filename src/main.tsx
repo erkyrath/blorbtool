@@ -38,7 +38,7 @@ function MyApp()
                 <div className="BlorbInfo">
                     <div className="BlorbTitle">{ blorb.filename || '(untitled)' }</div>
                     <div className="BlorbGloss">
-                    { blorb.chunks.length } chunks, { blorb.totallen } bytes</div>
+                    { blorb.chunks.length } chunks, { pretty_size(blorb.totallen) }</div>
                 </div>
                 <ul className="ChunkList">
                     { chunkls }
