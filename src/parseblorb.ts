@@ -41,13 +41,18 @@ function new_chunk(type:string|Uint8Array, data:Uint8Array) : Chunk
 }
 
 type Blorb = {
+    filename: string|undefined;
     chunks: Chunk[];
     totallen: number;
 };
 
 export function new_blorb() : Blorb
 {
-    return { chunks: [], totallen: 0 };
+    return {
+        filename: undefined,
+        chunks: [],
+        totallen: 0,
+    };
 }
 
 function blorb_recompute_positions(blorb: Blorb) : Blorb
@@ -83,7 +88,7 @@ function blorb_recompute_positions(blorb: Blorb) : Blorb
     return { ...blorb, chunks:newls, totallen:pos };
 }
 
-export function parse_blorb(dat: Uint8Array) : Blorb
+export function parse_blorb(dat: Uint8Array, filename?: string) : Blorb
 {
     let pos = 0;
     const len = dat.length;
@@ -150,7 +155,11 @@ export function parse_blorb(dat: Uint8Array) : Blorb
             pos++;
     }
 
-    let blorb = { chunks:chunks, totallen:pos };
+    let blorb = {
+        filename: filename,
+        chunks: chunks,
+        totallen: pos,
+    };
     blorb = blorb_recompute_positions(blorb);
 
     for (let chunk of blorb.chunks) {
