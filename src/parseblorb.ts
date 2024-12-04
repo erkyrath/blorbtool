@@ -1,6 +1,10 @@
 import { u8ToString, u8read4, stringToU8 } from './datutil';
 
+let keycounter = 0;
+
 type Chunk = {
+    reactkey: number,
+    
     stype: string, // [4]
     utype: Uint8Array, // [4]
     
@@ -22,6 +26,7 @@ function new_chunk(type:string|Uint8Array, data:Uint8Array) : Chunk
     }
 
     return {
+        reactkey: keycounter++,
         stype: stype,
         utype: utype,
         data: data,
