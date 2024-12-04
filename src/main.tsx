@@ -4,6 +4,7 @@ import { Root, createRoot } from 'react-dom/client';
 
 import { Chunk, Blorb, new_blorb } from './blorb';
 import { parse_blorb } from './parseblorb';
+import { pretty_size } from './readable';
 
 let initialBlorb: Blorb|undefined;
 
@@ -54,7 +55,7 @@ function ChunkListEntry(chunk: Chunk, blorb: Blorb)
     return (
         <li>
             <div className="ChunkTitle">###CHUNK</div>
-	        <div className="ChunkGloss">{ chunk.data.length } bytes</div>
+	        <div className="ChunkGloss">{ pretty_size(chunk.data.length) }</div>
             <div className="ChunkType">
                 <code className="IType">{ chunk.stype }</code>
                 { chunk.isform ? (
