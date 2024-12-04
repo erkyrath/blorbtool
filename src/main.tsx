@@ -58,12 +58,10 @@ function ChunkListEntry(chunk: Chunk, blorb: Blorb)
             <div className="ChunkTitle">{ chunk_readable_desc(chunk) }</div>
             <div className="ChunkGloss">{ pretty_size(chunk.data.length) }</div>
             <div className="ChunkType">
-                <code className="IType">{ chunk.type.stype }</code>
-                { chunk.formtype ? (
-                    <>
-                        /<code className="IType">{ chunk.formtype.stype }</code>
-                    </>
-                ) : null }
+                <code className="IType">
+                    { chunk.type.stype }
+                    { chunk.formtype ? ('/'+chunk.formtype.stype) : '' }
+                </code>
             </div>
         </li>
     );
