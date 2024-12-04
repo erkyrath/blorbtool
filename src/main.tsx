@@ -41,13 +41,16 @@ function MyApp()
 
     return (
         <>
-            <h1>Welcome to my app</h1>
-            <AddButton count={ count } onClick={ handleButtonClick } />
-            <DelButton onClick={ handleDelClick } />
-            <MyList ls={ products } />
+            <div className="IndexCol">
+            </div>
+            <div className="DisplayCol">
+            </div>
         </>
     );
 }
+
+
+//####...
 
 function reduceProducts(products:Product[], act:any) : Product[]
 {
