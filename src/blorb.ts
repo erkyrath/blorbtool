@@ -53,8 +53,8 @@ export function new_chunk(type:string|Uint8Array, data:Uint8Array) : Chunk
 export function chunk_readable_desc(chunk: Chunk) : string
 {
     if (chunk.isform) {
-	//###
-	return 'Unrecognized form chunk';
+        //###
+        return 'Unrecognized form chunk';
     }
     
     switch (chunk.type.stype) {

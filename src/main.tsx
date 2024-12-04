@@ -56,7 +56,7 @@ function ChunkListEntry(chunk: Chunk, blorb: Blorb)
     return (
         <li key={ chunk.reactkey }>
             <div className="ChunkTitle">{ chunk_readable_desc(chunk) }</div>
-	        <div className="ChunkGloss">{ pretty_size(chunk.data.length) }</div>
+            <div className="ChunkGloss">{ pretty_size(chunk.data.length) }</div>
             <div className="ChunkType">
                 <code className="IType">{ chunk.type.stype }</code>
                 { chunk.isform ? (
