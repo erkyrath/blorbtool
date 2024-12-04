@@ -29,7 +29,7 @@ export type Chunk = {
     reactkey: number, 
 
     type: ChunkType,
-    isform: boolean, // true if stype is 'FORM'
+    formtype: ChunkType|undefined, // set if type is 'FORM'
 
     data: Uint8Array,
 
@@ -41,10 +41,15 @@ export function new_chunk(type:string|Uint8Array, data:Uint8Array) : Chunk
 {
     let ctype = make_chunk_type(type);
     
+    let formtype: ChunkType|undefined;
+    if (ctype.stype === 'FORM') {
+        formtype = make_chunk_type(data.slice(8, 12));
+    }
+    
     return {
         reactkey: keycounter++,
         type: ctype,
-        isform: (ctype.stype==='FORM'),
+        formtype: formtype,
         data: data,
         pos: 0,
     }
@@ -52,8 +57,10 @@ export function new_chunk(type:string|Uint8Array, data:Uint8Array) : Chunk
 
 export function chunk_readable_desc(chunk: Chunk) : string
 {
-    if (chunk.isform) {
-        //###
+    if (chunk.formtype) {
+        switch (chunk.formtype.stype) {
+        case 'AIFF': return 'Audio \u2013 AIFF';
+        }
         return 'Unrecognized form chunk';
     }
     
@@ -105,7 +112,7 @@ export function blorb_recompute_positions(blorb: Blorb) : Blorb
             let newchunk = { ...chunk, pos:pos };
             newls.push(newchunk);
         }
-        if (chunk.isform)
+        if (chunk.formtype)
             pos += chunk.data.length;
         else
             pos += (8 + chunk.data.length);

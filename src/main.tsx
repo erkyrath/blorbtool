@@ -59,9 +59,9 @@ function ChunkListEntry(chunk: Chunk, blorb: Blorb)
             <div className="ChunkGloss">{ pretty_size(chunk.data.length) }</div>
             <div className="ChunkType">
                 <code className="IType">{ chunk.type.stype }</code>
-                { chunk.isform ? (
+                { chunk.formtype ? (
                     <>
-                        {' '}(<code className="IType">ABCD</code> 999)
+                        /<code className="IType">{ chunk.formtype.stype }</code>
                     </>
                 ) : null }
             </div>
