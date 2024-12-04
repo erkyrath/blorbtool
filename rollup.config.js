@@ -5,6 +5,8 @@ import terser from '@rollup/plugin-terser';
 
 const release = false;
 const nodeenv = (release ? 'production' : 'development')
+const tersopt = { format: { ascii_only:true } };
+const tersplugin = (release ? terser(tersopt) : null);
 
 export default {
     input: 'lib/main.js',
@@ -20,7 +22,7 @@ export default {
         }),
         commonjs(),
         nodeResolve(),
-        (release ? terser() : null),
+        tersplugin,
     ]
 }
 
