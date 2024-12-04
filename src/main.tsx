@@ -28,7 +28,7 @@ function MyApp()
     const [blorb, dispBlorb] = useReducer(reduceBlorb, initialBlorb!);
 
     let chunkls = blorb.chunks.map(chunk =>
-        <li>CHUNK</li>
+        ChunkListEntry(chunk, blorb)
     );
     
     return (
@@ -49,10 +49,20 @@ function MyApp()
     );
 }
 
-function ChunkListEntry({ chunk, blorb } : { chunk:Chunk, blorb:Blorb } )
+function ChunkListEntry(chunk: Chunk, blorb: Blorb)
 {
     return (
         <li>
+            <div className="ChunkTitle">###CHUNK</div>
+	        <div className="ChunkGloss">{ chunk.data.length } bytes</div>
+            <div className="ChunkType">
+                <code className="IType">{ chunk.stype }</code>
+                { chunk.isform ? (
+                    <>
+                        &nbsp;(<code className="IType">ABCD</code> 999)
+                    </>
+                ) : null }
+            </div>
         </li>
     );
 }
