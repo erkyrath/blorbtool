@@ -52,12 +52,10 @@ export function parse_blorb(dat: Uint8Array, filename?: string) : Blorb
         if (ctype == 'FORM') {
             let formtype = u8ToString(dat, pos, 4);
             let cdat = dat.slice(cpos, pos+clen);
-            console.log('###', ctype, formtype, clen+'+8', cpos);
             chunk = new_chunk(uctype, cdat);
         }
         else {
             let cdat = dat.slice(pos, pos+clen);
-            console.log('###', ctype, clen, cpos);
             chunk = new_chunk(uctype, cdat);
         }
 
