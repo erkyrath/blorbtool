@@ -66,10 +66,23 @@ export function chunk_readable_desc(chunk: Chunk) : string
     
     switch (chunk.type.stype) {
     case 'RIdx': return 'Resource index';
+    case 'RDes': return 'Resource description';
     case 'IFmd': return 'Metadata';
+    case 'Fspc': return 'Frontispiece';
     case 'JPEG': return 'Image \u2013 JPEG';
     case 'PNG ': return 'Image \u2013 PNG';
+    case 'ZCOD': return 'Game file \u2013 Z-code';
     case 'GLUL': return 'Game file \u2013 Glulx';
+    case 'TAD2': return 'Game file \u2013 TADS 2';
+    case 'TAD3': return 'Game file \u2013 TADS 3';
+    case 'HUGO': return 'Game file \u2013 Hugo';
+    case 'ALAN': return 'Game file \u2013 Alan';
+    case 'ADRI': return 'Game file \u2013 Adrift';
+    case 'LEVE': return 'Game file \u2013 Level 9';
+    case 'AGT ': return 'Game file \u2013 AGT';
+    case 'MAGS': return 'Game file \u2013 Magnetic Scrolls';
+    case 'ADVS': return 'Game file \u2013 AdvSys';
+    case 'EXEC': return 'Game file \u2013 Executable';
     }
     
     return 'Unrecognized chunk';
