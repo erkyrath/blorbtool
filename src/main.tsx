@@ -8,6 +8,8 @@ let root: Root|null = null;
 
 export function init()
 {
+    parse_blorb((window as any).sensory_blb_file); //###
+    
     const appel = document.getElementById('appbody') as HTMLElement;
     root = createRoot(appel);
     if (root)
