@@ -3,12 +3,17 @@ import { u8ToString, u8read4, stringToU8 } from './datutil';
 let keycounter = 0;
 
 type Chunk = {
-    reactkey: number,
+    // unique identifier for this chunk -- internal use only
+    reactkey: number, 
     
-    stype: string, // [4]
-    utype: Uint8Array, // [4]
-    
+    stype: string, // four characters
+    utype: Uint8Array, // four bytes
+    isform: boolean, // true if stype is 'FORM'
+
     data: Uint8Array,
+
+    // The pos is recomputed every time the blorb updates.
+    pos: number,
 };
 
 function new_chunk(type:string|Uint8Array, data:Uint8Array) : Chunk
@@ -29,17 +34,53 @@ function new_chunk(type:string|Uint8Array, data:Uint8Array) : Chunk
         reactkey: keycounter++,
         stype: stype,
         utype: utype,
+        isform: (stype==='FORM'),
         data: data,
+        pos: 0,
     }
 }
 
 type Blorb = {
     chunks: Chunk[];
+    totallen: number;
 };
 
 export function new_blorb() : Blorb
 {
-    return { chunks: [] };
+    return { chunks: [], totallen: 0 };
+}
+
+function blorb_recompute_positions(blorb: Blorb) : Blorb
+{
+    if (blorb.chunks.length == 0)
+        return blorb;
+
+    let ridx = blorb.chunks[0];
+    if (ridx.stype != 'RIdx') {
+        console.log('### first chunk is not an index');
+        return blorb;
+    }
+
+    let pos = 12;
+    let newls = [];
+    for (let chunk of blorb.chunks) {
+        if (chunk.pos == pos) {
+            newls.push(chunk);
+        }
+        else {
+            let newchunk = { ...chunk, pos:pos };
+            newls.push(newchunk);
+        }
+        if (chunk.isform)
+            pos += chunk.data.length;
+        else
+            pos += (8 + chunk.data.length);
+        
+        if (pos & 1)
+            pos++;
+    }
+    
+    return { ...blorb, chunks:newls, totallen:pos };
 }
 
 export function parse_blorb(dat: Uint8Array) : Blorb
@@ -68,7 +109,8 @@ export function parse_blorb(dat: Uint8Array) : Blorb
         return new_blorb();
     }
 
-    let chunks = [];
+    let chunks: Chunk[] = [];
+    let origposmap: Map<number, number> = new Map();
     pos = 12;
 
     while (pos < len) {
@@ -101,14 +143,16 @@ export function parse_blorb(dat: Uint8Array) : Blorb
         }
 
         chunks.push(chunk);
+        origposmap.set(chunk.reactkey, cpos);
 
         pos += clen;
         if (pos & 1)
             pos++;
     }
 
-    let blorb = { chunks: chunks };
-    console.log('### blorb:', blorb);
+    let blorb = { chunks:chunks, totallen:pos };
+    blorb = blorb_recompute_positions(blorb);
+
     return blorb;
 }
 
