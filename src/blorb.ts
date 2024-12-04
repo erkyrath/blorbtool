@@ -66,11 +66,31 @@ export function chunk_readable_desc(chunk: Chunk) : string
     
     switch (chunk.type.stype) {
     case 'RIdx': return 'Resource index';
-    case 'RDes': return 'Resource description';
-    case 'IFmd': return 'Metadata';
+        
+    case 'IFhd': return 'Game identifier';
     case 'Fspc': return 'Frontispiece';
+    case 'RDes': return 'Resource description';
+    case 'Plte': return 'Color palette';
+    case 'IFmd': return 'Metadata';
+
+    case 'AUTH': return 'Author';
+    case '(c) ': return 'Copyright message';
+    case 'ANNO': return 'Annotation';
+    case 'SNam': return 'Story name (deprecated)';
+
+    case 'Reso': return 'Resolution';
+    case 'APal': return 'Adaptive palette';
+    case 'Loop': return 'Audio looping';
+       
+    case 'TEXT': return 'Text';
+    case 'BINA': return 'Binary data';
+
     case 'JPEG': return 'Image \u2013 JPEG';
     case 'PNG ': return 'Image \u2013 PNG';
+    case 'Rect': return 'Image \u2013 placeholder';
+        
+    case 'OGGV': return 'Audio \u2013 Ogg';
+        
     case 'ZCOD': return 'Game file \u2013 Z-code';
     case 'GLUL': return 'Game file \u2013 Glulx';
     case 'TAD2': return 'Game file \u2013 TADS 2';
