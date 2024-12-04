@@ -2,7 +2,7 @@ import { u8ToString, u8read4, stringToU8 } from './datutil';
 
 let keycounter = 0;
 
-type Chunk = {
+export type Chunk = {
     // unique identifier for this chunk -- internal use only
     reactkey: number, 
     
@@ -40,7 +40,7 @@ function new_chunk(type:string|Uint8Array, data:Uint8Array) : Chunk
     }
 }
 
-type Blorb = {
+export type Blorb = {
     filename: string|undefined;
     chunks: Chunk[];
     totallen: number;

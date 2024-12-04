@@ -2,16 +2,17 @@ import React from 'react';
 import { useState, useReducer } from 'react';
 import { Root, createRoot } from 'react-dom/client';
 
+import { Blorb, new_blorb } from './parseblorb';
 import { parse_blorb } from './parseblorb';
 
-let root: Root|null = null;
+let initialBlorb: Blorb|undefined;
 
 export function init()
 {
-    parse_blorb((window as any).sensory_blb_file); //###
+    initialBlorb = parse_blorb((window as any).sensory_blb_file); //###
     
     const appel = document.getElementById('appbody') as HTMLElement;
-    root = createRoot(appel);
+    let root = createRoot(appel);
     if (root)
         root.render( <MyApp /> );
 }
@@ -20,28 +21,20 @@ type Product = { title:string, id:number };
 
 function MyApp()
 {
-    const initialProducts = [
-        { title: 'Cabbage', id: 1 },
-        { title: 'Garlic', id: 2 },
-        { title: 'Apple', id: 3 },
-    ];
+    if (!initialBlorb) {
+        initialBlorb = new_blorb();
+    }
     
-    const [count, setCount] = useState(1+initialProducts.length);
-    const [products, dispProducts] = useReducer(reduceProducts, initialProducts);
-
-    function handleButtonClick()
-    {
-        dispProducts({ type:'add', product:{ title:'Thing', id:count } });
-        setCount(count+1);
-    }
-    function handleDelClick()
-    {
-        dispProducts({ type:'del', index:0 });
-    }
+    const [blorb, dispBlorb] = useReducer(reduceBlorb, initialBlorb!);
 
     return (
         <>
             <div className="IndexCol">
+                <div className="BlorbInfo">
+                    <div className="BlorbTitle">{ blorb.filename || '(untitled)' }</div>
+                    <div className="BlorbGloss">
+                    { blorb.chunks.length } chunks, { blorb.totallen } bytes</div>
+                </div>
             </div>
             <div className="DisplayCol">
             </div>
@@ -50,53 +43,9 @@ function MyApp()
 }
 
 
-//####...
-
-function reduceProducts(products:Product[], act:any) : Product[]
+function reduceBlorb(blorb: Blorb, act: any) : Blorb
 {
-    if (act.type == 'add') {
-        return [ ...products, act.product ];
-    }
-    if (act.type == 'del') {
-        let ls = [ ...products ];
-        ls.splice(act.index, 1);
-        return ls;
-    }
-    
-    return products;
-}
-
-function AddButton({ count, onClick } : { count:number, onClick:MouseEv } )
-{
-    return (
-        <button className="Button" onClick={ onClick }>
-            Add product { count }
-        </button>
-    );
-}
-
-function DelButton({ onClick } : { onClick:MouseEv } )
-{
-    return (
-        <button className="Button" onClick={ onClick }>
-            Del first product
-        </button>
-    );
-}
-
-function MyList({ ls } : { ls:Product[] } )
-{
-    const ells = ls.map(product =>
-        <li key={ product.id }>
-            <em>{ product.id }</em>: { product.title }
-        </li>
-    );
-    
-    return (
-        <ul>
-            { ells }
-        </ul>
-    );
+    return blorb;
 }
 
 type MouseEv = React.MouseEventHandler<HTMLButtonElement>;
