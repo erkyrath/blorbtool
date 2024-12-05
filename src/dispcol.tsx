@@ -80,7 +80,7 @@ function DisplayChunkRaw({ chunk }: { chunk:Chunk })
 function DisplayChunkResIndex({ chunk }: { chunk:CTypes.CTResIndex })
 {
     let entls = chunk.entries.map(ent =>
-        DisplayChunkResIndexEntry(ent)
+        <DisplayChunkResIndexEntry ent={ ent } key={ ent.pos } />
     );
     
     return (
@@ -92,7 +92,7 @@ function DisplayChunkResIndex({ chunk }: { chunk:CTypes.CTResIndex })
     );
 }
 
-function DisplayChunkResIndexEntry(ent: CTypes.CTResIndexEntry)
+function DisplayChunkResIndexEntry({ ent }: { ent:CTypes.CTResIndexEntry })
 {
     let blorb = useContext(BlorbCtx);
     let chunk = blorb_chunk_for_usage(blorb, ent.usage, ent.resnum);
@@ -100,7 +100,7 @@ function DisplayChunkResIndexEntry(ent: CTypes.CTResIndexEntry)
     //### or error if not found
     
     return (
-        <li key={ ent.pos }>
+        <li>
             <code className="IType">{ ent.usage }</code>
             {' #'}{ ent.resnum },
             &nbsp;
