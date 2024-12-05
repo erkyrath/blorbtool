@@ -7,6 +7,8 @@ import { chunk_readable_desc, blorb_resentry_for_chunk } from './blorb';
 import { parse_blorb } from './parseblorb';
 import { pretty_size } from './readable';
 
+import { DisplayChunk } from './dispcol';
+
 let initialBlorb: Blorb|undefined;
 
 export function init()
@@ -92,13 +94,6 @@ function ChunkListEntry(chunk: Chunk, blorb: Blorb, isselected: boolean, setSele
             <div className="ChunkTitle">{ chunk_readable_desc(chunk) }</div>
             <div className="ChunkGloss">{ pretty_size(chunk.data.length) }</div>
         </li>
-    );
-}
-
-function DisplayChunk({ chunk } : { chunk:Chunk })
-{
-    return (
-        <div>{ chunk.type.stype }</div>
     );
 }
 
