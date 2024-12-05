@@ -30,7 +30,7 @@ export function DisplayChunk({ blorb, chunk } : { blorb:Blorb, chunk:Chunk })
     return (
         <div className="DisplayChunk">
             <h3>
-                Chunk { chunk.index }:{' '}
+                Chunk:{' '}
                 { chunk_readable_desc(chunk) }
             </h3>
             <ul className="InfoList">
@@ -71,7 +71,7 @@ function DisplayChunkRaw(blorb: Blorb, chunk: Chunk)
         <div>
             <code className="HexData">{ hexdump }</code>
             { ( extra ?
-                <span className="InfoLabel"> (...{ extra } more)</span>
+                <span className="InfoLabel"> &nbsp; (...{ extra } more)</span>
                 : null) }
         </div>
     );
