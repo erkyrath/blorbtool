@@ -59,7 +59,7 @@ function MyApp()
             </div>
             <div className="DisplayCol">
                 { (selchunk ?
-                   <DisplayChunk chunk={ selchunk } />
+                   <DisplayChunk blorb={ blorb } chunk={ selchunk } />
                    : null) }
             </div>
         </>
