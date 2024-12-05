@@ -11,10 +11,10 @@ export function DisplayChunk({ blorb, chunk } : { blorb:Blorb, chunk:Chunk })
     let display;
     switch (chunk.type.stype) {
     case 'RIdx':
-        display = DisplayChunkResIndex(blorb, chunk as ChunkTypes.ChunkResIndex);
+        display = DisplayCTResIndex(blorb, chunk as ChunkTypes.CTResIndex);
         break;
     case 'Fspc':
-        display = DisplayChunkFrontispiece(blorb, chunk as ChunkTypes.ChunkFrontispiece);
+        display = DisplayCTFrontispiece(blorb, chunk as ChunkTypes.CTFrontispiece);
         break;
     default:
         display = DisplayChunkRaw(blorb, chunk);
@@ -71,10 +71,10 @@ function DisplayChunkRaw(blorb: Blorb, chunk: Chunk)
     );
 }
 
-function DisplayChunkResIndex(blorb: Blorb, chunk: ChunkTypes.ChunkResIndex)
+function DisplayCTResIndex(blorb: Blorb, chunk: ChunkTypes.CTResIndex)
 {
     let entls = chunk.entries.map(ent =>
-        DisplayChunkResIndexEntry(ent)
+        DisplayCTResIndexEntry(ent)
     );
     
     return (
@@ -86,7 +86,7 @@ function DisplayChunkResIndex(blorb: Blorb, chunk: ChunkTypes.ChunkResIndex)
     );
 }
 
-function DisplayChunkResIndexEntry(ent: ChunkTypes.ChunkResIndexEntry)
+function DisplayCTResIndexEntry(ent: ChunkTypes.CTResIndexEntry)
 {
     return (
         <li key={ ent.pos }>
@@ -99,7 +99,7 @@ function DisplayChunkResIndexEntry(ent: ChunkTypes.ChunkResIndexEntry)
     );
 }
 
-function DisplayChunkFrontispiece(blorb: Blorb, chunk: ChunkTypes.ChunkFrontispiece)
+function DisplayCTFrontispiece(blorb: Blorb, chunk: ChunkTypes.CTFrontispiece)
 {
     return (
         <div>

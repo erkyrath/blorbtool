@@ -41,18 +41,18 @@ export interface Chunk {
 export namespace ChunkTypes {
     
     type ChunkUsage = 'Pict' | 'Snd ' | 'Data' | 'Exec';
-    export type ChunkResIndexEntry = {
+    export type CTResIndexEntry = {
         usage: ChunkUsage,
         resnum: number,
         pos: number,
     };
     
-    export interface ChunkResIndex extends Chunk {
-        entries: ReadonlyArray<ChunkResIndexEntry>,
+    export interface CTResIndex extends Chunk {
+        entries: ReadonlyArray<CTResIndexEntry>,
         //### maps
     };
     
-    export interface ChunkFrontispiece extends Chunk {
+    export interface CTFrontispiece extends Chunk {
         picnum: number;
     }
     
@@ -86,9 +86,9 @@ export function new_chunk(type:string|Uint8Array, data:Uint8Array) : Chunk
     return chunk;
 }
 
-function new_chunk_RIdx(chunk: Chunk) : ChunkTypes.ChunkResIndex
+function new_chunk_RIdx(chunk: Chunk) : ChunkTypes.CTResIndex
 {
-    let entries: ChunkTypes.ChunkResIndexEntry[] = [];
+    let entries: ChunkTypes.CTResIndexEntry[] = [];
 
     let count = u8read4(chunk.data, 0);
     if (chunk.data.length != 4 + count*12) {
@@ -104,7 +104,7 @@ function new_chunk_RIdx(chunk: Chunk) : ChunkTypes.ChunkResIndex
             console.log('### bad index entry usage');
             continue;
         }
-        let ent: ChunkTypes.ChunkResIndexEntry = { usage:usage, resnum:resnum, pos:pos };
+        let ent: ChunkTypes.CTResIndexEntry = { usage:usage, resnum:resnum, pos:pos };
         entries.push(ent);
     }
 
@@ -114,7 +114,7 @@ function new_chunk_RIdx(chunk: Chunk) : ChunkTypes.ChunkResIndex
     return { ...chunk, entries:entries };
 }
 
-function new_chunk_Fspc(chunk: Chunk) : ChunkTypes.ChunkFrontispiece
+function new_chunk_Fspc(chunk: Chunk) : ChunkTypes.CTFrontispiece
 {
     if (chunk.data.length != 4) {
         console.log('### bad chunk size');
@@ -243,12 +243,12 @@ export function blorb_recompute_positions(blorb: Blorb) : Blorb
     };
 }
 
-export function blorb_resentry_for_chunk(blorb: Blorb, chunk: Chunk) : ChunkTypes.ChunkResIndexEntry|undefined
+export function blorb_resentry_for_chunk(blorb: Blorb, chunk: Chunk) : ChunkTypes.CTResIndexEntry|undefined
 {
     if (blorb.chunks.length == 0 || blorb.chunks[0].type.stype != 'RIdx')
         return undefined;
     
-    let ridx = blorb.chunks[0] as ChunkTypes.ChunkResIndex;
+    let ridx = blorb.chunks[0] as ChunkTypes.CTResIndex;
     //### use a map
     for (let ent of ridx.entries) {
         if (ent.pos == chunk.pos)
