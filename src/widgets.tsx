@@ -9,6 +9,6 @@ export function ArrowToChunk({ destkey }: { destkey:number })
     }
 
     return (
-        <a href="#" onClick={ evhan_click }>&gt;&gt;</a>
+        <a className="JumpArrow" href="#" onClick={ evhan_click }>&#x279A;</a>
     );
 }

@@ -112,3 +112,14 @@ ul.NestTreeSub {
     list-style: none;
     padding-left: 20px;
 }
+
+a.JumpArrow {
+    font-size: 120%;
+    text-decoration: none;
+    text-shadow: 0px 0px 6px #0000FF80;
+}
+
+a.JumpArrow:hover {
+    text-shadow: 0px 0px 4px #0000FF;
+    color: black;
+}
