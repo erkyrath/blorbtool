@@ -1,8 +1,6 @@
 import React from 'react';
 
-import { Chunk, Blorb } from './blorb';
-import { ChunkResIndex, ChunkResIndexEntry } from './blorb';
-import { ChunkFrontispiece } from './blorb';
+import { Chunk, Blorb, ChunkTypes } from './blorb';
 import { chunk_readable_desc, blorb_resentry_for_chunk } from './blorb';
 import { pretty_size, byte_to_hex } from './readable';
 
@@ -13,10 +11,10 @@ export function DisplayChunk({ blorb, chunk } : { blorb:Blorb, chunk:Chunk })
     let display;
     switch (chunk.type.stype) {
     case 'RIdx':
-        display = DisplayChunkResIndex(blorb, chunk as ChunkResIndex);
+        display = DisplayChunkResIndex(blorb, chunk as ChunkTypes.ChunkResIndex);
         break;
     case 'Fspc':
-        display = DisplayChunkFrontispiece(blorb, chunk as ChunkFrontispiece);
+        display = DisplayChunkFrontispiece(blorb, chunk as ChunkTypes.ChunkFrontispiece);
         break;
     default:
         display = DisplayChunkRaw(blorb, chunk);
@@ -73,7 +71,7 @@ function DisplayChunkRaw(blorb: Blorb, chunk: Chunk)
     );
 }
 
-function DisplayChunkResIndex(blorb: Blorb, chunk: ChunkResIndex)
+function DisplayChunkResIndex(blorb: Blorb, chunk: ChunkTypes.ChunkResIndex)
 {
     let entls = chunk.entries.map(ent =>
         DisplayChunkResIndexEntry(ent)
@@ -88,7 +86,7 @@ function DisplayChunkResIndex(blorb: Blorb, chunk: ChunkResIndex)
     );
 }
 
-function DisplayChunkResIndexEntry(ent: ChunkResIndexEntry)
+function DisplayChunkResIndexEntry(ent: ChunkTypes.ChunkResIndexEntry)
 {
     return (
         <li key={ ent.pos }>
@@ -101,7 +99,7 @@ function DisplayChunkResIndexEntry(ent: ChunkResIndexEntry)
     );
 }
 
-function DisplayChunkFrontispiece(blorb: Blorb, chunk: ChunkFrontispiece)
+function DisplayChunkFrontispiece(blorb: Blorb, chunk: ChunkTypes.ChunkFrontispiece)
 {
     return (
         <div>

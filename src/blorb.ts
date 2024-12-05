@@ -38,20 +38,24 @@ export interface Chunk {
     pos: number,
 };
 
-type ChunkUsage = 'Pict' | 'Snd ' | 'Data' | 'Exec';
-export type ChunkResIndexEntry = {
-    usage: ChunkUsage,
-    resnum: number,
-    pos: number,
-};
-
-export interface ChunkResIndex extends Chunk {
-    entries: ReadonlyArray<ChunkResIndexEntry>,
-    //### maps
-};
-
-export interface ChunkFrontispiece extends Chunk {
-    picnum: number;
+export namespace ChunkTypes {
+    
+    type ChunkUsage = 'Pict' | 'Snd ' | 'Data' | 'Exec';
+    export type ChunkResIndexEntry = {
+        usage: ChunkUsage,
+        resnum: number,
+        pos: number,
+    };
+    
+    export interface ChunkResIndex extends Chunk {
+        entries: ReadonlyArray<ChunkResIndexEntry>,
+        //### maps
+    };
+    
+    export interface ChunkFrontispiece extends Chunk {
+        picnum: number;
+    }
+    
 }
 
 export function new_chunk(type:string|Uint8Array, data:Uint8Array) : Chunk
@@ -82,9 +86,9 @@ export function new_chunk(type:string|Uint8Array, data:Uint8Array) : Chunk
     return chunk;
 }
 
-function new_chunk_RIdx(chunk: Chunk) : ChunkResIndex
+function new_chunk_RIdx(chunk: Chunk) : ChunkTypes.ChunkResIndex
 {
-    let entries: ChunkResIndexEntry[] = [];
+    let entries: ChunkTypes.ChunkResIndexEntry[] = [];
 
     let count = u8read4(chunk.data, 0);
     if (chunk.data.length != 4 + count*12) {
@@ -100,7 +104,7 @@ function new_chunk_RIdx(chunk: Chunk) : ChunkResIndex
             console.log('### bad index entry usage');
             continue;
         }
-        let ent: ChunkResIndexEntry = { usage:usage, resnum:resnum, pos:pos };
+        let ent: ChunkTypes.ChunkResIndexEntry = { usage:usage, resnum:resnum, pos:pos };
         entries.push(ent);
     }
 
@@ -110,7 +114,7 @@ function new_chunk_RIdx(chunk: Chunk) : ChunkResIndex
     return { ...chunk, entries:entries };
 }
 
-function new_chunk_Fspc(chunk: Chunk) : ChunkFrontispiece
+function new_chunk_Fspc(chunk: Chunk) : ChunkTypes.ChunkFrontispiece
 {
     if (chunk.data.length != 4) {
         console.log('### bad chunk size');
@@ -239,12 +243,12 @@ export function blorb_recompute_positions(blorb: Blorb) : Blorb
     };
 }
 
-export function blorb_resentry_for_chunk(blorb: Blorb, chunk: Chunk) : ChunkResIndexEntry|undefined
+export function blorb_resentry_for_chunk(blorb: Blorb, chunk: Chunk) : ChunkTypes.ChunkResIndexEntry|undefined
 {
     if (blorb.chunks.length == 0 || blorb.chunks[0].type.stype != 'RIdx')
         return undefined;
     
-    let ridx = blorb.chunks[0] as ChunkResIndex;
+    let ridx = blorb.chunks[0] as ChunkTypes.ChunkResIndex;
     //### use a map
     for (let ent of ridx.entries) {
         if (ent.pos == chunk.pos)
