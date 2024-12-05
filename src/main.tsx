@@ -1,5 +1,5 @@
 import React from 'react';
-import { useState, useReducer } from 'react';
+import { useState, useContext, useReducer } from 'react';
 import { Root, createRoot } from 'react-dom/client';
 
 import { Chunk, Blorb, new_blorb } from './blorb';
@@ -42,7 +42,7 @@ function MyApp()
     }
     
     let chunkls = blorb.chunks.map(chunk =>
-        ChunkListEntry(chunk, blorb, (chunk.reactkey == selected), setSelected)
+        <ChunkListEntry key={ chunk.reactkey } chunk={ chunk } isselected={ chunk.reactkey == selected } />
     );
     let selchunk = blorb.chunks.find(chunk => (chunk.reactkey == selected));
     
@@ -69,18 +69,21 @@ function MyApp()
     );
 }
 
-function ChunkListEntry(chunk: Chunk, blorb: Blorb, isselected: boolean, setSelected: (_:number)=>void)
+function ChunkListEntry({ chunk, isselected } : { chunk:Chunk, isselected:boolean })
 {
+    let blorb = useContext(BlorbCtx);
+    let setSelection = useContext(SetSelectionCtx);
+    
     let resentry = blorb_resentry_for_chunk(blorb, chunk);
     
     function evhan_click(ev: React.MouseEvent<HTMLLIElement, MouseEvent>) {
         ev.preventDefault();
         ev.stopPropagation();
-        setSelected(chunk.reactkey);
+        setSelection(chunk.reactkey);
     }
     
     return (
-        <li key={ chunk.reactkey } className={ isselected ? "Selected" : "" } onClick={ evhan_click }>
+        <li className={ isselected ? "Selected" : "" } onClick={ evhan_click }>
             <div className="ChunkType">
                 <code className="IType">
                     { chunk.type.stype }
