@@ -1,4 +1,5 @@
 import React from 'react';
+import { useState } from 'react';
 
 import { Chunk, Blorb, CTypes } from './blorb';
 import { chunk_readable_desc, blorb_resentry_for_chunk } from './blorb';
@@ -116,6 +117,14 @@ function DisplayChunkFrontispiece(blorb: Blorb, chunk: CTypes.CTFrontispiece)
 
 function DisplayChunkMetadata(blorb: Blorb, chunk: CTypes.CTMetadata)
 {
+    const [showraw, setShowRaw] = useState(false);
+
+    function evhan_click(ev: React.MouseEvent<HTMLElement, MouseEvent>) {
+        ev.preventDefault();
+        ev.stopPropagation();
+        setShowRaw(!showraw);
+    }
+    
     let xmlparser = new DOMParser();
     let xmldoc = xmlparser.parseFromString(chunk.metadata, 'text/xml');
 
@@ -131,19 +140,22 @@ function DisplayChunkMetadata(blorb: Blorb, chunk: CTypes.CTMetadata)
     
     return (
         <>
-            <div className="InfoLabel">XML content:</div>
+            <div className="InfoLabel">
+                XML content:{' '}
+                <a href="#" onClick={ evhan_click }>(show raw)</a>
+                </div>
             <ul className="NestTree">
-                <ShowXMLNode nod={ xmlnod } />
+                <ShowXMLNode nod={ xmlnod } index={0} />
             </ul>
         </>
     );
 }
 
-function ShowXMLNode({ nod } : { nod:Node }) : React.ReactNode
+function ShowXMLNode({ nod, index } : { nod:Node, index:number }) : React.ReactNode
 {
     if (nod.nodeType == nod.TEXT_NODE) {
         return (
-            <div>
+            <div key={ index }>
                 { nod.textContent }
             </div>
         )
@@ -152,18 +164,19 @@ function ShowXMLNode({ nod } : { nod:Node }) : React.ReactNode
     if (nod.childNodes.length == 1 && nod.childNodes[0].nodeType == nod.TEXT_NODE) {
         let subnod = nod.childNodes[0];
         return (
-            <div>
+            <div key={ index }>
                 { nod.nodeName }: { subnod.textContent }
             </div>
         )
     }
 
+    let counter = 0;
     let subls = [ ...nod.childNodes ].map(subnod =>
-        ShowXMLNode({ nod:subnod })
+        ShowXMLNode({ nod:subnod, index:counter++ })
     );
     
     return (
-        <li>
+        <li key={ index }>
             { nod.nodeName }:
             <ul className="NestTreeSub">
                 { subls }
