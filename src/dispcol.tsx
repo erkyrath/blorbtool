@@ -11,13 +11,13 @@ export function DisplayChunk({ blorb, chunk } : { blorb:Blorb, chunk:Chunk })
     let display;
     switch (chunk.type.stype) {
     case 'RIdx':
-        display = DisplayCTResIndex(blorb, chunk as CTypes.CTResIndex);
+        display = DisplayChunkResIndex(blorb, chunk as CTypes.CTResIndex);
         break;
     case 'Fspc':
-        display = DisplayCTFrontispiece(blorb, chunk as CTypes.CTFrontispiece);
+        display = DisplayChunkFrontispiece(blorb, chunk as CTypes.CTFrontispiece);
         break;
     case 'IFmd':
-        display = DisplayCTMetadata(blorb, chunk as CTypes.CTMetadata);
+        display = DisplayChunkMetadata(blorb, chunk as CTypes.CTMetadata);
         break;
     default:
         display = DisplayChunkRaw(blorb, chunk);
@@ -74,10 +74,10 @@ function DisplayChunkRaw(blorb: Blorb, chunk: Chunk)
     );
 }
 
-function DisplayCTResIndex(blorb: Blorb, chunk: CTypes.CTResIndex)
+function DisplayChunkResIndex(blorb: Blorb, chunk: CTypes.CTResIndex)
 {
     let entls = chunk.entries.map(ent =>
-        DisplayCTResIndexEntry(ent)
+        DisplayChunkResIndexEntry(ent)
     );
     
     return (
@@ -89,7 +89,7 @@ function DisplayCTResIndex(blorb: Blorb, chunk: CTypes.CTResIndex)
     );
 }
 
-function DisplayCTResIndexEntry(ent: CTypes.CTResIndexEntry)
+function DisplayChunkResIndexEntry(ent: CTypes.CTResIndexEntry)
 {
     return (
         <li key={ ent.pos }>
@@ -102,7 +102,7 @@ function DisplayCTResIndexEntry(ent: CTypes.CTResIndexEntry)
     );
 }
 
-function DisplayCTFrontispiece(blorb: Blorb, chunk: CTypes.CTFrontispiece)
+function DisplayChunkFrontispiece(blorb: Blorb, chunk: CTypes.CTFrontispiece)
 {
     return (
         <div>
@@ -114,11 +114,60 @@ function DisplayCTFrontispiece(blorb: Blorb, chunk: CTypes.CTFrontispiece)
     );
 }
 
-function DisplayCTMetadata(blorb: Blorb, chunk: CTypes.CTMetadata)
+function DisplayChunkMetadata(blorb: Blorb, chunk: CTypes.CTMetadata)
 {
+    let xmlparser = new DOMParser();
+    let xmldoc = xmlparser.parseFromString(chunk.metadata, 'text/xml');
+
+    if (!xmldoc.childNodes.length) {
+        return (
+            <div>
+                (XML content not found)
+            </div>
+        );
+    }
+
+    let xmlnod = xmldoc.childNodes[0];
+    
     return (
-        <pre>
-            { chunk.metadata }
-        </pre>
+        <>
+            <div className="InfoLabel">XML content:</div>
+            <ul className="NestTree">
+                <ShowXMLNode nod={ xmlnod } />
+            </ul>
+        </>
+    );
+}
+
+function ShowXMLNode({ nod } : { nod:Node }) : React.ReactNode
+{
+    if (nod.nodeType == nod.TEXT_NODE) {
+        return (
+            <div>
+                { nod.textContent }
+            </div>
+        )
+    }
+
+    if (nod.childNodes.length == 1 && nod.childNodes[0].nodeType == nod.TEXT_NODE) {
+        let subnod = nod.childNodes[0];
+        return (
+            <div>
+                { nod.nodeName }: { subnod.textContent }
+            </div>
+        )
+    }
+
+    let subls = [ ...nod.childNodes ].map(subnod =>
+        ShowXMLNode({ nod:subnod })
+    );
+    
+    return (
+        <li>
+            { nod.nodeName }:
+            <ul className="NestTreeSub">
+                { subls }
+            </ul>
+        </li>
     );
 }

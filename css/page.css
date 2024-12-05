@@ -102,3 +102,13 @@ code.IType {
     font-style: italic;
 }
 
+ul.NestTree {
+    list-style: none;
+    padding-left: 0px;
+    font-size: 85%;
+}
+
+ul.NestTreeSub {
+    list-style: none;
+    padding-left: 20px;
+}
