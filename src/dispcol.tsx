@@ -14,16 +14,16 @@ export function DisplayChunk({ blorb, chunk } : { blorb:Blorb, chunk:Chunk })
     let display;
     switch (chunk.type.stype) {
     case 'RIdx':
-        display = DisplayChunkResIndex(blorb, chunk as CTypes.CTResIndex);
+        display = DisplayChunkResIndex(chunk as CTypes.CTResIndex);
         break;
     case 'Fspc':
-        display = DisplayChunkFrontispiece(blorb, chunk as CTypes.CTFrontispiece);
+        display = DisplayChunkFrontispiece(chunk as CTypes.CTFrontispiece);
         break;
     case 'IFmd':
-        display = DisplayChunkMetadata(blorb, chunk as CTypes.CTMetadata);
+        display = DisplayChunkMetadata(chunk as CTypes.CTMetadata);
         break;
     default:
-        display = DisplayChunkRaw(blorb, chunk);
+        display = DisplayChunkRaw(chunk);
         break;
     }
     
@@ -59,7 +59,7 @@ export function DisplayChunk({ blorb, chunk } : { blorb:Blorb, chunk:Chunk })
     );
 }
 
-function DisplayChunkRaw(blorb: Blorb, chunk: Chunk)
+function DisplayChunkRaw(chunk: Chunk)
 {
     let subdata = chunk.data.slice(0, 512);
     let ls = [ ...subdata ].map(byte_to_hex);
@@ -77,7 +77,7 @@ function DisplayChunkRaw(blorb: Blorb, chunk: Chunk)
     );
 }
 
-function DisplayChunkResIndex(blorb: Blorb, chunk: CTypes.CTResIndex)
+function DisplayChunkResIndex(chunk: CTypes.CTResIndex)
 {
     let entls = chunk.entries.map(ent =>
         DisplayChunkResIndexEntry(ent)
@@ -114,8 +114,9 @@ function DisplayChunkResIndexEntry(ent: CTypes.CTResIndexEntry)
     );
 }
 
-function DisplayChunkFrontispiece(blorb: Blorb, chunk: CTypes.CTFrontispiece)
+function DisplayChunkFrontispiece(chunk: CTypes.CTFrontispiece)
 {
+    let blorb = useContext(BlorbCtx);
     let imgchunk = blorb_chunk_for_usage(blorb, 'Pict', chunk.picnum);
 
     //### or error if not found
@@ -134,7 +135,7 @@ function DisplayChunkFrontispiece(blorb: Blorb, chunk: CTypes.CTFrontispiece)
     );
 }
 
-function DisplayChunkMetadata(blorb: Blorb, chunk: CTypes.CTMetadata)
+function DisplayChunkMetadata(chunk: CTypes.CTMetadata)
 {
     const [showraw, setShowRaw] = useState(false);
 
