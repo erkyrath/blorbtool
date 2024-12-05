@@ -28,10 +28,12 @@ function MyApp()
     }
     
     const [blorb, dispBlorb] = useReducer(reduceBlorb, initialBlorb!);
+    const [selected, setSelected] = useState(-1);
+    
     (window as any).curblorb = blorb; //###
 
     let chunkls = blorb.chunks.map(chunk =>
-        ChunkListEntry(chunk, blorb)
+        ChunkListEntry(chunk, blorb, (chunk.reactkey == selected), setSelected)
     );
     
     return (
@@ -52,18 +54,18 @@ function MyApp()
     );
 }
 
-function ChunkListEntry(chunk: Chunk, blorb: Blorb)
+function ChunkListEntry(chunk: Chunk, blorb: Blorb, isselected: boolean, setSelected: (_:number)=>void)
 {
     let resentry = blorb_resentry_for_chunk(blorb, chunk);
     
     function evhan_click(ev: MouseEvLI) {
-        console.log('### click', chunk.type, resentry);
         ev.preventDefault();
         ev.stopPropagation();
+        setSelected(chunk.reactkey);
     }
     
     return (
-        <li key={ chunk.reactkey } onClick={ evhan_click }>
+        <li key={ chunk.reactkey } className={ isselected ? "Selected" : "" } onClick={ evhan_click }>
             <div className="ChunkType">
                 <code className="IType">
                     { chunk.type.stype }

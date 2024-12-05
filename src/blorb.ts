@@ -22,7 +22,7 @@ function make_chunk_type(type:string|Uint8Array) : ChunkType
     return { stype:stype, utype:utype };
 }
 
-let keycounter = 0;
+let keycounter = 1;
 
 export interface Chunk {
     // unique identifier for this chunk -- internal use only
