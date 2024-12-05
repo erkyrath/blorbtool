@@ -1,8 +1,9 @@
 import React from 'react';
-import { useState } from 'react';
+import { useState, useContext } from 'react';
 
 import { Chunk, Blorb, CTypes } from './blorb';
 import { chunk_readable_desc, blorb_resentry_for_chunk, blorb_chunk_for_usage } from './blorb';
+import { BlorbCtx } from './contexts';
 import { ArrowToChunk } from './widgets';
 import { pretty_size, byte_to_hex } from './readable';
 
@@ -93,7 +94,10 @@ function DisplayChunkResIndex(blorb: Blorb, chunk: CTypes.CTResIndex)
 
 function DisplayChunkResIndexEntry(ent: CTypes.CTResIndexEntry)
 {
-    let destkey = -1; //###
+    let blorb = useContext(BlorbCtx);
+    let chunk = blorb_chunk_for_usage(blorb, ent.usage, ent.resnum);
+
+    //### or error if not found
     
     return (
         <li key={ ent.pos }>
@@ -101,7 +105,11 @@ function DisplayChunkResIndexEntry(ent: CTypes.CTResIndexEntry)
             {' #'}{ ent.resnum },
             &nbsp;
             <span className="InfoLabel">starts at</span> { ent.pos }
-            {' '}&nbsp; <ArrowToChunk destkey={ destkey } />
+            { ( chunk ?
+                <>
+                    {' '}&nbsp; <ArrowToChunk destkey={ chunk.reactkey } />
+                </>
+                : null) }
         </li>
     );
 }
