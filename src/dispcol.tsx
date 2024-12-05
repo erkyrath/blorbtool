@@ -11,18 +11,24 @@ export function DisplayChunk({ blorb, chunk } : { blorb:Blorb, chunk:Chunk })
     return (
         <div className="DisplayChunk">
             <ul>
-                <li>Type:{' '}
+                <li><span className="InfoLabel">Type:</span>{' '}
                     <code className="IType">
                         { chunk.type.stype }
                         { chunk.formtype ? ('/'+chunk.formtype.stype) : '' }
                     </code>
                 </li>
                 { (resentry ?
-                   <li>Usage:{' '}
+                   <li><span className="InfoLabel">Usage:</span>{' '}
                        <code className="IType">{ resentry.usage }</code>
                        {' #'}{ resentry.resnum }
                    </li>
                    : null) }
+                <li>
+                    <span className="InfoLabel">Size:</span>{' '}
+                    { pretty_size(chunk.data.length) }
+                </li>
+                <li>
+                    <span className="InfoLabel">File position:</span> { chunk.pos }</li>
             </ul>
         </div>
     );
