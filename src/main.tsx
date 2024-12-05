@@ -58,7 +58,7 @@ function ChunkListEntry(chunk: Chunk, blorb: Blorb, isselected: boolean, setSele
 {
     let resentry = blorb_resentry_for_chunk(blorb, chunk);
     
-    function evhan_click(ev: MouseEvLI) {
+    function evhan_click(ev: React.MouseEvent<HTMLLIElement, MouseEvent>) {
         ev.preventDefault();
         ev.stopPropagation();
         setSelected(chunk.reactkey);
@@ -77,7 +77,7 @@ function ChunkListEntry(chunk: Chunk, blorb: Blorb, isselected: boolean, setSele
                        <code className="IType">{ resentry.usage }</code>
                        {' #'}{ resentry.resnum }
                    </>
-               : null) }
+                   : null) }
             </div>
             <div className="ChunkTitle">{ chunk_readable_desc(chunk) }</div>
             <div className="ChunkGloss">{ pretty_size(chunk.data.length) }</div>
@@ -89,6 +89,4 @@ function reduceBlorb(blorb: Blorb, act: any) : Blorb
 {
     return blorb;
 }
-
-type MouseEvLI = React.MouseEvent<HTMLLIElement, MouseEvent>;
 
