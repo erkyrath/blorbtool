@@ -33,7 +33,8 @@ export interface Chunk {
 
     data: Uint8Array,
 
-    // The pos is recomputed every time the blorb updates.
+    // These values are recomputed every time the blorb updates.
+    index: number,
     pos: number,
 };
 
@@ -63,6 +64,7 @@ export function new_chunk(type:string|Uint8Array, data:Uint8Array) : Chunk
         type: ctype,
         formtype: formtype,
         data: data,
+        index: -1,
         pos: 0,
     }
 
@@ -186,17 +188,18 @@ export function blorb_recompute_positions(blorb: Blorb) : Blorb
         return blorb;
     }
 
+    let index = 0;
     let pos = 12;
     let newls: Chunk[] = [];
     let newmap: Map<number, Chunk> = new Map();
     
     for (let origchunk of blorb.chunks) {
         let chunk: Chunk;
-        if (origchunk.pos == pos) {
+        if (origchunk.pos == pos && origchunk.index == index) {
             chunk = origchunk;
         }
         else {
-            chunk = { ...origchunk, pos:pos };
+            chunk = { ...origchunk, pos:pos, index:index };
         }
         newls.push(chunk);
         newmap.set(chunk.reactkey, chunk);
@@ -208,6 +211,7 @@ export function blorb_recompute_positions(blorb: Blorb) : Blorb
         
         if (pos & 1)
             pos++;
+        index++;
     }
     
     return {

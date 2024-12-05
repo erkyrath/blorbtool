@@ -1,4 +1,12 @@
 
+export function byte_to_hex(val: number) : string
+{
+    let res = val.toString(16).toUpperCase();
+    while (res.length < 2)
+        res = '0'+res;
+    return res;
+}
+
 export function pretty_size(len: number) : string
 {
     if (len == 1)

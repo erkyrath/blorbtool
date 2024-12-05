@@ -2,15 +2,25 @@ import React from 'react';
 
 import { Chunk, Blorb } from './blorb';
 import { chunk_readable_desc, blorb_resentry_for_chunk } from './blorb';
-import { pretty_size } from './readable';
+import { pretty_size, byte_to_hex } from './readable';
 
 export function DisplayChunk({ blorb, chunk } : { blorb:Blorb, chunk:Chunk })
 {
     let resentry = blorb_resentry_for_chunk(blorb, chunk);
+
+    let subdata = chunk.data.slice(0, 512);
+    let ls = [ ...subdata ].map(byte_to_hex);
+    let hexdump = ls.join(' ');
+
+    let extra = chunk.data.length - subdata.length;
     
     return (
         <div className="DisplayChunk">
-            <ul>
+            <h3>
+                Chunk { chunk.index }:{' '}
+                { chunk_readable_desc(chunk) }
+            </h3>
+            <ul className="InfoList">
                 <li><span className="InfoLabel">Type:</span>{' '}
                     <code className="IType">
                         { chunk.type.stype }
@@ -30,6 +40,12 @@ export function DisplayChunk({ blorb, chunk } : { blorb:Blorb, chunk:Chunk })
                 <li>
                     <span className="InfoLabel">File position:</span> { chunk.pos }</li>
             </ul>
+            <div>
+                <code className="HexData">{ hexdump }</code>
+                { ( extra ?
+                    <span className="InfoLabel"> (...{ extra } more)</span>
+                    : null) }
+            </div>
         </div>
     );
 }

@@ -68,6 +68,7 @@ body {
     border-left: 1px solid #AAA;
     padding: 10px 20px;
     box-sizing: border-box;
+    overflow-y: scroll;
 }
 
 .IndexCol ul {
@@ -84,6 +85,11 @@ code.IType {
     background: #00008811;
     white-space: pre;
     padding: 1px 2px;
+}
+
+.InfoList {
+    list-style: none;
+    padding: 0px;
 }
 
 .InfoLabel {
