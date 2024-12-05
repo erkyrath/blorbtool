@@ -2,7 +2,7 @@ import React from 'react';
 import { useState } from 'react';
 
 import { Chunk, Blorb, CTypes } from './blorb';
-import { chunk_readable_desc, blorb_resentry_for_chunk } from './blorb';
+import { chunk_readable_desc, blorb_resentry_for_chunk, blorb_chunk_for_usage } from './blorb';
 import { ArrowToChunk } from './widgets';
 import { pretty_size, byte_to_hex } from './readable';
 
@@ -108,12 +108,20 @@ function DisplayChunkResIndexEntry(ent: CTypes.CTResIndexEntry)
 
 function DisplayChunkFrontispiece(blorb: Blorb, chunk: CTypes.CTFrontispiece)
 {
+    let imgchunk = blorb_chunk_for_usage(blorb, 'Pict', chunk.picnum);
+
+    //### or error if not found
+    
     return (
         <div>
             Cover image is{' '}
             <code className="IType">PICT</code>
             {' #'}{ chunk.picnum }
-            {' '}&nbsp; <ArrowToChunk destkey={ chunk.picnum } />
+            { ( imgchunk ?
+                <>
+                    {' '}&nbsp; <ArrowToChunk destkey={ imgchunk.reactkey } />
+                </>
+                : null) }
         </div>
     );
 }

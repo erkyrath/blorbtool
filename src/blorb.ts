@@ -268,3 +268,23 @@ export function blorb_resentry_for_chunk(blorb: Blorb, chunk: Chunk) : CTypes.CT
     }
     return undefined;
 }
+
+export function blorb_chunk_for_usage(blorb: Blorb, usage: string, resnum: number) : Chunk|undefined
+{
+    if (blorb.chunks.length == 0 || blorb.chunks[0].type.stype != 'RIdx')
+        return undefined;
+    
+    let ridx = blorb.chunks[0] as CTypes.CTResIndex;
+    //### use a map. or two
+    for (let ent of ridx.entries) {
+        if (ent.usage == usage && ent.resnum == resnum) {
+            for (let chunk of blorb.chunks) {
+                if (chunk.pos == ent.pos)
+                    return chunk;
+            }
+            return undefined;
+        }
+    }
+    return undefined;
+}
+

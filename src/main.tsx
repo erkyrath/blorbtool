@@ -7,7 +7,7 @@ import { chunk_readable_desc, blorb_resentry_for_chunk } from './blorb';
 import { parse_blorb } from './parseblorb';
 import { pretty_size } from './readable';
 
-import { SetSelectionCtx } from './contexts';
+import { BlorbCtx, SetSelectionCtx } from './contexts';
 import { DisplayChunk } from './dispcol';
 
 let initialBlorb: Blorb|undefined;
@@ -48,21 +48,23 @@ function MyApp()
     
     return (
         <SetSelectionCtx.Provider value={ setSelected }>
-            <div className="IndexCol" onClick={ evhan_click_background }>
-                <div className="BlorbInfo">
-                    <div className="BlorbTitle">{ blorb.filename || '(untitled)' }</div>
-                    <div className="BlorbGloss">
-                    { blorb.chunks.length } chunks, { pretty_size(blorb.totallen) }</div>
+            <BlorbCtx.Provider value={ blorb }>
+                <div className="IndexCol" onClick={ evhan_click_background }>
+                    <div className="BlorbInfo">
+                        <div className="BlorbTitle">{ blorb.filename || '(untitled)' }</div>
+                        <div className="BlorbGloss">
+                        { blorb.chunks.length } chunks, { pretty_size(blorb.totallen) }</div>
+                    </div>
+                    <ul className="ChunkList">
+                        { chunkls }
+                    </ul>
                 </div>
-                <ul className="ChunkList">
-                    { chunkls }
-                </ul>
-            </div>
-            <div className="DisplayCol">
-                { (selchunk ?
-                   <DisplayChunk blorb={ blorb } chunk={ selchunk } />
-                   : null) }
-            </div>
+                <div className="DisplayCol">
+                    { (selchunk ?
+                       <DisplayChunk blorb={ blorb } chunk={ selchunk } />
+                       : null) }
+                </div>
+            </BlorbCtx.Provider>
         </SetSelectionCtx.Provider>
     );
 }
