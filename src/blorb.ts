@@ -93,6 +93,7 @@ export function chunk_readable_desc(chunk: Chunk) : string
     case 'ANNO': return 'Annotation';
     case 'SNam': return 'Story name (deprecated)';
 
+    case 'RelN': return 'Release number (Z-code)';
     case 'Reso': return 'Resolution';
     case 'APal': return 'Adaptive palette';
     case 'Loop': return 'Audio looping';
