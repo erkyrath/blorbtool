@@ -3,7 +3,7 @@ import { useState, useReducer } from 'react';
 import { Root, createRoot } from 'react-dom/client';
 
 import { Chunk, Blorb, new_blorb } from './blorb';
-import { chunk_readable_desc } from './blorb';
+import { chunk_readable_desc, blorb_resentry_for_chunk } from './blorb';
 import { parse_blorb } from './parseblorb';
 import { pretty_size } from './readable';
 
@@ -54,6 +54,8 @@ function MyApp()
 
 function ChunkListEntry(chunk: Chunk, blorb: Blorb)
 {
+    let resentry = blorb_resentry_for_chunk(blorb, chunk);
+    
     return (
         <li key={ chunk.reactkey }>
             <div className="ChunkTitle">{ chunk_readable_desc(chunk) }</div>
@@ -64,6 +66,12 @@ function ChunkListEntry(chunk: Chunk, blorb: Blorb)
                     { chunk.formtype ? ('/'+chunk.formtype.stype) : '' }
                 </code>
             </div>
+            { (resentry ?
+               <div className="ChunkType">
+                   <code className="IType">{ resentry.usage }</code>
+                   {' '}{ resentry.resnum }
+               </div>
+               : null) }
         </li>
     );
 }

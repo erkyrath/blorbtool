@@ -217,3 +217,17 @@ export function blorb_recompute_positions(blorb: Blorb) : Blorb
         keymap: newmap,
     };
 }
+
+export function blorb_resentry_for_chunk(blorb: Blorb, chunk: Chunk) : ChunkResIndexEntry|undefined
+{
+    if (blorb.chunks.length == 0 || blorb.chunks[0].type.stype != 'RIdx')
+        return undefined;
+    
+    let ridx = blorb.chunks[0] as ChunkResIndex;
+    //### use a map
+    for (let ent of ridx.entries) {
+        if (ent.pos == chunk.pos)
+            return ent;
+    }
+    return undefined;
+}
