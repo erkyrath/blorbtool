@@ -69,6 +69,14 @@ function BlorbInfoHeader()
 {
     let blorb = useContext(BlorbCtx);
 
+    if (blorb.chunks.length == 0) {
+        return (
+            <div className="BlorbInfo">
+                <div className="BlorbTitle">(no blorb data is loaded)</div>
+            </div>
+        );
+    }
+
     return (
         <div className="BlorbInfo">
             <div className="BlorbTitle">{ blorb.filename || '(untitled)' }</div>
