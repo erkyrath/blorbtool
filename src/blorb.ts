@@ -24,7 +24,7 @@ function make_chunk_type(type:string|Uint8Array) : ChunkType
 
 let keycounter = 0;
 
-export type Chunk = {
+export interface Chunk {
     // unique identifier for this chunk -- internal use only
     reactkey: number, 
 
@@ -37,19 +37,15 @@ export type Chunk = {
     pos: number,
 };
 
-type ChunkResIndex = {
-    // unique identifier for this chunk -- internal use only
-    reactkey: number, 
-
-    type: ChunkType,
-    formtype: ChunkType|undefined, // set if type is 'FORM'
-
-    data: Uint8Array,
-
-    // The pos is recomputed every time the blorb updates.
+type ChunkResIndexEntry = {
+    usage: 'Pict' | 'Snd ' | 'Data' | 'Exec',
+    resnum: number,
     pos: number,
+};
 
-    flag: boolean;
+interface ChunkResIndex extends Chunk {
+    entries: ReadonlyArray<ChunkResIndexEntry>,
+    //### maps
 };
 
 export function new_chunk(type:string|Uint8Array, data:Uint8Array) : Chunk
