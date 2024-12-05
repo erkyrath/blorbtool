@@ -3,6 +3,7 @@ import { useState } from 'react';
 
 import { Chunk, Blorb, CTypes } from './blorb';
 import { chunk_readable_desc, blorb_resentry_for_chunk } from './blorb';
+import { ArrowToChunk } from './widgets';
 import { pretty_size, byte_to_hex } from './readable';
 
 export function DisplayChunk({ blorb, chunk } : { blorb:Blorb, chunk:Chunk })
@@ -92,14 +93,16 @@ function DisplayChunkResIndex(blorb: Blorb, chunk: CTypes.CTResIndex)
 
 function DisplayChunkResIndexEntry(ent: CTypes.CTResIndexEntry)
 {
+    let destkey = -1; //###
+    
     return (
         <li key={ ent.pos }>
             <code className="IType">{ ent.usage }</code>
             {' #'}{ ent.resnum },
             &nbsp;
             <span className="InfoLabel">starts at</span> { ent.pos }
+            {' '}&nbsp; <ArrowToChunk destkey={ destkey } />
         </li>
-        //### link!
     );
 }
 
@@ -110,8 +113,8 @@ function DisplayChunkFrontispiece(blorb: Blorb, chunk: CTypes.CTFrontispiece)
             Cover image is{' '}
             <code className="IType">PICT</code>
             {' #'}{ chunk.picnum }
+            {' '}&nbsp; <ArrowToChunk destkey={ chunk.picnum } />
         </div>
-        //### link!
     );
 }
 
