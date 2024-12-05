@@ -41,6 +41,7 @@ function MyApp()
     let chunkls = blorb.chunks.map(chunk =>
         ChunkListEntry(chunk, blorb, (chunk.reactkey == selected), setSelected)
     );
+    let selchunk = blorb.chunks.find(chunk => (chunk.reactkey == selected));
     
     return (
         <>
@@ -55,6 +56,9 @@ function MyApp()
                 </ul>
             </div>
             <div className="DisplayCol">
+                { (selchunk ?
+                   <DisplayChunk />
+                   : null) }
             </div>
         </>
     );
@@ -88,6 +92,13 @@ function ChunkListEntry(chunk: Chunk, blorb: Blorb, isselected: boolean, setSele
             <div className="ChunkTitle">{ chunk_readable_desc(chunk) }</div>
             <div className="ChunkGloss">{ pretty_size(chunk.data.length) }</div>
         </li>
+    );
+}
+
+function DisplayChunk()
+{
+    return (
+        <div>STUFF</div>
     );
 }
 
