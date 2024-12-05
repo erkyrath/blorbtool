@@ -1,11 +1,16 @@
 import React from 'react';
+import { useContext } from 'react';
+
+import { SetSelectionCtx } from './contexts';
 
 export function ArrowToChunk({ destkey }: { destkey:number })
 {
+    let setSelection = useContext(SetSelectionCtx);
+    
     function evhan_click(ev: React.MouseEvent<HTMLElement, MouseEvent>) {
         ev.preventDefault();
         ev.stopPropagation();
-        console.log('### goto', destkey);
+        setSelection(destkey);
     }
 
     return (

@@ -7,6 +7,7 @@ import { chunk_readable_desc, blorb_resentry_for_chunk } from './blorb';
 import { parse_blorb } from './parseblorb';
 import { pretty_size } from './readable';
 
+import { SetSelectionCtx } from './contexts';
 import { DisplayChunk } from './dispcol';
 
 let initialBlorb: Blorb|undefined;
@@ -46,7 +47,7 @@ function MyApp()
     let selchunk = blorb.chunks.find(chunk => (chunk.reactkey == selected));
     
     return (
-        <>
+        <SetSelectionCtx.Provider value={ setSelected }>
             <div className="IndexCol" onClick={ evhan_click_background }>
                 <div className="BlorbInfo">
                     <div className="BlorbTitle">{ blorb.filename || '(untitled)' }</div>
@@ -62,7 +63,7 @@ function MyApp()
                    <DisplayChunk blorb={ blorb } chunk={ selchunk } />
                    : null) }
             </div>
-        </>
+        </SetSelectionCtx.Provider>
     );
 }
 
