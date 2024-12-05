@@ -38,7 +38,7 @@ export interface Chunk {
     pos: number,
 };
 
-export namespace ChunkTypes {
+export namespace CTypes {
     
     type ChunkUsage = 'Pict' | 'Snd ' | 'Data' | 'Exec';
     export type CTResIndexEntry = {
@@ -86,9 +86,9 @@ export function new_chunk(type:string|Uint8Array, data:Uint8Array) : Chunk
     return chunk;
 }
 
-function new_chunk_RIdx(chunk: Chunk) : ChunkTypes.CTResIndex
+function new_chunk_RIdx(chunk: Chunk) : CTypes.CTResIndex
 {
-    let entries: ChunkTypes.CTResIndexEntry[] = [];
+    let entries: CTypes.CTResIndexEntry[] = [];
 
     let count = u8read4(chunk.data, 0);
     if (chunk.data.length != 4 + count*12) {
@@ -104,7 +104,7 @@ function new_chunk_RIdx(chunk: Chunk) : ChunkTypes.CTResIndex
             console.log('### bad index entry usage');
             continue;
         }
-        let ent: ChunkTypes.CTResIndexEntry = { usage:usage, resnum:resnum, pos:pos };
+        let ent: CTypes.CTResIndexEntry = { usage:usage, resnum:resnum, pos:pos };
         entries.push(ent);
     }
 
@@ -114,7 +114,7 @@ function new_chunk_RIdx(chunk: Chunk) : ChunkTypes.CTResIndex
     return { ...chunk, entries:entries };
 }
 
-function new_chunk_Fspc(chunk: Chunk) : ChunkTypes.CTFrontispiece
+function new_chunk_Fspc(chunk: Chunk) : CTypes.CTFrontispiece
 {
     if (chunk.data.length != 4) {
         console.log('### bad chunk size');
@@ -243,12 +243,12 @@ export function blorb_recompute_positions(blorb: Blorb) : Blorb
     };
 }
 
-export function blorb_resentry_for_chunk(blorb: Blorb, chunk: Chunk) : ChunkTypes.CTResIndexEntry|undefined
+export function blorb_resentry_for_chunk(blorb: Blorb, chunk: Chunk) : CTypes.CTResIndexEntry|undefined
 {
     if (blorb.chunks.length == 0 || blorb.chunks[0].type.stype != 'RIdx')
         return undefined;
     
-    let ridx = blorb.chunks[0] as ChunkTypes.CTResIndex;
+    let ridx = blorb.chunks[0] as CTypes.CTResIndex;
     //### use a map
     for (let ent of ridx.entries) {
         if (ent.pos == chunk.pos)
