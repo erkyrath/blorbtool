@@ -154,16 +154,16 @@ export function blorb_recompute_positions(blorb: Blorb) : Blorb
     let newls: Chunk[] = [];
     let newmap: Map<number, Chunk> = new Map();
     
-    for (let chunk of blorb.chunks) {
-        let newchunk: Chunk;
-        if (chunk.pos == pos) {
-            newchunk = chunk;
+    for (let origchunk of blorb.chunks) {
+        let chunk: Chunk;
+        if (origchunk.pos == pos) {
+            chunk = origchunk;
         }
         else {
-            newchunk = { ...chunk, pos:pos };
+            chunk = { ...origchunk, pos:pos };
         }
-        newls.push(newchunk);
-        newmap.set(newchunk.reactkey, newchunk);
+        newls.push(chunk);
+        newmap.set(chunk.reactkey, chunk);
         
         if (chunk.formtype)
             pos += chunk.data.length;
