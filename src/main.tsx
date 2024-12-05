@@ -56,8 +56,14 @@ function ChunkListEntry(chunk: Chunk, blorb: Blorb)
 {
     let resentry = blorb_resentry_for_chunk(blorb, chunk);
     
+    function evhan_click(ev: MouseEvLI) {
+        console.log('### click', chunk.type, resentry);
+        ev.preventDefault();
+        ev.stopPropagation();
+    }
+    
     return (
-        <li key={ chunk.reactkey }>
+        <li key={ chunk.reactkey } onClick={ evhan_click }>
             <div className="ChunkType">
                 <code className="IType">
                     { chunk.type.stype }
@@ -82,5 +88,5 @@ function reduceBlorb(blorb: Blorb, act: any) : Blorb
     return blorb;
 }
 
-type MouseEv = React.MouseEventHandler<HTMLButtonElement>;
+type MouseEvLI = React.MouseEvent<HTMLLIElement, MouseEvent>;
 
