@@ -124,6 +124,20 @@ function DisplayChunkMetadata(blorb: Blorb, chunk: CTypes.CTMetadata)
         ev.stopPropagation();
         setShowRaw(!showraw);
     }
+
+    if (showraw) {
+        return (
+            <>
+                <div className="InfoLabel">
+                    XML content:{' '}
+                    <a href="#" onClick={ evhan_click }>(show parsed)</a>
+                </div>
+                <pre>
+                    { chunk.metadata }
+                </pre>
+            </>
+        );
+    }
     
     let xmlparser = new DOMParser();
     let xmldoc = xmlparser.parseFromString(chunk.metadata, 'text/xml');
@@ -143,7 +157,7 @@ function DisplayChunkMetadata(blorb: Blorb, chunk: CTypes.CTMetadata)
             <div className="InfoLabel">
                 XML content:{' '}
                 <a href="#" onClick={ evhan_click }>(show raw)</a>
-                </div>
+            </div>
             <ul className="NestTree">
                 <ShowXMLNode nod={ xmlnod } />
             </ul>
