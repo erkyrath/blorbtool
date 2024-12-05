@@ -32,13 +32,19 @@ function MyApp()
     
     (window as any).curblorb = blorb; //###
 
+    function evhan_click_background(ev: React.MouseEvent<HTMLDivElement, MouseEvent>) {
+        ev.preventDefault();
+        ev.stopPropagation();
+        setSelected(-1);
+    }
+    
     let chunkls = blorb.chunks.map(chunk =>
         ChunkListEntry(chunk, blorb, (chunk.reactkey == selected), setSelected)
     );
     
     return (
         <>
-            <div className="IndexCol">
+            <div className="IndexCol" onClick={ evhan_click_background }>
                 <div className="BlorbInfo">
                     <div className="BlorbTitle">{ blorb.filename || '(untitled)' }</div>
                     <div className="BlorbGloss">
