@@ -28,6 +28,7 @@ function MyApp()
     }
     
     const [blorb, dispBlorb] = useReducer(reduceBlorb, initialBlorb!);
+    (window as any).curblorb = blorb; //###
 
     let chunkls = blorb.chunks.map(chunk =>
         ChunkListEntry(chunk, blorb)
