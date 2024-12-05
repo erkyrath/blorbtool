@@ -38,8 +38,12 @@ body {
 }
 
 .ChunkList .ChunkGloss {
-    float: right;
     font-size: 85%;
+}
+
+.ChunkList .ChunkType {
+    float: right;
+    text-align: right;
 }
 
 .BlorbInfo {

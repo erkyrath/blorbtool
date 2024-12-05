@@ -58,20 +58,21 @@ function ChunkListEntry(chunk: Chunk, blorb: Blorb)
     
     return (
         <li key={ chunk.reactkey }>
-            <div className="ChunkTitle">{ chunk_readable_desc(chunk) }</div>
-            <div className="ChunkGloss">{ pretty_size(chunk.data.length) }</div>
             <div className="ChunkType">
                 <code className="IType">
                     { chunk.type.stype }
                     { chunk.formtype ? ('/'+chunk.formtype.stype) : '' }
                 </code>
-            </div>
-            { (resentry ?
-               <div className="ChunkType">
-                   <code className="IType">{ resentry.usage }</code>
-                   {' '}{ resentry.resnum }
-               </div>
+                { (resentry ?
+                   <>
+                       <br />
+                       <code className="IType">{ resentry.usage }</code>
+                       {' #'}{ resentry.resnum }
+                   </>
                : null) }
+            </div>
+            <div className="ChunkTitle">{ chunk_readable_desc(chunk) }</div>
+            <div className="ChunkGloss">{ pretty_size(chunk.data.length) }</div>
         </li>
     );
 }
