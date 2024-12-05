@@ -1,4 +1,4 @@
-import { u8ToString, stringToU8 } from './datutil';
+import { u8ToString, stringToU8, u8read4 } from './datutil';
 
 export type ChunkType = {
     stype: string, // four characters
@@ -37,8 +37,9 @@ export interface Chunk {
     pos: number,
 };
 
+type ChunkUsage = 'Pict' | 'Snd ' | 'Data' | 'Exec';
 type ChunkResIndexEntry = {
-    usage: 'Pict' | 'Snd ' | 'Data' | 'Exec',
+    usage: ChunkUsage,
     resnum: number,
     pos: number,
 };
@@ -57,13 +58,48 @@ export function new_chunk(type:string|Uint8Array, data:Uint8Array) : Chunk
         formtype = make_chunk_type(data.slice(8, 12));
     }
     
-    return {
+    let chunk: Chunk = {
         reactkey: keycounter++,
         type: ctype,
         formtype: formtype,
         data: data,
         pos: 0,
     }
+
+    switch (ctype.stype) {
+    case 'RIdx':
+        return new_chunk_ridx(chunk);
+    }
+
+    return chunk;
+}
+
+function new_chunk_ridx(chunk: Chunk) : ChunkResIndex
+{
+    let entries: ChunkResIndexEntry[] = [];
+
+    let count = u8read4(chunk.data, 0);
+    if (chunk.data.length != 4 + count*12) {
+        console.log('### bad index chunk count');
+        return { ...chunk, entries:entries };
+    }
+
+    for (let ix=0; ix<count; ix++) {
+        let usage = u8ToString(chunk.data, 4 + ix*12, 4);
+        let resnum = u8read4(chunk.data, 4 + ix*12 + 4);
+        let pos = u8read4(chunk.data, 4 + ix*12 + 8);
+        if (usage != 'Pict' && usage != 'Snd ' && usage != 'Data' && usage != 'Exec') {
+            console.log('### bad index entry usage');
+            continue;
+        }
+        let ent: ChunkResIndexEntry = { usage:usage, resnum:resnum, pos:pos };
+        entries.push(ent);
+    }
+
+    //### should check that the pos values are valid
+    //### and build some maps
+    
+    return { ...chunk, entries:entries };
 }
 
 export function chunk_readable_desc(chunk: Chunk) : string
