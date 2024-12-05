@@ -57,7 +57,7 @@ function MyApp()
             </div>
             <div className="DisplayCol">
                 { (selchunk ?
-                   <DisplayChunk />
+                   <DisplayChunk chunk={ selchunk } />
                    : null) }
             </div>
         </>
@@ -95,10 +95,10 @@ function ChunkListEntry(chunk: Chunk, blorb: Blorb, isselected: boolean, setSele
     );
 }
 
-function DisplayChunk()
+function DisplayChunk({ chunk } : { chunk:Chunk })
 {
     return (
-        <div>STUFF</div>
+        <div>{ chunk.type.stype }</div>
     );
 }
 
