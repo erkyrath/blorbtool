@@ -2,6 +2,7 @@
 export function byte_to_hex(val: number) : string
 {
     let res = val.toString(16).toUpperCase();
+    // leftpad can go whistle
     while (res.length < 2)
         res = '0'+res;
     return res;
