@@ -145,17 +145,17 @@ function DisplayChunkMetadata(blorb: Blorb, chunk: CTypes.CTMetadata)
                 <a href="#" onClick={ evhan_click }>(show raw)</a>
                 </div>
             <ul className="NestTree">
-                <ShowXMLNode nod={ xmlnod } index={0} />
+                <ShowXMLNode nod={ xmlnod } />
             </ul>
         </>
     );
 }
 
-function ShowXMLNode({ nod, index } : { nod:Node, index:number }) : React.ReactNode
+function ShowXMLNode({ nod } : { nod:Node }) : React.ReactNode
 {
     if (nod.nodeType == nod.TEXT_NODE) {
         return (
-            <div key={ index }>
+            <div>
                 { nod.textContent }
             </div>
         )
@@ -164,7 +164,7 @@ function ShowXMLNode({ nod, index } : { nod:Node, index:number }) : React.ReactN
     if (nod.childNodes.length == 1 && nod.childNodes[0].nodeType == nod.TEXT_NODE) {
         let subnod = nod.childNodes[0];
         return (
-            <div key={ index }>
+            <div>
                 { nod.nodeName }: { subnod.textContent }
             </div>
         )
@@ -172,11 +172,13 @@ function ShowXMLNode({ nod, index } : { nod:Node, index:number }) : React.ReactN
 
     let counter = 0;
     let subls = [ ...nod.childNodes ].map(subnod =>
-        ShowXMLNode({ nod:subnod, index:counter++ })
+        <div key={ counter++ }>
+            <ShowXMLNode nod={ subnod } />
+        </div>
     );
     
     return (
-        <li key={ index }>
+        <li>
             { nod.nodeName }:
             <ul className="NestTreeSub">
                 { subls }
