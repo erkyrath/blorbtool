@@ -50,11 +50,7 @@ function MyApp()
         <SetSelectionCtx.Provider value={ setSelected }>
             <BlorbCtx.Provider value={ blorb }>
                 <div className="IndexCol" onClick={ evhan_click_background }>
-                    <div className="BlorbInfo">
-                        <div className="BlorbTitle">{ blorb.filename || '(untitled)' }</div>
-                        <div className="BlorbGloss">
-                        { blorb.chunks.length } chunks, { pretty_size(blorb.totallen) }</div>
-                    </div>
+                    <BlorbInfoHeader />
                     <ul className="ChunkList">
                         { chunkls }
                     </ul>
@@ -66,6 +62,19 @@ function MyApp()
                 </div>
             </BlorbCtx.Provider>
         </SetSelectionCtx.Provider>
+    );
+}
+
+function BlorbInfoHeader()
+{
+    let blorb = useContext(BlorbCtx);
+
+    return (
+        <div className="BlorbInfo">
+            <div className="BlorbTitle">{ blorb.filename || '(untitled)' }</div>
+            <div className="BlorbGloss">
+            { blorb.chunks.length } chunks, { pretty_size(blorb.totallen) }</div>
+        </div>
     );
 }
 
