@@ -50,6 +50,10 @@ export interface ChunkResIndex extends Chunk {
     //### maps
 };
 
+export interface ChunkFrontispiece extends Chunk {
+    picnum: number;
+}
+
 export function new_chunk(type:string|Uint8Array, data:Uint8Array) : Chunk
 {
     let ctype = make_chunk_type(type);
@@ -70,13 +74,15 @@ export function new_chunk(type:string|Uint8Array, data:Uint8Array) : Chunk
 
     switch (ctype.stype) {
     case 'RIdx':
-        return new_chunk_ridx(chunk);
+        return new_chunk_RIdx(chunk);
+    case 'Fspc':
+        return new_chunk_Fspc(chunk);
     }
 
     return chunk;
 }
 
-function new_chunk_ridx(chunk: Chunk) : ChunkResIndex
+function new_chunk_RIdx(chunk: Chunk) : ChunkResIndex
 {
     let entries: ChunkResIndexEntry[] = [];
 
@@ -102,6 +108,17 @@ function new_chunk_ridx(chunk: Chunk) : ChunkResIndex
     //### and build some maps
     
     return { ...chunk, entries:entries };
+}
+
+function new_chunk_Fspc(chunk: Chunk) : ChunkFrontispiece
+{
+    if (chunk.data.length != 4) {
+        console.log('### bad chunk size');
+        return { ...chunk, picnum:0 };
+    }
+    
+    let num = u8read4(chunk.data, 0);
+    return { ...chunk, picnum:num };
 }
 
 export function chunk_readable_desc(chunk: Chunk) : string

@@ -2,6 +2,7 @@ import React from 'react';
 
 import { Chunk, Blorb } from './blorb';
 import { ChunkResIndex, ChunkResIndexEntry } from './blorb';
+import { ChunkFrontispiece } from './blorb';
 import { chunk_readable_desc, blorb_resentry_for_chunk } from './blorb';
 import { pretty_size, byte_to_hex } from './readable';
 
@@ -13,6 +14,9 @@ export function DisplayChunk({ blorb, chunk } : { blorb:Blorb, chunk:Chunk })
     switch (chunk.type.stype) {
     case 'RIdx':
         display = DisplayChunkResIndex(blorb, chunk as ChunkResIndex);
+        break;
+    case 'Fspc':
+        display = DisplayChunkFrontispiece(blorb, chunk as ChunkFrontispiece);
         break;
     default:
         display = DisplayChunkRaw(blorb, chunk);
@@ -93,6 +97,17 @@ function DisplayChunkResIndexEntry(ent: ChunkResIndexEntry)
             &nbsp;
             <span className="InfoLabel">starts at</span> { ent.pos }
         </li>
+    );
+}
+
+function DisplayChunkFrontispiece(blorb: Blorb, chunk: ChunkFrontispiece)
+{
+    return (
+        <div>
+            Cover image is{' '}
+            <code className="IType">PICT</code>
+            {' #'}{ chunk.picnum }
+        </div>
     );
 }
 
