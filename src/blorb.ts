@@ -39,13 +39,13 @@ export interface Chunk {
 };
 
 type ChunkUsage = 'Pict' | 'Snd ' | 'Data' | 'Exec';
-type ChunkResIndexEntry = {
+export type ChunkResIndexEntry = {
     usage: ChunkUsage,
     resnum: number,
     pos: number,
 };
 
-interface ChunkResIndex extends Chunk {
+export interface ChunkResIndex extends Chunk {
     entries: ReadonlyArray<ChunkResIndexEntry>,
     //### maps
 };

@@ -1,6 +1,7 @@
 import React from 'react';
 
 import { Chunk, Blorb } from './blorb';
+import { ChunkResIndex, ChunkResIndexEntry } from './blorb';
 import { chunk_readable_desc, blorb_resentry_for_chunk } from './blorb';
 import { pretty_size, byte_to_hex } from './readable';
 
@@ -8,7 +9,15 @@ export function DisplayChunk({ blorb, chunk } : { blorb:Blorb, chunk:Chunk })
 {
     let resentry = blorb_resentry_for_chunk(blorb, chunk);
 
-    let display = DisplayChunkRaw(blorb, chunk);
+    let display;
+    switch (chunk.type.stype) {
+    case 'RIdx':
+        display = DisplayChunkResIndex(blorb, chunk as ChunkResIndex);
+        break;
+    default:
+        display = DisplayChunkRaw(blorb, chunk);
+        break;
+    }
     
     return (
         <div className="DisplayChunk">
@@ -42,7 +51,7 @@ export function DisplayChunk({ blorb, chunk } : { blorb:Blorb, chunk:Chunk })
     );
 }
 
-export function DisplayChunkRaw(blorb: Blorb, chunk: Chunk)
+function DisplayChunkRaw(blorb: Blorb, chunk: Chunk)
 {
     let subdata = chunk.data.slice(0, 512);
     let ls = [ ...subdata ].map(byte_to_hex);
@@ -51,11 +60,39 @@ export function DisplayChunkRaw(blorb: Blorb, chunk: Chunk)
     let extra = chunk.data.length - subdata.length;
 
     return (
-            <div>
-                <code className="HexData">{ hexdump }</code>
-                { ( extra ?
-                    <span className="InfoLabel"> (...{ extra } more)</span>
-                    : null) }
-            </div>
+        <div>
+            <code className="HexData">{ hexdump }</code>
+            { ( extra ?
+                <span className="InfoLabel"> (...{ extra } more)</span>
+                : null) }
+        </div>
     );
 }
+
+function DisplayChunkResIndex(blorb: Blorb, chunk: ChunkResIndex)
+{
+    let entls = chunk.entries.map(ent =>
+        DisplayChunkResIndexEntry(ent)
+    );
+    
+    return (
+        <div>
+            <ul className="InfoList">
+                { entls }
+            </ul>
+        </div>
+    );
+}
+
+function DisplayChunkResIndexEntry(ent: ChunkResIndexEntry)
+{
+    return (
+        <li key={ ent.pos }>
+            <code className="IType">{ ent.usage }</code>
+            {' #'}{ ent.resnum },
+            &nbsp;
+            <span className="InfoLabel">starts at</span> { ent.pos }
+        </li>
+    );
+}
+
