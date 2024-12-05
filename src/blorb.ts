@@ -56,6 +56,10 @@ export namespace CTypes {
         picnum: number;
     }
     
+    export interface CTMetadata extends Chunk {
+        metadata: string;
+    }
+    
 }
 
 export function new_chunk(type:string|Uint8Array, data:Uint8Array) : Chunk
@@ -81,6 +85,8 @@ export function new_chunk(type:string|Uint8Array, data:Uint8Array) : Chunk
         return new_chunk_RIdx(chunk);
     case 'Fspc':
         return new_chunk_Fspc(chunk);
+    case 'IFmd':
+        return new_chunk_IFmd(chunk);
     }
 
     return chunk;
@@ -123,6 +129,12 @@ function new_chunk_Fspc(chunk: Chunk) : CTypes.CTFrontispiece
     
     let num = u8read4(chunk.data, 0);
     return { ...chunk, picnum:num };
+}
+
+function new_chunk_IFmd(chunk: Chunk) : CTypes.CTMetadata
+{
+    let metadata = u8ToString(chunk.data); //### UTF-8!
+    return { ...chunk, metadata:metadata };
 }
 
 export function chunk_readable_desc(chunk: Chunk) : string

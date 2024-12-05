@@ -77,6 +77,11 @@ body {
     padding: 0px;
 }
 
+pre {
+    font-family: "Source Code Pro";
+    font-size: 85%;
+}
+
 code {
     font-family: "Source Code Pro";
 }

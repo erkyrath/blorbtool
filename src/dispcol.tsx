@@ -16,6 +16,9 @@ export function DisplayChunk({ blorb, chunk } : { blorb:Blorb, chunk:Chunk })
     case 'Fspc':
         display = DisplayCTFrontispiece(blorb, chunk as CTypes.CTFrontispiece);
         break;
+    case 'IFmd':
+        display = DisplayCTMetadata(blorb, chunk as CTypes.CTMetadata);
+        break;
     default:
         display = DisplayChunkRaw(blorb, chunk);
         break;
@@ -111,3 +114,11 @@ function DisplayCTFrontispiece(blorb: Blorb, chunk: CTypes.CTFrontispiece)
     );
 }
 
+function DisplayCTMetadata(blorb: Blorb, chunk: CTypes.CTMetadata)
+{
+    return (
+        <pre>
+            { chunk.metadata }
+        </pre>
+    );
+}
