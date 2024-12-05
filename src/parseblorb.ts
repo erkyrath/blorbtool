@@ -67,10 +67,11 @@ export function parse_blorb(dat: Uint8Array, filename?: string) : Blorb
             pos++;
     }
 
-    let blorb = {
+    let blorb: Blorb = {
         filename: filename,
         chunks: (chunks as ReadonlyArray<Chunk>),
         totallen: pos,
+        keymap: new Map(),
     };
     blorb = blorb_recompute_positions(blorb);
 

@@ -125,6 +125,8 @@ export type Blorb = {
     filename: string|undefined;
     chunks: ReadonlyArray<Chunk>;
     totallen: number;
+
+    keymap: Map<number, Chunk>; // chunk.reactkey to chunk
 };
 
 export function new_blorb() : Blorb
@@ -133,6 +135,7 @@ export function new_blorb() : Blorb
         filename: undefined,
         chunks: [],
         totallen: 0,
+        keymap: new Map(),
     };
 }
 
@@ -149,14 +152,19 @@ export function blorb_recompute_positions(blorb: Blorb) : Blorb
 
     let pos = 12;
     let newls: Chunk[] = [];
+    let newmap: Map<number, Chunk> = new Map();
+    
     for (let chunk of blorb.chunks) {
+        let newchunk: Chunk;
         if (chunk.pos == pos) {
-            newls.push(chunk);
+            newchunk = chunk;
         }
         else {
-            let newchunk = { ...chunk, pos:pos };
-            newls.push(newchunk);
+            newchunk = { ...chunk, pos:pos };
         }
+        newls.push(newchunk);
+        newmap.set(newchunk.reactkey, newchunk);
+        
         if (chunk.formtype)
             pos += chunk.data.length;
         else
@@ -166,5 +174,10 @@ export function blorb_recompute_positions(blorb: Blorb) : Blorb
             pos++;
     }
     
-    return { ...blorb, chunks:newls, totallen:pos };
+    return {
+        ...blorb,
+        chunks: newls,
+        totallen: pos,
+        keymap: newmap,
+    };
 }
