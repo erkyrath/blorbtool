@@ -97,6 +97,7 @@ function DisplayChunkResIndexEntry(ent: ChunkResIndexEntry)
             &nbsp;
             <span className="InfoLabel">starts at</span> { ent.pos }
         </li>
+        //### link!
     );
 }
 
@@ -108,6 +109,7 @@ function DisplayChunkFrontispiece(blorb: Blorb, chunk: ChunkFrontispiece)
             <code className="IType">PICT</code>
             {' #'}{ chunk.picnum }
         </div>
+        //### link!
     );
 }
 
