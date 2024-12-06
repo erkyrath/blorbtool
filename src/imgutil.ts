@@ -24,7 +24,7 @@ function find_dimensions_png(arr: Uint8Array) : Size|undefined
             pos += 4;
             let height = (arr[pos+0] << 24) | (arr[pos+1] << 16) | (arr[pos+2] << 8) | (arr[pos+3]);
             pos += 4;
-            return { width:width, height:height };
+            return { width, height };
         }
         pos += chunklen;
         pos += 4; /* skip CRC */
@@ -61,7 +61,7 @@ function find_dimensions_jpeg(arr: Uint8Array) : Size|undefined
             }
             let height = (arr[pos+3] << 8) | (arr[pos+4]);
             let width  = (arr[pos+5] << 8) | (arr[pos+6]);
-            return { width:width, height:height };
+            return { width, height };
         }
         pos += chunklen;
     }
