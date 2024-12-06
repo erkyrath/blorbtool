@@ -79,6 +79,14 @@ export namespace CTypes {
         imgsize: ImageSize|undefined;
     }
     
+    export interface CTText extends Chunk {
+        text: string;
+    }
+    
+    export interface CTReleaseNumber extends Chunk {
+        release: number;
+    }
+    
 }
 
 export function new_chunk(type:string|Uint8Array, data:Uint8Array) : Chunk
@@ -114,6 +122,14 @@ export function new_chunk(type:string|Uint8Array, data:Uint8Array) : Chunk
         return new_chunk_PNG(chunk);
     case 'JPEG':
         return new_chunk_JPEG(chunk);
+    case 'RelN':
+        return new_chunk_RelN(chunk);
+    case 'AUTH':
+        return new_chunk_ASCIIText(chunk);
+    case 'ANNO':
+        return new_chunk_ASCIIText(chunk);
+    case '(c) ':
+        return new_chunk_ASCIIText(chunk);
     }
 
     return chunk;
@@ -206,6 +222,18 @@ function new_chunk_JPEG(chunk: Chunk) : CTypes.CTImage
 {
     let imgsize = find_dimensions_jpeg(chunk.data);
     return { ...chunk, imgsize:imgsize };
+}
+
+function new_chunk_ASCIIText(chunk: Chunk) : CTypes.CTText
+{
+    let text = u8ToString(chunk.data);
+    return { ...chunk, text:text };
+}
+
+function new_chunk_RelN(chunk: Chunk) : CTypes.CTReleaseNumber
+{
+    let release = 0x100 * chunk.data[0] + chunk.data[1];
+    return { ...chunk, release:release };
 }
 
 export function chunk_readable_desc(chunk: Chunk) : string
