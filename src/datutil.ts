@@ -14,7 +14,7 @@ export function u8ToString(arr: Uint8Array,
         else
             arr = arr.slice(rpos, rpos+len);
     }
-    return [ ...arr ].map(ch => String.fromCharCode(ch) ).join('');
+    return String.fromCharCode.apply(null, [ ...arr ]);
 }
 
 export function u8read4(arr: Uint8Array, pos: number) : number
