@@ -417,6 +417,10 @@ function DisplayChunkResolutionEntry({ ent }: { ent:CTypes.CTResolutionEntry })
                     {' '}&nbsp; <ArrowToChunk destkey={ chunk.reactkey } />
                 </>
                 : null) }
+            {' : '}
+            stdratio { ent.stdratio.numerator }/{ ent.stdratio.numerator },
+            minratio { ent.minratio.numerator }/{ ent.minratio.numerator },
+            maxratio { ent.maxratio.numerator }/{ ent.maxratio.numerator }
         </li>
     );
 }
