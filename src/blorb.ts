@@ -1,4 +1,4 @@
-import { u8ToString, stringToU8, u8read4 } from './datutil';
+import { u8ToString, u16ToString, stringToU8, u8read4 } from './datutil';
 import { ImageSize, find_dimensions_png, find_dimensions_jpeg } from './imgutil';
 
 export type ChunkType = {
@@ -130,6 +130,8 @@ export function new_chunk(type:string|Uint8Array, data:Uint8Array) : Chunk
         return new_chunk_ASCIIText(chunk);
     case '(c) ':
         return new_chunk_ASCIIText(chunk);
+    case 'SNam':
+        return new_chunk_U16Text(chunk);
     }
 
     return chunk;
@@ -227,6 +229,12 @@ function new_chunk_JPEG(chunk: Chunk) : CTypes.CTImage
 function new_chunk_ASCIIText(chunk: Chunk) : CTypes.CTText
 {
     let text = u8ToString(chunk.data);
+    return { ...chunk, text:text };
+}
+
+function new_chunk_U16Text(chunk: Chunk) : CTypes.CTText
+{
+    let text = u16ToString(chunk.data);
     return { ...chunk, text:text };
 }
 

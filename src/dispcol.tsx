@@ -40,6 +40,7 @@ export function DisplayChunk({ blorb, chunk } : { blorb:Blorb, chunk:Chunk })
     case 'AUTH':
     case 'ANNO':
     case '(c) ':
+    case 'SNam':
         display = <DisplayChunkText chunk={ chunk as CTypes.CTText } />
         break;
     default:
