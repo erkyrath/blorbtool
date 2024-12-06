@@ -71,6 +71,7 @@ export function parse_blorb(dat: Uint8Array, filename?: string) : Blorb
         filename: filename,
         chunks: (chunks as ReadonlyArray<Chunk>),
         totallen: pos,
+        usagemap: new Map(),
         keymap: new Map(),
         posmap: new Map(),
     };

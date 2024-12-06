@@ -219,6 +219,7 @@ export type Blorb = {
     totallen: number;
 
     // Maps are recomputed whenever the blorb updates.
+    usagemap: Map<string, number>; // "Pict:1" to reactkey
     keymap: Map<number, Chunk>; // chunk.reactkey to chunk
     posmap: Map<number, Chunk>; // chunk.pos to chunk
 };
@@ -229,25 +230,29 @@ export function new_blorb() : Blorb
         filename: undefined,
         chunks: [],
         totallen: 0,
+        usagemap: new Map(),
         keymap: new Map(),
         posmap: new Map(),
     };
 }
 
-export function blorb_recompute_positions(blorb: Blorb) : Blorb
+export function blorb_recompute_positions(blorb: Blorb, oldusagemap?: Map<string, number>) : Blorb
 {
     if (blorb.chunks.length == 0)
         return blorb;
 
-    let ridx = blorb.chunks[0];
-    if (ridx.type.stype != 'RIdx') {
+    if (blorb.chunks[0].type.stype != 'RIdx') {
         console.log('### first chunk is not an index');
         return blorb;
     }
+    let ridx = blorb.chunks[0] as CTypes.CTResIndex;
+
+    //### if oldusagemap, restomp ridx.data!
 
     let index = 0;
     let pos = 12;
     let newls: Chunk[] = [];
+    let newusagemap: Map<string, number> = new Map();
     let newkeymap: Map<number, Chunk> = new Map();
     let newposmap: Map<number, Chunk> = new Map();
     
@@ -273,11 +278,39 @@ export function blorb_recompute_positions(blorb: Blorb) : Blorb
             pos++;
         index++;
     }
+
+    if (!oldusagemap) {
+        for (let [key, pos] of ridx.usagemap) {
+            let chunk = newposmap.get(pos);
+            if (chunk)
+                newusagemap.set(key, chunk.reactkey);
+        }
+    }
+    else {
+        let newents = [];
+        let newusagemap = new Map();
+        for (let ent of ridx.entries) {
+            let key = ent.usage+':'+ent.resnum;
+            let reactkey = oldusagemap.get(key);
+            if (reactkey !== undefined) {
+                let chunk = newkeymap.get(reactkey);
+                if (chunk) {
+                    let newent = { usage:ent.usage, resnum:ent.resnum, pos:chunk.pos };
+                    newents.push(newent);
+                    newusagemap.set(key, chunk.reactkey);
+                }
+            }
+        }
+        //### rebuild ridx.data as well
+        let newridx = { ...ridx, entries:newents, newusagemap:newusagemap };
+        newls[0] = newridx;
+    }
     
     return {
         ...blorb,
         chunks: newls,
         totallen: pos,
+        usagemap: newusagemap,
         keymap: newkeymap,
         posmap: newposmap,
     };
