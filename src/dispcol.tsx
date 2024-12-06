@@ -37,6 +37,9 @@ export function DisplayChunk({ blorb, chunk } : { blorb:Blorb, chunk:Chunk })
     case 'RelN':
         display = <DisplayChunkReleaseNumber chunk={ chunk as CTypes.CTReleaseNumber } />
         break;
+    case 'Reso':
+        display = <DisplayChunkResolution chunk={ chunk as CTypes.CTResolution } />
+        break;
     case 'AUTH':
     case 'ANNO':
     case '(c) ':
@@ -360,6 +363,31 @@ function DisplayChunkReleaseNumber({ chunk }: { chunk:CTypes.CTReleaseNumber })
                 <li>
                     <span className="InfoLabel">Release number:</span>{' '}
                     { chunk.release }
+                </li>
+            </ul>
+        </>
+    );
+}
+
+function DisplayChunkResolution({ chunk }: { chunk:CTypes.CTResolution })
+{
+    return (
+        <>
+            <ul className="InfoList">
+                <li>
+                    <span className="InfoLabel">Window size:</span>{' '}
+                    { chunk.winsize.width }&#xD7;
+                    { chunk.winsize.height }
+                </li>
+                <li>
+                    <span className="InfoLabel">Min window size:</span>{' '}
+                    { chunk.minwinsize.width }&#xD7;
+                    { chunk.minwinsize.height }
+                </li>
+                <li>
+                    <span className="InfoLabel">Max window size:</span>{' '}
+                    { chunk.maxwinsize.width }&#xD7;
+                    { chunk.maxwinsize.height }
                 </li>
             </ul>
         </>
