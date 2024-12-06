@@ -1,4 +1,4 @@
-import { u8ToString, u16ToString, stringToU8, u8read4 } from './datutil';
+import { u8ToString, u16ToString, utf8ToString, stringToU8, u8read4 } from './datutil';
 import { ImageSize, find_dimensions_png, find_dimensions_jpeg } from './imgutil';
 
 export type ChunkType = {
@@ -181,7 +181,7 @@ function new_chunk_Fspc(chunk: Chunk) : CTypes.CTFrontispiece
 
 function new_chunk_IFmd(chunk: Chunk) : CTypes.CTMetadata
 {
-    let metadata = u8ToString(chunk.data); //### UTF-8!
+    let metadata = utf8ToString(chunk.data);
     return { ...chunk, metadata:metadata };
 }
 
