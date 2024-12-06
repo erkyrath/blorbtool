@@ -197,7 +197,9 @@ export type Blorb = {
     chunks: ReadonlyArray<Chunk>;
     totallen: number;
 
+    // Maps are recomputed whenever the blorb updates.
     keymap: Map<number, Chunk>; // chunk.reactkey to chunk
+    posmap: Map<number, Chunk>; // chunk.pos to chunk
 };
 
 export function new_blorb() : Blorb
@@ -207,6 +209,7 @@ export function new_blorb() : Blorb
         chunks: [],
         totallen: 0,
         keymap: new Map(),
+        posmap: new Map(),
     };
 }
 
@@ -224,7 +227,8 @@ export function blorb_recompute_positions(blorb: Blorb) : Blorb
     let index = 0;
     let pos = 12;
     let newls: Chunk[] = [];
-    let newmap: Map<number, Chunk> = new Map();
+    let newkeymap: Map<number, Chunk> = new Map();
+    let newposmap: Map<number, Chunk> = new Map();
     
     for (let origchunk of blorb.chunks) {
         let chunk: Chunk;
@@ -235,7 +239,9 @@ export function blorb_recompute_positions(blorb: Blorb) : Blorb
             chunk = { ...origchunk, pos:pos, index:index };
         }
         newls.push(chunk);
-        newmap.set(chunk.reactkey, chunk);
+        
+        newkeymap.set(chunk.reactkey, chunk);
+        newposmap.set(chunk.pos, chunk);
         
         if (chunk.formtype)
             pos += chunk.data.length;
@@ -251,7 +257,8 @@ export function blorb_recompute_positions(blorb: Blorb) : Blorb
         ...blorb,
         chunks: newls,
         totallen: pos,
-        keymap: newmap,
+        keymap: newkeymap,
+        posmap: newposmap,
     };
 }
 
@@ -280,14 +287,10 @@ export function blorb_chunk_for_usage(blorb: Blorb, usage: string, resnum: numbe
         return undefined;
     
     let ridx = blorb.chunks[0] as CTypes.CTResIndex;
-    //### use a map. or two
+    //### use a map
     for (let ent of ridx.entries) {
         if (ent.usage == usage && ent.resnum == resnum) {
-            for (let chunk of blorb.chunks) {
-                if (chunk.pos == ent.pos)
-                    return chunk;
-            }
-            return undefined;
+            return blorb.posmap.get(ent.pos);
         }
     }
     return undefined;
