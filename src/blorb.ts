@@ -255,6 +255,11 @@ export function blorb_recompute_positions(blorb: Blorb) : Blorb
     };
 }
 
+export function blorb_chunk_for_key(blorb: Blorb, key: number) : Chunk|undefined
+{
+    return blorb.keymap.get(key);
+}
+
 export function blorb_resentry_for_chunk(blorb: Blorb, chunk: Chunk) : CTypes.CTResIndexEntry|undefined
 {
     if (blorb.chunks.length == 0 || blorb.chunks[0].type.stype != 'RIdx')

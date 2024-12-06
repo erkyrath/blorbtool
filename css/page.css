@@ -123,3 +123,7 @@ a.JumpArrow {
 a.JumpArrow:hover {
     background: #0000FF40;
 }
+
+.JumpGloss {
+    font-size: 85%
+}

@@ -1,11 +1,16 @@
 import React from 'react';
 import { useContext } from 'react';
 
-import { SetSelectionCtx } from './contexts';
+import { blorb_chunk_for_key, chunk_readable_desc } from './blorb';
+
+import { BlorbCtx, SetSelectionCtx } from './contexts';
 
 export function ArrowToChunk({ destkey }: { destkey:number })
 {
+    let blorb = useContext(BlorbCtx);
     let setSelection = useContext(SetSelectionCtx);
+
+    let chunk = blorb_chunk_for_key(blorb, destkey);
     
     function evhan_click(ev: React.MouseEvent<HTMLElement, MouseEvent>) {
         ev.preventDefault();
@@ -14,6 +19,11 @@ export function ArrowToChunk({ destkey }: { destkey:number })
     }
 
     return (
-        <a className="JumpArrow" href="#" onClick={ evhan_click }>&#x279A;</a>
+        <>
+            <a className="JumpArrow" href="#" onClick={ evhan_click }>&#x279A;</a>
+            { ( chunk ?
+                <span className="JumpGloss">&nbsp; { chunk_readable_desc(chunk) }</span>
+                : null) }
+        </>
     );
 }
