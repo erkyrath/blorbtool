@@ -333,12 +333,7 @@ export function blorb_resentry_for_chunk(blorb: Blorb, chunk: Chunk) : CTypes.CT
         return undefined;
     
     let ridx = blorb.chunks[0] as CTypes.CTResIndex;
-    //### use a map
-    for (let ent of ridx.entries) {
-        if (ent.pos == chunk.pos)
-            return ent;
-    }
-    return undefined;
+    return ridx.invusagemap.get(chunk.pos);
 }
 
 export function blorb_chunk_for_usage(blorb: Blorb, usage: string, resnum: number) : Chunk|undefined
