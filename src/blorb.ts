@@ -51,6 +51,7 @@ export namespace CTypes {
     export interface CTResIndex extends Chunk {
         entries: ReadonlyArray<CTResIndexEntry>,
         usagemap: Map<string, number>; // "Pict:1" to pos
+        invusagemap: Map<number, string>; // the inverse
     };
     
     export interface CTFrontispiece extends Chunk {
@@ -105,11 +106,12 @@ function new_chunk_RIdx(chunk: Chunk) : CTypes.CTResIndex
 {
     let entries: CTypes.CTResIndexEntry[] = [];
     let usagemap: Map<string, number> = new Map();
+    let invusagemap: Map<number, string> = new Map();
 
     let count = u8read4(chunk.data, 0);
     if (chunk.data.length != 4 + count*12) {
         console.log('### bad index chunk count');
-        return { ...chunk, entries:entries, usagemap:usagemap };
+        return { ...chunk, entries:entries, usagemap:usagemap, invusagemap:invusagemap };
     }
 
     for (let ix=0; ix<count; ix++) {
@@ -123,10 +125,12 @@ function new_chunk_RIdx(chunk: Chunk) : CTypes.CTResIndex
         let ent: CTypes.CTResIndexEntry = { usage:usage, resnum:resnum, pos:pos };
         entries.push(ent);
 
-        usagemap.set(usage+':'+resnum, pos);
+        let usekey = usage+':'+resnum;
+        usagemap.set(usekey, pos);
+        invusagemap.set(pos, usekey);
     }
 
-    return { ...chunk, entries:entries, usagemap:usagemap };
+    return { ...chunk, entries:entries, usagemap:usagemap, invusagemap:invusagemap };
 }
 
 function new_chunk_Fspc(chunk: Chunk) : CTypes.CTFrontispiece
@@ -289,20 +293,22 @@ export function blorb_recompute_positions(blorb: Blorb, oldusagemap?: Map<string
     else {
         let newents: CTypes.CTResIndexEntry[] = [];
         let newusagemap: Map<string, number> = new Map();
+        let newinvusagemap: Map<number, string> = new Map();
         for (let ent of ridx.entries) {
-            let key = ent.usage+':'+ent.resnum;
-            let reactkey = oldusagemap.get(key);
+            let usekey = ent.usage+':'+ent.resnum;
+            let reactkey = oldusagemap.get(usekey);
             if (reactkey !== undefined) {
                 let chunk = newkeymap.get(reactkey);
                 if (chunk) {
                     let newent = { usage:ent.usage, resnum:ent.resnum, pos:chunk.pos };
                     newents.push(newent);
-                    newusagemap.set(key, chunk.reactkey);
+                    newusagemap.set(usekey, chunk.reactkey);
+                    newinvusagemap.set(chunk.reactkey, usekey);
                 }
             }
         }
         //### rebuild ridx.data as well
-        let newridx = { ...ridx, entries:newents, newusagemap:newusagemap };
+        let newridx = { ...ridx, entries:newents, usagemap:newusagemap, invusagemap:newinvusagemap };
         newls[0] = newridx;
     }
     
