@@ -23,10 +23,10 @@ export function DisplayChunk({ blorb, chunk } : { blorb:Blorb, chunk:Chunk })
         display = <DisplayChunkMetadata chunk={ chunk as CTypes.CTMetadata } />;
         break;
     case 'PNG ':
-        display = <DisplayChunkImgPNG chunk={ chunk } />
+        display = <DisplayChunkImgPNG chunk={ chunk as CTypes.CTImage } />
         break;
     case 'JPEG':
-        display = <DisplayChunkImgJPEG chunk={ chunk } />
+        display = <DisplayChunkImgJPEG chunk={ chunk as CTypes.CTImage } />
         break;
     default:
         display = <DisplayChunkRaw chunk={ chunk } />;
@@ -227,14 +227,27 @@ function ShowXMLNode({ nod } : { nod:Node }) : React.ReactNode
     );
 }
 
-function DisplayChunkImgPNG({ chunk }: { chunk:Chunk })
+function DisplayChunkImgPNG({ chunk }: { chunk:CTypes.CTImage })
 {
+    if (!chunk.imgsize) {
+        return (
+            <div>Unable to recognize PNG data.</div>
+        );
+    };
+    
     let dataurl = URL.createObjectURL(
         new Blob([ chunk.data ], { type: 'image/png' })
     );
     
     return (
         <>
+            <ul className="InfoList">
+                <li>
+                    <span className="InfoLabel">Image size:</span>{' '}
+                    { chunk.imgsize.width }&#xD7;
+                    { chunk.imgsize.height }
+                </li>
+            </ul>
             <div className="ImageBox">
                 <img src={dataurl} />
             </div>
@@ -242,14 +255,27 @@ function DisplayChunkImgPNG({ chunk }: { chunk:Chunk })
     );
 }
 
-function DisplayChunkImgJPEG({ chunk }: { chunk:Chunk })
+function DisplayChunkImgJPEG({ chunk }: { chunk:CTypes.CTImage })
 {
+    if (!chunk.imgsize) {
+        return (
+            <div>Unable to recognize JPEG data.</div>
+        );
+    };
+    
     let dataurl = URL.createObjectURL(
         new Blob([ chunk.data ], { type: 'image/jpeg' })
     );
     
     return (
         <>
+            <ul className="InfoList">
+                <li>
+                    <span className="InfoLabel">Image size:</span>{' '}
+                    { chunk.imgsize.width }&#xD7;
+                    { chunk.imgsize.height }
+                </li>
+            </ul>
             <div className="ImageBox">
                 <img src={dataurl} />
             </div>

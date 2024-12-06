@@ -1,12 +1,12 @@
 
 import { u8ToString } from './datutil';
 
-type Size = { width:number, height:number };
+export type ImageSize = { width:number, height:number };
 
 /* Given a PNG file, extract its dimensions. Return a {width,height}
    object, or undefined on error. 
 */
-function find_dimensions_png(arr: Uint8Array) : Size|undefined
+export function find_dimensions_png(arr: Uint8Array) : ImageSize|undefined
 {
     let pos = 0;
     if (arr[0] != 0x89 || u8ToString(arr.slice(1,4)) != 'PNG') {
@@ -37,7 +37,7 @@ function find_dimensions_png(arr: Uint8Array) : Size|undefined
 /* Given a JPEG file, extract its dimensions. Return a {width,height}
    object, or undefined on error. 
 */
-function find_dimensions_jpeg(arr: Uint8Array) : Size|undefined
+export function find_dimensions_jpeg(arr: Uint8Array) : ImageSize|undefined
 {
     let pos = 0;
     while (pos < arr.length) {

@@ -1,4 +1,5 @@
 import { u8ToString, stringToU8, u8read4 } from './datutil';
+import { ImageSize, find_dimensions_png, find_dimensions_jpeg } from './imgutil';
 
 export type ChunkType = {
     stype: string, // four characters
@@ -60,6 +61,10 @@ export namespace CTypes {
         metadata: string;
     }
     
+    export interface CTImage extends Chunk {
+        imgsize: ImageSize|undefined;
+    }
+    
 }
 
 export function new_chunk(type:string|Uint8Array, data:Uint8Array) : Chunk
@@ -87,6 +92,10 @@ export function new_chunk(type:string|Uint8Array, data:Uint8Array) : Chunk
         return new_chunk_Fspc(chunk);
     case 'IFmd':
         return new_chunk_IFmd(chunk);
+    case 'PNG ':
+        return new_chunk_PNG(chunk);
+    case 'JPEG':
+        return new_chunk_JPEG(chunk);
     }
 
     return chunk;
@@ -135,6 +144,18 @@ function new_chunk_IFmd(chunk: Chunk) : CTypes.CTMetadata
 {
     let metadata = u8ToString(chunk.data); //### UTF-8!
     return { ...chunk, metadata:metadata };
+}
+
+function new_chunk_PNG(chunk: Chunk) : CTypes.CTImage
+{
+    let imgsize = find_dimensions_png(chunk.data);
+    return { ...chunk, imgsize:imgsize };
+}
+
+function new_chunk_JPEG(chunk: Chunk) : CTypes.CTImage
+{
+    let imgsize = find_dimensions_jpeg(chunk.data);
+    return { ...chunk, imgsize:imgsize };
 }
 
 export function chunk_readable_desc(chunk: Chunk) : string
