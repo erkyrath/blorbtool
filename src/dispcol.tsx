@@ -272,6 +272,10 @@ function DisplayChunkGlulx({ chunk }: { chunk:CTypes.CTGlulx })
                     <span className="InfoLabel">VM version:</span>{' '}
                     { chunk.gversion }
                 </li>
+                <li>
+                    <span className="InfoLabel">Compiler version:</span>{' '}
+                    { chunk.infversion }
+                </li>
             </ul>
         </>
     );

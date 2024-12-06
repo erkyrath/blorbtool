@@ -70,6 +70,7 @@ export namespace CTypes {
     
     export interface CTGlulx extends Chunk {
         gversion: string;
+        infversion: string;
         release: number;
         serial: string;
     }
@@ -183,14 +184,16 @@ function new_chunk_GLUL(chunk: Chunk) : CTypes.CTGlulx
     
     let release = 0;
     let serial = '';
+    let infversion = '';
     if (u8ToString(chunk.data, 36, 4) == 'Info') {
         if (chunk.data[40] == 0 && chunk.data[41] == 1 && chunk.data[42] == 0 && chunk.data[43] == 0) {
             release = 0x100 * chunk.data[52] + chunk.data[53];
             serial = u8ToString(chunk.data, 54, 6);
+            infversion = u8ToString(chunk.data, 44, 4);
         }
     }
     
-    return { ...chunk, gversion, release, serial };
+    return { ...chunk, gversion, infversion, release, serial };
 }
 
 function new_chunk_PNG(chunk: Chunk) : CTypes.CTImage
