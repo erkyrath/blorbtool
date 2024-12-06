@@ -22,6 +22,12 @@ export function DisplayChunk({ blorb, chunk } : { blorb:Blorb, chunk:Chunk })
     case 'IFmd':
         display = <DisplayChunkMetadata chunk={ chunk as CTypes.CTMetadata } />;
         break;
+    case 'PNG ':
+        display = <DisplayChunkImgPNG chunk={ chunk } />
+        break;
+    case 'JPEG':
+        display = <DisplayChunkImgJPEG chunk={ chunk } />
+        break;
     default:
         display = <DisplayChunkRaw chunk={ chunk } />;
         break;
@@ -218,5 +224,35 @@ function ShowXMLNode({ nod } : { nod:Node }) : React.ReactNode
                 { subls }
             </ul>
         </li>
+    );
+}
+
+function DisplayChunkImgPNG({ chunk }: { chunk:Chunk })
+{
+    let dataurl = URL.createObjectURL(
+        new Blob([ chunk.data ], { type: 'image/png' })
+    );
+    
+    return (
+        <>
+            <div className="ImageBox">
+                <img src={dataurl} />
+            </div>
+        </>
+    );
+}
+
+function DisplayChunkImgJPEG({ chunk }: { chunk:Chunk })
+{
+    let dataurl = URL.createObjectURL(
+        new Blob([ chunk.data ], { type: 'image/jpeg' })
+    );
+    
+    return (
+        <>
+            <div className="ImageBox">
+                <img src={dataurl} />
+            </div>
+        </>
     );
 }

@@ -127,3 +127,11 @@ a.JumpArrow:hover {
 .JumpGloss {
     font-size: 85%
 }
+
+.ImageBox {
+    text-align: center;
+}
+
+.ImageBox img {
+    max-width: 95%;
+}
