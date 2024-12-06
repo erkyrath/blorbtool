@@ -109,7 +109,7 @@ function DisplayChunkResIndexEntry({ ent }: { ent:CTypes.CTResIndexEntry })
                 </>
                 : null) }
             {' '}&nbsp;{' '}
-            <span className="InfoLabel">(starts at</span> { ent.pos })
+            <span className="InfoLabel">(starts at { ent.pos })</span>
         </li>
     );
 }
