@@ -74,6 +74,9 @@ export function parse_blorb(dat: Uint8Array, filename?: string) : Blorb
         keymap: new Map(),
         posmap: new Map(),
     };
+
+    //### check for consistency errors before we recompute?
+    
     blorb = blorb_recompute_positions(blorb);
 
     for (let chunk of blorb.chunks) {

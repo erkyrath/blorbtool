@@ -50,7 +50,7 @@ export namespace CTypes {
     
     export interface CTResIndex extends Chunk {
         entries: ReadonlyArray<CTResIndexEntry>,
-        //### maps
+        usagemap: Map<string, number>; // "Pict:1" to pos
     };
     
     export interface CTFrontispiece extends Chunk {
@@ -104,11 +104,12 @@ export function new_chunk(type:string|Uint8Array, data:Uint8Array) : Chunk
 function new_chunk_RIdx(chunk: Chunk) : CTypes.CTResIndex
 {
     let entries: CTypes.CTResIndexEntry[] = [];
+    let usagemap: Map<string, number> = new Map();
 
     let count = u8read4(chunk.data, 0);
     if (chunk.data.length != 4 + count*12) {
         console.log('### bad index chunk count');
-        return { ...chunk, entries:entries };
+        return { ...chunk, entries:entries, usagemap:usagemap };
     }
 
     for (let ix=0; ix<count; ix++) {
@@ -121,12 +122,11 @@ function new_chunk_RIdx(chunk: Chunk) : CTypes.CTResIndex
         }
         let ent: CTypes.CTResIndexEntry = { usage:usage, resnum:resnum, pos:pos };
         entries.push(ent);
+
+        usagemap.set(usage+':'+resnum, pos);
     }
 
-    //### should check that the pos values are valid
-    //### and build some maps
-    
-    return { ...chunk, entries:entries };
+    return { ...chunk, entries:entries, usagemap:usagemap };
 }
 
 function new_chunk_Fspc(chunk: Chunk) : CTypes.CTFrontispiece
