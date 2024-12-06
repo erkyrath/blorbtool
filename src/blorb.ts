@@ -287,8 +287,8 @@ export function blorb_recompute_positions(blorb: Blorb, oldusagemap?: Map<string
         }
     }
     else {
-        let newents = [];
-        let newusagemap = new Map();
+        let newents: CTypes.CTResIndexEntry[] = [];
+        let newusagemap: Map<string, number> = new Map();
         for (let ent of ridx.entries) {
             let key = ent.usage+':'+ent.resnum;
             let reactkey = oldusagemap.get(key);
@@ -339,14 +339,11 @@ export function blorb_chunk_for_usage(blorb: Blorb, usage: string, resnum: numbe
 {
     if (blorb.chunks.length == 0 || blorb.chunks[0].type.stype != 'RIdx')
         return undefined;
-    
-    let ridx = blorb.chunks[0] as CTypes.CTResIndex;
-    //### use a map
-    for (let ent of ridx.entries) {
-        if (ent.usage == usage && ent.resnum == resnum) {
-            return blorb.posmap.get(ent.pos);
-        }
-    }
+
+    let key = usage+':'+resnum;
+    let reactkey = blorb.usagemap.get(key);
+    if (reactkey !== undefined)
+        return blorb.keymap.get(reactkey);
     return undefined;
 }
 
