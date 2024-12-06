@@ -371,8 +371,13 @@ function DisplayChunkReleaseNumber({ chunk }: { chunk:CTypes.CTReleaseNumber })
 
 function DisplayChunkResolution({ chunk }: { chunk:CTypes.CTResolution })
 {
+    let counter = 0;
+    let entls = chunk.entries.map(ent =>
+        <DisplayChunkResolutionEntry ent={ ent } key={ counter++ } />
+    );
+    
     return (
-        <>
+        <div>
             <ul className="InfoList">
                 <li>
                     <span className="InfoLabel">Window size:</span>{' '}
@@ -390,7 +395,29 @@ function DisplayChunkResolution({ chunk }: { chunk:CTypes.CTResolution })
                     { chunk.maxwinsize.height }
                 </li>
             </ul>
-        </>
+            <ul className="InfoList">
+                { entls }
+            </ul>
+        </div>
+    );
+}
+
+function DisplayChunkResolutionEntry({ ent }: { ent:CTypes.CTResolutionEntry })
+{
+    let blorb = useContext(BlorbCtx);
+    let chunk = blorb_chunk_for_usage(blorb, 'Pict', ent.resnum);
+
+    
+    return (
+        <li>
+            <code className="IType">Pict</code>
+            {' #'}{ ent.resnum }
+            { ( chunk ?
+                <>
+                    {' '}&nbsp; <ArrowToChunk destkey={ chunk.reactkey } />
+                </>
+                : null) }
+        </li>
     );
 }
 
