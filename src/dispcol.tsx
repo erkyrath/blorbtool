@@ -242,10 +242,12 @@ function DisplayChunkZCode({ chunk }: { chunk:CTypes.CTZCode })
                     <span className="InfoLabel">Release:</span>{' '}
                     { chunk.release }
                 </li>
-                <li>
-                    <span className="InfoLabel">Serial:</span>{' '}
-                    { chunk.serial }
-                </li>
+                { (chunk.serial ? (
+                    <li>
+                        <span className="InfoLabel">Serial:</span>{' '}
+                        { chunk.serial }
+                    </li>
+                ) : null) }
                 <li>
                     <span className="InfoLabel">Z-machine version:</span>{' '}
                     { chunk.zversion }
@@ -264,18 +266,22 @@ function DisplayChunkGlulx({ chunk }: { chunk:CTypes.CTGlulx })
                     <span className="InfoLabel">Release:</span>{' '}
                     { chunk.release }
                 </li>
-                <li>
-                    <span className="InfoLabel">Serial:</span>{' '}
-                    { chunk.serial }
-                </li>
+                { (chunk.serial ? (
+                    <li>
+                        <span className="InfoLabel">Serial:</span>{' '}
+                        { chunk.serial }
+                    </li>
+                ) : null) }
                 <li>
                     <span className="InfoLabel">VM version:</span>{' '}
                     { chunk.gversion }
                 </li>
-                <li>
-                    <span className="InfoLabel">Compiler version:</span>{' '}
-                    { chunk.infversion }
-                </li>
+                { (chunk.infversion ? (
+                    <li>
+                        <span className="InfoLabel">Compiler version:</span>{' '}
+                        { chunk.infversion }
+                    </li>
+                ) : null) }
             </ul>
         </>
     );
