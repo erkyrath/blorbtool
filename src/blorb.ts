@@ -1,5 +1,5 @@
 import { u8ToString, u16ToString, utf8ToString, stringToU8, u8read4 } from './datutil';
-import { ImageSize, find_dimensions_png, find_dimensions_jpeg } from './imgutil';
+import { ImageSize, ImageRatio, find_dimensions_png, find_dimensions_jpeg } from './imgutil';
 
 export type ChunkType = {
     stype: string, // four characters
@@ -86,6 +86,20 @@ export namespace CTypes {
     export interface CTReleaseNumber extends Chunk {
         release: number;
     }
+
+    export type CTResolutionEntry = {
+        resnum: number;
+        stdratio: ImageRatio;
+        minratio: ImageRatio;
+        maxratio: ImageRatio;
+    }
+
+    export interface CTResolution extends Chunk {
+        winsize: ImageSize;
+        minwinsize: ImageSize;
+        maxwinsize: ImageSize;
+        entries: ReadonlyArray<CTResolutionEntry>;
+    }
     
 }
 
@@ -124,6 +138,8 @@ export function new_chunk(type:string|Uint8Array, data:Uint8Array) : Chunk
         return new_chunk_JPEG(chunk);
     case 'RelN':
         return new_chunk_RelN(chunk);
+    case 'Reso':
+        return new_chunk_Reso(chunk);
     case 'AUTH':
         return new_chunk_ASCIIText(chunk);
     case 'ANNO':
@@ -242,6 +258,29 @@ function new_chunk_RelN(chunk: Chunk) : CTypes.CTReleaseNumber
 {
     let release = 0x100 * chunk.data[0] + chunk.data[1];
     return { ...chunk, release:release };
+}
+
+function new_chunk_Reso(chunk: Chunk) : CTypes.CTResolution
+{
+    let winsize = { width:u8read4(chunk.data, 0), height:u8read4(chunk.data, 4) };
+    let minwinsize = { width:u8read4(chunk.data, 8), height:u8read4(chunk.data, 12) };
+    let maxwinsize = { width:u8read4(chunk.data, 16), height:u8read4(chunk.data, 20) };
+
+    let entries: CTypes.CTResolutionEntry[] = [];
+
+    let pos = 24;
+    while (pos < chunk.data.length) {
+        let ent: CTypes.CTResolutionEntry = {
+            resnum: u8read4(chunk.data, pos),
+            stdratio: { numerator:u8read4(chunk.data, pos+4), denominator:u8read4(chunk.data, pos+8) },
+            minratio: { numerator:u8read4(chunk.data, pos+12), denominator:u8read4(chunk.data, pos+16) },
+            maxratio: { numerator:u8read4(chunk.data, pos+20), denominator:u8read4(chunk.data, pos+24) },
+        };
+        entries.push(ent);
+        pos += 28;
+    }
+    
+    return { ...chunk, winsize:winsize, minwinsize:minwinsize, maxwinsize:maxwinsize, entries:entries };
 }
 
 export function chunk_readable_desc(chunk: Chunk) : string

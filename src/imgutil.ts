@@ -3,6 +3,8 @@ import { u8ToString } from './datutil';
 
 export type ImageSize = { width:number, height:number };
 
+export type ImageRatio = { numerator:number, denominator:number };
+
 /* Given a PNG file, extract its dimensions. Return a {width,height}
    object, or undefined on error. 
 */
