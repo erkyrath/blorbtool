@@ -103,13 +103,13 @@ function DisplayChunkResIndexEntry({ ent }: { ent:CTypes.CTResIndexEntry })
         <li>
             <code className="IType">{ ent.usage }</code>
             {' #'}{ ent.resnum },
-            &nbsp;
-            <span className="InfoLabel">starts at</span> { ent.pos }
             { ( chunk ?
                 <>
                     {' '}&nbsp; <ArrowToChunk destkey={ chunk.reactkey } />
                 </>
                 : null) }
+            {' '}&nbsp;{' '}
+            <span className="InfoLabel">(starts at</span> { ent.pos })
         </li>
     );
 }
