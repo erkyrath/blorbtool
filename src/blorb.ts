@@ -184,8 +184,10 @@ function new_chunk_GLUL(chunk: Chunk) : CTypes.CTGlulx
     let release = 0;
     let serial = '';
     if (u8ToString(chunk.data, 36, 4) == 'Info') {
-        release = 0x100 * chunk.data[52] + chunk.data[53];
-        serial = u8ToString(chunk.data, 54, 6);
+        if (chunk.data[40] == 0 && chunk.data[41] == 1 && chunk.data[42] == 0 && chunk.data[43] == 0) {
+            release = 0x100 * chunk.data[52] + chunk.data[53];
+            serial = u8ToString(chunk.data, 54, 6);
+        }
     }
     
     return { ...chunk, gversion, release, serial };
