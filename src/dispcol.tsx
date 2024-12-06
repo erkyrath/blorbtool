@@ -34,6 +34,14 @@ export function DisplayChunk({ blorb, chunk } : { blorb:Blorb, chunk:Chunk })
     case 'JPEG':
         display = <DisplayChunkImgJPEG chunk={ chunk as CTypes.CTImage } />
         break;
+    case 'RelN':
+        display = <DisplayChunkReleaseNumber chunk={ chunk as CTypes.CTReleaseNumber } />
+        break;
+    case 'AUTH':
+    case 'ANNO':
+    case '(c) ':
+        display = <DisplayChunkText chunk={ chunk as CTypes.CTText } />
+        break;
     default:
         display = <DisplayChunkRaw chunk={ chunk } />;
         break;
@@ -339,6 +347,34 @@ function DisplayChunkImgJPEG({ chunk }: { chunk:CTypes.CTImage })
             <div className="ImageBox">
                 <img src={dataurl} />
             </div>
+        </>
+    );
+}
+
+function DisplayChunkReleaseNumber({ chunk }: { chunk:CTypes.CTReleaseNumber })
+{
+    return (
+        <>
+            <ul className="InfoList">
+                <li>
+                    <span className="InfoLabel">Release number:</span>{' '}
+                    { chunk.release }
+                </li>
+            </ul>
+        </>
+    );
+}
+
+function DisplayChunkText({ chunk }: { chunk:CTypes.CTText })
+{
+    return (
+        <>
+            <ul className="InfoList">
+                <li>
+                    <span className="InfoLabel">Text:</span>{' '}
+                    { chunk.text }
+                </li>
+            </ul>
         </>
     );
 }
