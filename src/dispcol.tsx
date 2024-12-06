@@ -22,6 +22,12 @@ export function DisplayChunk({ blorb, chunk } : { blorb:Blorb, chunk:Chunk })
     case 'IFmd':
         display = <DisplayChunkMetadata chunk={ chunk as CTypes.CTMetadata } />;
         break;
+    case 'ZCOD':
+        display = <DisplayChunkZCode chunk={ chunk as CTypes.CTZCode } />
+        break;
+    case 'GLUL':
+        display = <DisplayChunkGlulx chunk={ chunk as CTypes.CTGlulx } />
+        break;
     case 'PNG ':
         display = <DisplayChunkImgPNG chunk={ chunk as CTypes.CTImage } />
         break;
@@ -224,6 +230,50 @@ function ShowXMLNode({ nod } : { nod:Node }) : React.ReactNode
                 { subls }
             </ul>
         </li>
+    );
+}
+
+function DisplayChunkZCode({ chunk }: { chunk:CTypes.CTZCode })
+{
+    return (
+        <>
+            <ul className="InfoList">
+                <li>
+                    <span className="InfoLabel">Release:</span>{' '}
+                    { chunk.release }
+                </li>
+                <li>
+                    <span className="InfoLabel">Serial:</span>{' '}
+                    { chunk.serial }
+                </li>
+                <li>
+                    <span className="InfoLabel">Z-machine version:</span>{' '}
+                    { chunk.zversion }
+                </li>
+            </ul>
+        </>
+    );
+}
+
+function DisplayChunkGlulx({ chunk }: { chunk:CTypes.CTGlulx })
+{
+    return (
+        <>
+            <ul className="InfoList">
+                <li>
+                    <span className="InfoLabel">Release:</span>{' '}
+                    { chunk.release }
+                </li>
+                <li>
+                    <span className="InfoLabel">Serial:</span>{' '}
+                    { chunk.serial }
+                </li>
+                <li>
+                    <span className="InfoLabel">VM version:</span>{' '}
+                    { chunk.gversion }
+                </li>
+            </ul>
+        </>
     );
 }
 

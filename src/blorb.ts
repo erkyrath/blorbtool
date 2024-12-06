@@ -62,6 +62,18 @@ export namespace CTypes {
         metadata: string;
     }
     
+    export interface CTZCode extends Chunk {
+        zversion: number;
+        release: number;
+        serial: string;
+    }
+    
+    export interface CTGlulx extends Chunk {
+        gversion: string;
+        release: number;
+        serial: string;
+    }
+    
     export interface CTImage extends Chunk {
         imgsize: ImageSize|undefined;
     }
@@ -93,6 +105,10 @@ export function new_chunk(type:string|Uint8Array, data:Uint8Array) : Chunk
         return new_chunk_Fspc(chunk);
     case 'IFmd':
         return new_chunk_IFmd(chunk);
+    case 'ZCOD':
+        return new_chunk_ZCOD(chunk);
+    case 'GLUL':
+        return new_chunk_GLUL(chunk);
     case 'PNG ':
         return new_chunk_PNG(chunk);
     case 'JPEG':
@@ -148,6 +164,31 @@ function new_chunk_IFmd(chunk: Chunk) : CTypes.CTMetadata
 {
     let metadata = u8ToString(chunk.data); //### UTF-8!
     return { ...chunk, metadata:metadata };
+}
+
+function new_chunk_ZCOD(chunk: Chunk) : CTypes.CTZCode
+{
+    let zversion = chunk.data[0];
+    let release = 0x100 * chunk.data[2] + chunk.data[3];
+    let serial = u8ToString(chunk.data, 18, 6);
+    return { ...chunk, zversion, release, serial };
+}
+
+function new_chunk_GLUL(chunk: Chunk) : CTypes.CTGlulx
+{
+    let majversion = 0x100 * chunk.data[4] + chunk.data[5];
+    let gversion = '' + majversion + '.' + chunk.data[6];
+    if (chunk.data[7])
+        gversion += chunk.data[7];
+    
+    let release = 0;
+    let serial = '';
+    if (u8ToString(chunk.data, 36, 4) == 'Info') {
+        release = 0x100 * chunk.data[52] + chunk.data[53];
+        serial = u8ToString(chunk.data, 54, 6);
+    }
+    
+    return { ...chunk, gversion, release, serial };
 }
 
 function new_chunk_PNG(chunk: Chunk) : CTypes.CTImage
