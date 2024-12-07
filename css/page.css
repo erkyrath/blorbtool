@@ -106,25 +106,27 @@ body {
     margin-right: 16px;
 }
 
-.DisplayHeader .PopPane {
+.DisplayCol .PopPane {
     position: absolute;
     top: 54px;
     right: 24px;
     padding: 10px 20px;
     background: #EEE;
     border: 1px solid #CCC;
-    text-align: left;
+    font-family: "Helvetica Neue", "Helvetica", "Arial", sans-serif;
+    font-size: 85%;
 }
 
-.DisplayHeader button {
+button {
+    font-family: "Helvetica Neue", "Helvetica", "Arial", sans-serif;
     font-size: 100%;
     background-color: #EEE;
     border-radius: 6px;
     border: 1px solid #888;
-    padding: 3px 6px;
+    padding: 3px 8px;
 }
 
-.DisplayHeader button:hover {
+button:hover {
     background-color: #DDD;
 }
 
