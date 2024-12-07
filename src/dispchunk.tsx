@@ -127,7 +127,7 @@ export namespace DispChunks {
             <>
                 <div className="InfoLabel">
                     XML content:{' '}
-                    <a href="#" onClick={ evhan_click }>(show raw)</a>
+                    <a href="#" onClick={ evhan_click }>(show XML)</a>
                 </div>
                 <ul className="NestTree">
                     <ShowXMLNode nod={ xmlnod } />
