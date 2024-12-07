@@ -5,7 +5,7 @@ import { Chunk, Blorb, CTypes } from './blorb';
 import { chunk_readable_desc, blorb_resentry_for_chunk } from './blorb';
 import { pretty_size, byte_to_hex } from './readable';
 
-import { DisplayChunkRaw, DisplayChunkResIndex, DisplayChunkFrontispiece, DisplayChunkMetadata, DisplayChunkZCode, DisplayChunkGlulx, DisplayChunkImgPNG, DisplayChunkImgJPEG, DisplayChunkReleaseNumber, DisplayChunkResolution, DisplayChunkText } from './dispchunk';
+import { DispChunks } from './dispchunk';
 
 export function DisplayChunk({ blorb, chunk } : { blorb:Blorb, chunk:Chunk })
 {
@@ -14,40 +14,40 @@ export function DisplayChunk({ blorb, chunk } : { blorb:Blorb, chunk:Chunk })
     let display;
     switch (chunk.type.stype) {
     case 'RIdx':
-        display = <DisplayChunkResIndex chunk={ chunk as CTypes.CTResIndex } />;
+        display = <DispChunks.DCResIndex chunk={ chunk as CTypes.CTResIndex } />;
         break;
     case 'Fspc':
-        display = <DisplayChunkFrontispiece chunk={ chunk as CTypes.CTFrontispiece } />;
+        display = <DispChunks.DCFrontispiece chunk={ chunk as CTypes.CTFrontispiece } />;
         break;
     case 'IFmd':
-        display = <DisplayChunkMetadata chunk={ chunk as CTypes.CTMetadata } />;
+        display = <DispChunks.DCMetadata chunk={ chunk as CTypes.CTMetadata } />;
         break;
     case 'ZCOD':
-        display = <DisplayChunkZCode chunk={ chunk as CTypes.CTZCode } />
+        display = <DispChunks.DCZCode chunk={ chunk as CTypes.CTZCode } />
         break;
     case 'GLUL':
-        display = <DisplayChunkGlulx chunk={ chunk as CTypes.CTGlulx } />
+        display = <DispChunks.DCGlulx chunk={ chunk as CTypes.CTGlulx } />
         break;
     case 'PNG ':
-        display = <DisplayChunkImgPNG chunk={ chunk as CTypes.CTImage } />
+        display = <DispChunks.DCImgPNG chunk={ chunk as CTypes.CTImage } />
         break;
     case 'JPEG':
-        display = <DisplayChunkImgJPEG chunk={ chunk as CTypes.CTImage } />
+        display = <DispChunks.DCImgJPEG chunk={ chunk as CTypes.CTImage } />
         break;
     case 'RelN':
-        display = <DisplayChunkReleaseNumber chunk={ chunk as CTypes.CTReleaseNumber } />
+        display = <DispChunks.DCReleaseNumber chunk={ chunk as CTypes.CTReleaseNumber } />
         break;
     case 'Reso':
-        display = <DisplayChunkResolution chunk={ chunk as CTypes.CTResolution } />
+        display = <DispChunks.DCResolution chunk={ chunk as CTypes.CTResolution } />
         break;
     case 'AUTH':
     case 'ANNO':
     case '(c) ':
     case 'SNam':
-        display = <DisplayChunkText chunk={ chunk as CTypes.CTText } />
+        display = <DispChunks.DCText chunk={ chunk as CTypes.CTText } />
         break;
     default:
-        display = <DisplayChunkRaw chunk={ chunk } />;
+        display = <DispChunks.DCRaw chunk={ chunk } />;
         break;
     }
     

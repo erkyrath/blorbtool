@@ -8,7 +8,9 @@ import { BlorbCtx } from './contexts';
 
 import { ArrowToChunk } from './widgets';
 
-export function DisplayChunkRaw({ chunk }: { chunk:Chunk })
+export namespace DispChunks {
+    
+export function DCRaw({ chunk }: { chunk:Chunk })
 {
     let subdata = chunk.data.slice(0, 512);
     let ls = [ ...subdata ].map(byte_to_hex);
@@ -26,10 +28,10 @@ export function DisplayChunkRaw({ chunk }: { chunk:Chunk })
     );
 }
 
-export function DisplayChunkResIndex({ chunk }: { chunk:CTypes.CTResIndex })
+export function DCResIndex({ chunk }: { chunk:CTypes.CTResIndex })
 {
     let entls = chunk.entries.map(ent =>
-        <DisplayChunkResIndexEntry ent={ ent } key={ ent.pos } />
+        <DCResIndexEntry ent={ ent } key={ ent.pos } />
     );
     
     return (
@@ -41,7 +43,7 @@ export function DisplayChunkResIndex({ chunk }: { chunk:CTypes.CTResIndex })
     );
 }
 
-function DisplayChunkResIndexEntry({ ent }: { ent:CTypes.CTResIndexEntry })
+function DCResIndexEntry({ ent }: { ent:CTypes.CTResIndexEntry })
 {
     let blorb = useContext(BlorbCtx);
     let chunk = blorb_chunk_for_usage(blorb, ent.usage, ent.resnum);
@@ -63,7 +65,7 @@ function DisplayChunkResIndexEntry({ ent }: { ent:CTypes.CTResIndexEntry })
     );
 }
 
-export function DisplayChunkFrontispiece({ chunk }: { chunk:CTypes.CTFrontispiece })
+export function DCFrontispiece({ chunk }: { chunk:CTypes.CTFrontispiece })
 {
     let blorb = useContext(BlorbCtx);
     let imgchunk = blorb_chunk_for_usage(blorb, 'Pict', chunk.picnum);
@@ -84,7 +86,7 @@ export function DisplayChunkFrontispiece({ chunk }: { chunk:CTypes.CTFrontispiec
     );
 }
 
-export function DisplayChunkMetadata({ chunk }: { chunk:CTypes.CTMetadata })
+export function DCMetadata({ chunk }: { chunk:CTypes.CTMetadata })
 {
     const [showraw, setShowRaw] = useState(false);
 
@@ -170,7 +172,7 @@ function ShowXMLNode({ nod } : { nod:Node }) : React.ReactNode
     );
 }
 
-export function DisplayChunkZCode({ chunk }: { chunk:CTypes.CTZCode })
+export function DCZCode({ chunk }: { chunk:CTypes.CTZCode })
 {
     return (
         <>
@@ -194,7 +196,7 @@ export function DisplayChunkZCode({ chunk }: { chunk:CTypes.CTZCode })
     );
 }
 
-export function DisplayChunkGlulx({ chunk }: { chunk:CTypes.CTGlulx })
+export function DCGlulx({ chunk }: { chunk:CTypes.CTGlulx })
 {
     return (
         <>
@@ -224,7 +226,7 @@ export function DisplayChunkGlulx({ chunk }: { chunk:CTypes.CTGlulx })
     );
 }
 
-export function DisplayChunkImgPNG({ chunk }: { chunk:CTypes.CTImage })
+export function DCImgPNG({ chunk }: { chunk:CTypes.CTImage })
 {
     if (!chunk.imgsize) {
         return (
@@ -252,7 +254,7 @@ export function DisplayChunkImgPNG({ chunk }: { chunk:CTypes.CTImage })
     );
 }
 
-export function DisplayChunkImgJPEG({ chunk }: { chunk:CTypes.CTImage })
+export function DCImgJPEG({ chunk }: { chunk:CTypes.CTImage })
 {
     if (!chunk.imgsize) {
         return (
@@ -280,7 +282,7 @@ export function DisplayChunkImgJPEG({ chunk }: { chunk:CTypes.CTImage })
     );
 }
 
-export function DisplayChunkReleaseNumber({ chunk }: { chunk:CTypes.CTReleaseNumber })
+export function DCReleaseNumber({ chunk }: { chunk:CTypes.CTReleaseNumber })
 {
     return (
         <>
@@ -294,11 +296,11 @@ export function DisplayChunkReleaseNumber({ chunk }: { chunk:CTypes.CTReleaseNum
     );
 }
 
-export function DisplayChunkResolution({ chunk }: { chunk:CTypes.CTResolution })
+export function DCResolution({ chunk }: { chunk:CTypes.CTResolution })
 {
     let counter = 0;
     let entls = chunk.entries.map(ent =>
-        <DisplayChunkResolutionEntry ent={ ent } key={ counter++ } />
+        <DCResolutionEntry ent={ ent } key={ counter++ } />
     );
     
     return (
@@ -327,7 +329,7 @@ export function DisplayChunkResolution({ chunk }: { chunk:CTypes.CTResolution })
     );
 }
 
-function DisplayChunkResolutionEntry({ ent }: { ent:CTypes.CTResolutionEntry })
+function DCResolutionEntry({ ent }: { ent:CTypes.CTResolutionEntry })
 {
     let blorb = useContext(BlorbCtx);
     let chunk = blorb_chunk_for_usage(blorb, 'Pict', ent.resnum);
@@ -350,7 +352,7 @@ function DisplayChunkResolutionEntry({ ent }: { ent:CTypes.CTResolutionEntry })
     );
 }
 
-export function DisplayChunkText({ chunk }: { chunk:CTypes.CTText })
+export function DCText({ chunk }: { chunk:CTypes.CTText })
 {
     return (
         <>
@@ -363,3 +365,6 @@ export function DisplayChunkText({ chunk }: { chunk:CTypes.CTText })
         </>
     );
 }
+
+}
+
