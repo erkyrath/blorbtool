@@ -99,7 +99,7 @@ body {
 
 .DisplayHeader .Control {
     display: inline-block;
-    margin: 12px 2px;
+    margin: 12px 4px;
 }
 
 .DisplayHeader .Control:last-child {
