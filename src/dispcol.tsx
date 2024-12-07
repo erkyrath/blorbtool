@@ -11,9 +11,7 @@ export function DisplayChunk({ blorb, chunk } : { blorb:Blorb, chunk:Chunk })
 {
     const [showhex, setShowHex] = useState(false);
 
-    function evhan_click(ev: React.MouseEvent<HTMLElement, MouseEvent>) {
-        //ev.preventDefault();
-        ev.stopPropagation();
+    function evhan_change(ev: React.ChangeEvent<HTMLInputElement>) {
         setShowHex(!showhex);
     }
     
@@ -69,7 +67,7 @@ export function DisplayChunk({ blorb, chunk } : { blorb:Blorb, chunk:Chunk })
         <div className="DisplayChunk">
             <div className="DisplayControls">
                 <div className="Control">
-                    <input id="control_showraw" type="checkbox" onClick={ evhan_click } checked={ showhex } />
+                    <input id="control_showraw" type="checkbox" onChange={ evhan_change } checked={ showhex } />
                     <label htmlFor="control_showraw"> Display as hex</label>
                 </div>
                 <div className="Control">
