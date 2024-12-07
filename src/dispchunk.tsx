@@ -9,7 +9,7 @@ import { BlorbCtx } from './contexts';
 import { ArrowToChunk } from './widgets';
 
 export namespace DispChunks {
-    
+
     export function DCRaw({ chunk }: { chunk:Chunk })
     {
         let subdata = chunk.data.slice(0, 512);
@@ -27,13 +27,13 @@ export namespace DispChunks {
             </div>
         );
     }
-    
+
     export function DCResIndex({ chunk }: { chunk:CTypes.CTResIndex })
     {
         let entls = chunk.entries.map(ent =>
             <DCResIndexEntry ent={ ent } key={ ent.pos } />
         );
-        
+    
         return (
             <div>
                 <ul className="InfoList">
@@ -42,14 +42,14 @@ export namespace DispChunks {
             </div>
         );
     }
-    
+
     function DCResIndexEntry({ ent }: { ent:CTypes.CTResIndexEntry })
     {
         let blorb = useContext(BlorbCtx);
         let chunk = blorb_chunk_for_usage(blorb, ent.usage, ent.resnum);
     
         //### or error if not found
-        
+    
         return (
             <li>
                 <code className="IType">{ ent.usage }</code>
@@ -64,14 +64,14 @@ export namespace DispChunks {
             </li>
         );
     }
-    
+
     export function DCFrontispiece({ chunk }: { chunk:CTypes.CTFrontispiece })
     {
         let blorb = useContext(BlorbCtx);
         let imgchunk = blorb_chunk_for_usage(blorb, 'Pict', chunk.picnum);
     
         //### or error if not found
-        
+    
         return (
             <div>
                 Cover image is{' '}
@@ -85,7 +85,7 @@ export namespace DispChunks {
             </div>
         );
     }
-    
+
     export function DCMetadata({ chunk }: { chunk:CTypes.CTMetadata })
     {
         const [showraw, setShowRaw] = useState(false);
@@ -109,7 +109,7 @@ export namespace DispChunks {
                 </>
             );
         }
-        
+    
         let xmlparser = new DOMParser();
         let xmldoc = xmlparser.parseFromString(chunk.metadata, 'text/xml');
     
@@ -122,7 +122,7 @@ export namespace DispChunks {
         }
     
         let xmlnod = xmldoc.childNodes[0];
-        
+    
         return (
             <>
                 <div className="InfoLabel">
@@ -135,7 +135,7 @@ export namespace DispChunks {
             </>
         );
     }
-    
+
     function ShowXMLNode({ nod } : { nod:Node }) : React.ReactNode
     {
         if (nod.nodeType == nod.TEXT_NODE) {
@@ -161,7 +161,7 @@ export namespace DispChunks {
                 <ShowXMLNode nod={ subnod } />
             </div>
         );
-        
+    
         return (
             <li>
                 { nod.nodeName }:
@@ -171,7 +171,7 @@ export namespace DispChunks {
             </li>
         );
     }
-    
+
     export function DCZCode({ chunk }: { chunk:CTypes.CTZCode })
     {
         return (
@@ -195,7 +195,7 @@ export namespace DispChunks {
             </>
         );
     }
-    
+
     export function DCGlulx({ chunk }: { chunk:CTypes.CTGlulx })
     {
         return (
@@ -225,7 +225,7 @@ export namespace DispChunks {
             </>
         );
     }
-    
+
     export function DCImgPNG({ chunk }: { chunk:CTypes.CTImage })
     {
         if (!chunk.imgsize) {
@@ -233,11 +233,11 @@ export namespace DispChunks {
                 <div>Unable to recognize PNG data.</div>
             );
         };
-        
+    
         let dataurl = URL.createObjectURL(
             new Blob([ chunk.data ], { type: 'image/png' })
         );
-        
+    
         return (
             <>
                 <ul className="InfoList">
@@ -253,7 +253,7 @@ export namespace DispChunks {
             </>
         );
     }
-    
+
     export function DCImgJPEG({ chunk }: { chunk:CTypes.CTImage })
     {
         if (!chunk.imgsize) {
@@ -261,11 +261,11 @@ export namespace DispChunks {
                 <div>Unable to recognize JPEG data.</div>
             );
         };
-        
+    
         let dataurl = URL.createObjectURL(
             new Blob([ chunk.data ], { type: 'image/jpeg' })
         );
-        
+    
         return (
             <>
                 <ul className="InfoList">
@@ -281,7 +281,7 @@ export namespace DispChunks {
             </>
         );
     }
-    
+
     export function DCReleaseNumber({ chunk }: { chunk:CTypes.CTReleaseNumber })
     {
         return (
@@ -295,14 +295,14 @@ export namespace DispChunks {
             </>
         );
     }
-    
+
     export function DCResolution({ chunk }: { chunk:CTypes.CTResolution })
     {
         let counter = 0;
         let entls = chunk.entries.map(ent =>
             <DCResolutionEntry ent={ ent } key={ counter++ } />
         );
-        
+    
         return (
             <div>
                 <ul className="InfoList">
@@ -328,13 +328,13 @@ export namespace DispChunks {
             </div>
         );
     }
-    
+
     function DCResolutionEntry({ ent }: { ent:CTypes.CTResolutionEntry })
     {
         let blorb = useContext(BlorbCtx);
         let chunk = blorb_chunk_for_usage(blorb, 'Pict', ent.resnum);
     
-        
+    
         return (
             <li>
                 <code className="IType">Pict</code>
@@ -351,7 +351,7 @@ export namespace DispChunks {
             </li>
         );
     }
-    
+
     export function DCText({ chunk }: { chunk:CTypes.CTText })
     {
         return (
@@ -365,6 +365,6 @@ export namespace DispChunks {
             </>
         );
     }
-    
+
 }
 
