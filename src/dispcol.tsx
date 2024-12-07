@@ -1,6 +1,7 @@
 import React from 'react';
 import { useState, useContext } from 'react';
 
+import { u8ToBase64URL } from './datutil';
 import { Chunk, Blorb, CTypes } from './blorb';
 import { chunk_readable_desc, blorb_resentry_for_chunk } from './blorb';
 import { pretty_size, byte_to_hex } from './readable';
@@ -11,10 +12,10 @@ export function DisplayChunk({ blorb, chunk } : { blorb:Blorb, chunk:Chunk })
 {
     const [showhex, setShowHex] = useState(false);
 
-    function evhan_change(ev: React.ChangeEvent<HTMLInputElement>) {
+    function evhan_change(ev: ChangeEv) {
         setShowHex(!showhex);
     }
-    
+                                                   
     let resentry = blorb_resentry_for_chunk(blorb, chunk);
 
     let display;
@@ -106,3 +107,5 @@ export function DisplayChunk({ blorb, chunk } : { blorb:Blorb, chunk:Chunk })
         </div>
     );
 }
+
+type ChangeEv = React.ChangeEvent<HTMLInputElement>;
