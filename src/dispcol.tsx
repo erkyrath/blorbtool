@@ -9,53 +9,67 @@ import { DispChunks } from './dispchunk';
 
 export function DisplayChunk({ blorb, chunk } : { blorb:Blorb, chunk:Chunk })
 {
+    const [showhex, setShowHex] = useState(false);
+
+    function evhan_click(ev: React.MouseEvent<HTMLElement, MouseEvent>) {
+        //ev.preventDefault();
+        ev.stopPropagation();
+        setShowHex(!showhex);
+    }
+    
     let resentry = blorb_resentry_for_chunk(blorb, chunk);
 
     let display;
-    switch (chunk.type.stype) {
-    case 'RIdx':
-        display = <DispChunks.DCResIndex chunk={ chunk as CTypes.CTResIndex } />;
-        break;
-    case 'Fspc':
-        display = <DispChunks.DCFrontispiece chunk={ chunk as CTypes.CTFrontispiece } />;
-        break;
-    case 'IFmd':
-        display = <DispChunks.DCMetadata chunk={ chunk as CTypes.CTMetadata } />;
-        break;
-    case 'ZCOD':
-        display = <DispChunks.DCZCode chunk={ chunk as CTypes.CTZCode } />
-        break;
-    case 'GLUL':
-        display = <DispChunks.DCGlulx chunk={ chunk as CTypes.CTGlulx } />
-        break;
-    case 'PNG ':
-        display = <DispChunks.DCImgPNG chunk={ chunk as CTypes.CTImage } />
-        break;
-    case 'JPEG':
-        display = <DispChunks.DCImgJPEG chunk={ chunk as CTypes.CTImage } />
-        break;
-    case 'RelN':
-        display = <DispChunks.DCReleaseNumber chunk={ chunk as CTypes.CTReleaseNumber } />
-        break;
-    case 'Reso':
-        display = <DispChunks.DCResolution chunk={ chunk as CTypes.CTResolution } />
-        break;
-    case 'AUTH':
-    case 'ANNO':
-    case '(c) ':
-    case 'SNam':
-        display = <DispChunks.DCText chunk={ chunk as CTypes.CTText } />
-        break;
-    default:
-        display = <DispChunks.DCRaw chunk={ chunk } />;
-        break;
+
+    if (showhex) {
+        display = <DispChunks.DCRaw chunk={ chunk } />
+    }
+    else {
+        switch (chunk.type.stype) {
+        case 'RIdx':
+            display = <DispChunks.DCResIndex chunk={ chunk as CTypes.CTResIndex } />;
+            break;
+        case 'Fspc':
+            display = <DispChunks.DCFrontispiece chunk={ chunk as CTypes.CTFrontispiece } />;
+            break;
+        case 'IFmd':
+            display = <DispChunks.DCMetadata chunk={ chunk as CTypes.CTMetadata } />;
+            break;
+        case 'ZCOD':
+            display = <DispChunks.DCZCode chunk={ chunk as CTypes.CTZCode } />
+            break;
+        case 'GLUL':
+            display = <DispChunks.DCGlulx chunk={ chunk as CTypes.CTGlulx } />
+            break;
+        case 'PNG ':
+            display = <DispChunks.DCImgPNG chunk={ chunk as CTypes.CTImage } />
+            break;
+        case 'JPEG':
+            display = <DispChunks.DCImgJPEG chunk={ chunk as CTypes.CTImage } />
+            break;
+        case 'RelN':
+            display = <DispChunks.DCReleaseNumber chunk={ chunk as CTypes.CTReleaseNumber } />
+            break;
+        case 'Reso':
+            display = <DispChunks.DCResolution chunk={ chunk as CTypes.CTResolution } />
+            break;
+        case 'AUTH':
+        case 'ANNO':
+        case '(c) ':
+        case 'SNam':
+            display = <DispChunks.DCText chunk={ chunk as CTypes.CTText } />
+            break;
+        default:
+            display = <DispChunks.DCRaw chunk={ chunk } />;
+            break;
+        }
     }
     
     return (
         <div className="DisplayChunk">
             <div className="DisplayControls">
                 <div className="Control">
-                    <input id="control_showraw" type="checkbox" />
+                    <input id="control_showraw" type="checkbox" onClick={ evhan_click } checked={ showhex } />
                     <label htmlFor="control_showraw"> Display as hex</label>
                 </div>
                 <div className="Control">
