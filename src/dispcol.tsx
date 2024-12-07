@@ -8,7 +8,35 @@ import { pretty_size, byte_to_hex } from './readable';
 
 import { DispChunks } from './dispchunk';
 
-export function DisplayChunk({ blorb, chunk } : { blorb:Blorb, chunk:Chunk })
+export function DisplayColumn({ blorb, selected }: { blorb:Blorb, selected:number })
+{
+    let selchunk = blorb.chunks.find(chunk => (chunk.reactkey == selected));
+    let showhex = true; //###
+    
+    return (
+                <div className="DisplayCol">
+                    <div className="DisplayHeader">
+                        <div className="Control">
+                            <input id="control_showraw" type="checkbox" checked={ showhex } />
+                            <label htmlFor="control_showraw"> Display hex</label>
+                        </div>
+                        <div className="Control">
+                            <button>Download</button>
+                        </div>
+                        <div className="Control">
+                            <button>Delete</button>
+                        </div>
+                    </div>
+                    <div className="DisplayPane">
+                        { (selchunk ?
+                           <DisplayChunk blorb={ blorb } chunk={ selchunk } />
+                           : null) }
+                    </div>
+                </div>
+    );
+}
+
+export function DisplayChunk({ blorb, chunk }: { blorb:Blorb, chunk:Chunk })
 {
     const [showhex, setShowHex] = useState(false);
 

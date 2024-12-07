@@ -8,7 +8,7 @@ import { parse_blorb } from './parseblorb';
 import { pretty_size } from './readable';
 
 import { BlorbCtx, SetSelectionCtx } from './contexts';
-import { DisplayChunk } from './dispcol';
+import { DisplayColumn } from './dispcol';
 
 let initialBlorb: Blorb|undefined;
 
@@ -44,10 +44,7 @@ function MyApp()
     let chunkls = blorb.chunks.map(chunk =>
         <ChunkListEntry key={ chunk.reactkey } chunk={ chunk } isselected={ chunk.reactkey == selected } />
     );
-    let selchunk = blorb.chunks.find(chunk => (chunk.reactkey == selected));
 
-    let showhex = true; //###
-    
     return (
         <SetSelectionCtx.Provider value={ setSelected }>
             <BlorbCtx.Provider value={ blorb }>
@@ -57,25 +54,7 @@ function MyApp()
                         { chunkls }
                     </ul>
                 </div>
-                <div className="DisplayCol">
-                    <div className="DisplayHeader">
-                        <div className="Control">
-                            <input id="control_showraw" type="checkbox" checked={ showhex } />
-                            <label htmlFor="control_showraw"> Display hex</label>
-                        </div>
-                        <div className="Control">
-                            <button>Download</button>
-                        </div>
-                        <div className="Control">
-                            <button>Delete</button>
-                        </div>
-                    </div>
-                    <div className="DisplayPane">
-                        { (selchunk ?
-                           <DisplayChunk blorb={ blorb } chunk={ selchunk } />
-                           : null) }
-                    </div>
-                </div>
+                <DisplayColumn blorb={ blorb } selected={ selected } />
             </BlorbCtx.Provider>
         </SetSelectionCtx.Provider>
     );
