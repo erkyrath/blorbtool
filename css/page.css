@@ -62,12 +62,32 @@ body {
 
 .DisplayCol {
     position: absolute;
+    box-sizing: border-box;
     left: 33%;
     width: 67%;
     height: 100%;
     border-left: 1px solid #AAA;
-    padding: 10px 20px;
+}
+
+.DisplayHeader {
+    position: absolute;
     box-sizing: border-box;
+    width: 100%;
+    top: 0px;
+    height: 50px;
+    background: #EEE;
+    font-family: "Helvetica", "Arial", sans-serif;
+    font-size: 85%;
+    text-align: right;
+}
+
+.DisplayPane {
+    position: absolute;
+    box-sizing: border-box;
+    width: 100%;
+    top: 50px;
+    bottom: 0px;
+    padding: 10px 20px;
     overflow-y: scroll;
 }
 
@@ -77,20 +97,23 @@ body {
     padding: 0px;
 }
 
-.DisplayControls {
-    position: relative;
-    left: 15px;
-    top: -20px;
-    float: right;
-    font-family: "Helvetica", "Arial", sans-serif;
-    background: #EEE;
-    border-radius: 8px;
-    padding: 10px 20px;
+.DisplayHeader .Control {
+    display: inline-block;
+    margin: 12px 2px;
 }
 
-.DisplayControls .Control {
-    margin-top: 10px;
-    margin-bottom: 10px;
+.DisplayHeader .Control:last-child {
+    margin-right: 16px;
+}
+
+.DisplayHeader .PopPane {
+    position: absolute;
+    top: 54px;
+    right: 24px;
+    padding: 10px 20px;
+    background: #EEE;
+    border: 1px solid #CCC;
+    text-align: left;
 }
 
 pre {

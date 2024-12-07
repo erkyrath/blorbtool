@@ -45,6 +45,8 @@ function MyApp()
         <ChunkListEntry key={ chunk.reactkey } chunk={ chunk } isselected={ chunk.reactkey == selected } />
     );
     let selchunk = blorb.chunks.find(chunk => (chunk.reactkey == selected));
+
+    let showhex = true; //###
     
     return (
         <SetSelectionCtx.Provider value={ setSelected }>
@@ -56,9 +58,23 @@ function MyApp()
                     </ul>
                 </div>
                 <div className="DisplayCol">
-                    { (selchunk ?
-                       <DisplayChunk blorb={ blorb } chunk={ selchunk } />
-                       : null) }
+                    <div className="DisplayHeader">
+                        <div className="Control">
+                            <input id="control_showraw" type="checkbox" checked={ showhex } />
+                            <label htmlFor="control_showraw"> Display hex</label>
+                        </div>
+                        <div className="Control">
+                            <button>Download</button>
+                        </div>
+                        <div className="Control">
+                            <button>Delete</button>
+                        </div>
+                    </div>
+                    <div className="DisplayPane">
+                        { (selchunk ?
+                           <DisplayChunk blorb={ blorb } chunk={ selchunk } />
+                           : null) }
+                    </div>
                 </div>
             </BlorbCtx.Provider>
         </SetSelectionCtx.Provider>
