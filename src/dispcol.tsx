@@ -53,6 +53,18 @@ export function DisplayChunk({ blorb, chunk } : { blorb:Blorb, chunk:Chunk })
     
     return (
         <div className="DisplayChunk">
+            <div className="DisplayControls">
+                <div className="Control">
+                    <input id="control_showraw" type="checkbox" />
+                    <label htmlFor="control_showraw"> Display as hex</label>
+                </div>
+                <div className="Control">
+                    Download chunk as file
+                </div>
+                <div className="Control">
+                    Delete this chunk
+                </div>
+            </div>
             <h3>
                 Chunk:{' '}
                 { chunk_readable_desc(chunk) }

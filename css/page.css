@@ -77,6 +77,22 @@ body {
     padding: 0px;
 }
 
+.DisplayControls {
+    position: relative;
+    left: 15px;
+    top: -20px;
+    float: right;
+    font-family: "Helvetica", "Arial", sans-serif;
+    background: #EEE;
+    border-radius: 8px;
+    padding: 10px 20px;
+}
+
+.DisplayControls .Control {
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
 pre {
     font-family: "Source Code Pro";
     font-size: 85%;
