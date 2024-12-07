@@ -76,8 +76,6 @@ body {
     top: 0px;
     height: 50px;
     background: #EEE;
-    font-family: "Helvetica", "Arial", sans-serif;
-    font-size: 85%;
     text-align: right;
 }
 
@@ -100,6 +98,8 @@ body {
 .DisplayHeader .Control {
     display: inline-block;
     margin: 12px 4px;
+    font-family: "Helvetica", "Arial", sans-serif;
+    font-size: 85%;
 }
 
 .DisplayHeader .Control:last-child {
