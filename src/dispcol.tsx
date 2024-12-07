@@ -11,39 +11,37 @@ import { DispChunks } from './dispchunk';
 export function DisplayColumn({ blorb, selected }: { blorb:Blorb, selected:number })
 {
     let selchunk = blorb.chunks.find(chunk => (chunk.reactkey == selected));
-    let showhex = true; //###
-    
-    return (
-                <div className="DisplayCol">
-                    <div className="DisplayHeader">
-                        <div className="Control">
-                            <input id="control_showraw" type="checkbox" checked={ showhex } />
-                            <label htmlFor="control_showraw"> Display hex</label>
-                        </div>
-                        <div className="Control">
-                            <button>Download</button>
-                        </div>
-                        <div className="Control">
-                            <button>Delete</button>
-                        </div>
-                    </div>
-                    <div className="DisplayPane">
-                        { (selchunk ?
-                           <DisplayChunk blorb={ blorb } chunk={ selchunk } />
-                           : null) }
-                    </div>
-                </div>
-    );
-}
-
-export function DisplayChunk({ blorb, chunk }: { blorb:Blorb, chunk:Chunk })
-{
     const [showhex, setShowHex] = useState(false);
 
     function evhan_change(ev: ChangeEv) {
         setShowHex(!showhex);
     }
                                                    
+    return (
+        <div className="DisplayCol">
+            <div className="DisplayHeader">
+                <div className="Control">
+                    <input id="control_showraw" type="checkbox" checked={ showhex } onChange={ evhan_change } />
+                    <label htmlFor="control_showraw"> Display hex</label>
+                </div>
+                <div className="Control">
+                    <button>Download</button>
+                </div>
+                <div className="Control">
+                    <button>Delete</button>
+                </div>
+            </div>
+            <div className="DisplayPane">
+                { (selchunk ?
+                   <DisplayChunk blorb={ blorb } chunk={ selchunk } showhex={ showhex } />
+                   : null) }
+            </div>
+        </div>
+    );
+}
+
+export function DisplayChunk({ blorb, chunk, showhex }: { blorb:Blorb, chunk:Chunk, showhex:boolean })
+{
     let resentry = blorb_resentry_for_chunk(blorb, chunk);
 
     let display;
