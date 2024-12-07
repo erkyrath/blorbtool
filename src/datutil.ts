@@ -36,3 +36,15 @@ export function u8read4(arr: Uint8Array, pos: number) : number
 {
     return arr[pos] * 0x1000000 + arr[pos+1] * 0x10000 + arr[pos+2] * 0x100 + arr[pos+3];
 }
+
+export function u8ToBase64URL(arr: Uint8Array) : Promise<string|ArrayBuffer|null>
+{
+    let mimetype = "application/octet-stream";
+    return new Promise((resolve, reject) => {
+        const reader = Object.assign(new FileReader(), {
+            onload: () => resolve(reader.result),
+            onerror: () => reject(reader.error),
+        });
+        reader.readAsDataURL(new File([ arr ], "", { type:mimetype }));
+    });
+}
