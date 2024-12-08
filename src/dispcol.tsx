@@ -21,43 +21,43 @@ export function DisplayColumn({ blorb, selected }: { blorb:Blorb, selected:numbe
         setShowHex(!showhex);
     }
     function evhan_click_download(ev: React.MouseEvent<HTMLElement, MouseEvent>) {
-	if (chunkcmd != 'download')
-	    setchunkcmd('download');
-	else
-	    setchunkcmd(null);
+        if (chunkcmd != 'download')
+            setchunkcmd('download');
+        else
+            setchunkcmd(null);
     }
     function evhan_click_delete(ev: React.MouseEvent<HTMLElement, MouseEvent>) {
-	if (chunkcmd != 'delete')
-	    setchunkcmd('delete');
-	else
-	    setchunkcmd(null);
+        if (chunkcmd != 'delete')
+            setchunkcmd('delete');
+        else
+            setchunkcmd(null);
     }
 
     let cmdpanel = null;
     switch (chunkcmd) {
     case 'download':
-	if (selchunk)
-	    cmdpanel = <DownloadChunkPanel chunk={selchunk} />;
-	break;
+        if (selchunk)
+            cmdpanel = <DownloadChunkPanel chunk={selchunk} />;
+        break;
     case 'delete':
-	if (selchunk)
-	    cmdpanel = <DeleteChunkPanel chunk={selchunk} />;
-	break;
+        if (selchunk)
+            cmdpanel = <DeleteChunkPanel chunk={selchunk} />;
+        break;
     }
     
     return (
         <div className="DisplayCol">
             <div className="DisplayHeader">
-		<div className="ControlBox">
+                <div className="ControlBox">
                     <div className="Control">
-			<input id="control_showraw" type="checkbox" checked={ showhex } onChange={ evhan_change } />
-			<label htmlFor="control_showraw"> Display hex</label>
+                        <input id="control_showraw" type="checkbox" checked={ showhex } onChange={ evhan_change } />
+                        <label htmlFor="control_showraw"> Display hex</label>
                     </div>
                     <div className="Control">
-			<button onClick={ evhan_click_download }>Download</button>
+                        <button onClick={ evhan_click_download }>Download</button>
                     </div>
                     <div className="Control">
-			<button onClick={ evhan_click_delete }>Delete</button>
+                        <button onClick={ evhan_click_delete }>Delete</button>
                     </div>
                 </div>
             </div>
@@ -66,7 +66,7 @@ export function DisplayColumn({ blorb, selected }: { blorb:Blorb, selected:numbe
                    <DisplayChunk blorb={ blorb } chunk={ selchunk } showhex={ showhex } />
                    : null) }
             </div>
-	    { cmdpanel }
+            { cmdpanel }
         </div>
     );
 }
@@ -74,20 +74,20 @@ export function DisplayColumn({ blorb, selected }: { blorb:Blorb, selected:numbe
 function DownloadChunkPanel({ chunk }: { chunk:Chunk })
 {
     return (
-	<div className="PopPane">
-	    <div>Download this chunk...</div>
-	</div>
+        <div className="PopPane">
+            <div>Download this chunk...</div>
+        </div>
     );
 }
 
 function DeleteChunkPanel({ chunk }: { chunk:Chunk })
 {
     return (
-	<div className="PopPane">
-	    <div>Delete this chunk?</div>
-	    <button>Cancel</button>
-	    <button>Delete</button>
-	</div>
+        <div className="PopPane">
+            <div>Delete this chunk?</div>
+            <button>Cancel</button>
+            <button>Delete</button>
+        </div>
     );
 }
 
