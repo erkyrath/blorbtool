@@ -20,15 +20,17 @@ export function DisplayColumn({ blorb, selected }: { blorb:Blorb, selected:numbe
     return (
         <div className="DisplayCol">
             <div className="DisplayHeader">
-                <div className="Control">
-                    <input id="control_showraw" type="checkbox" checked={ showhex } onChange={ evhan_change } />
-                    <label htmlFor="control_showraw"> Display hex</label>
-                </div>
-                <div className="Control">
-                    <button>Download</button>
-                </div>
-                <div className="Control">
-                    <button>Delete</button>
+		<div className="ControlBox">
+                    <div className="Control">
+			<input id="control_showraw" type="checkbox" checked={ showhex } onChange={ evhan_change } />
+			<label htmlFor="control_showraw"> Display hex</label>
+                    </div>
+                    <div className="Control">
+			<button>Download</button>
+                    </div>
+                    <div className="Control">
+			<button>Delete</button>
+                    </div>
                 </div>
             </div>
             <div className="DisplayPane">
