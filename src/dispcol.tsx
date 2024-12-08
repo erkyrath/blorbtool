@@ -7,12 +7,15 @@ import { chunk_readable_desc, blorb_resentry_for_chunk, chunk_filename_info } fr
 import { pretty_size, byte_to_hex } from './readable';
 
 import { BlorbCtx, ChunkCmd, ChunkCmdCtx, SetChunkCmdCtx, BlorbCmdCtx, SetBlorbCmdCtx } from './contexts';
+import { AltDisplay, AltDisplayCtx } from './contexts';
 import { ArrowDownload } from './widgets';
 import { DispChunks } from './dispchunk';
 
 export function DisplayColumn({ blorb, selected }: { blorb:Blorb, selected:number })
 {
     const [showhex, setShowHex] = useState(false);
+
+    let altdisplay = useContext(AltDisplayCtx);
     let chunkcmd = useContext(ChunkCmdCtx);
     let setchunkcmd = useContext(SetChunkCmdCtx);
     let setblorbcmd = useContext(SetBlorbCmdCtx);
@@ -48,6 +51,22 @@ export function DisplayColumn({ blorb, selected }: { blorb:Blorb, selected:numbe
             cmdpanel = <DeleteChunkPanel chunk={selchunk} />;
         break;
     }
+
+    let contentpane = null;
+    switch (altdisplay) {
+    case 'errors':
+        if (blorb.errors.length) {
+            contentpane = <DisplayErrors errors={ blorb.errors } />
+        }
+        break;
+    default:
+        if (selchunk) {
+            contentpane = <DisplayChunk blorb={ blorb } chunk={ selchunk } showhex={ showhex } />
+        }
+        else if (blorb.errors.length) {
+            contentpane = <DisplayErrors errors={ blorb.errors } />
+        }
+    }
     
     return (
         <div className="DisplayCol">
@@ -66,9 +85,7 @@ export function DisplayColumn({ blorb, selected }: { blorb:Blorb, selected:numbe
                 </div>
             </div>
             <div className="DisplayPane">
-                { (selchunk ?
-                   <DisplayChunk blorb={ blorb } chunk={ selchunk } showhex={ showhex } />
-                   : null) }
+                { contentpane }
             </div>
             { cmdpanel }
         </div>
@@ -95,6 +112,23 @@ function DeleteChunkPanel({ chunk }: { chunk:Chunk })
             <div>Delete this chunk?</div>
             <button>Cancel</button>
             <button>Delete</button>
+        </div>
+    );
+}
+
+export function DisplayErrors({ errors }: { errors:ReadonlyArray<string> })
+{
+    let counter = 0;
+    let errls = errors.map((msg) =>
+        <div key={ counter++ }>
+            { msg }
+        </div>
+    );
+    
+    return (
+        <div>
+            <h3>Format errors</h3>
+            { errls }
         </div>
     );
 }

@@ -10,6 +10,7 @@ import { pretty_size } from './readable';
 import { BlorbCtx, SetSelectionCtx } from './contexts';
 import { ChunkCmd, ChunkCmdCtx, SetChunkCmdCtx } from './contexts';
 import { BlorbCmd, BlorbCmdCtx, SetBlorbCmdCtx } from './contexts';
+import { AltDisplay, AltDisplayCtx, SetAltDisplayCtx } from './contexts';
 import { DisplayColumn } from './dispcol';
 import { ArrowDownload } from './widgets';
 
@@ -33,6 +34,7 @@ function MyApp()
     
     const [blorb, dispBlorb] = useReducer(reduceBlorb, initialBlorb!);
     const [selected, setSelected] = useState(-1);
+    const [altdisplay, setAltDisplay ] = useState(null as AltDisplay);
     const [chunkcmd, setChunkCmd] = useState(null as ChunkCmd);
     const [blorbcmd, setBlorbCmd] = useState(null as BlorbCmd);
 
@@ -42,6 +44,7 @@ function MyApp()
         if (val != selected) {
             setSelected(val);
             setChunkCmd(null);
+            setAltDisplay(null);
         }
     };
     
@@ -56,6 +59,8 @@ function MyApp()
 
     return (
         <SetSelectionCtx.Provider value={ setSelectedWrap }>
+        <SetAltDisplayCtx.Provider value={ setAltDisplay }>
+        <AltDisplayCtx.Provider value={ altdisplay }>
         <SetChunkCmdCtx.Provider value={ setChunkCmd }>
         <ChunkCmdCtx.Provider value={ chunkcmd }>
         <SetBlorbCmdCtx.Provider value={ setBlorbCmd }>
@@ -73,6 +78,8 @@ function MyApp()
         </SetBlorbCmdCtx.Provider>
         </ChunkCmdCtx.Provider>
         </SetChunkCmdCtx.Provider>
+        </AltDisplayCtx.Provider>
+        </SetAltDisplayCtx.Provider>
         </SetSelectionCtx.Provider>
     );
 }
@@ -116,6 +123,11 @@ function BlorbInfoHeader()
             <div className="BlorbGloss">
                 { blorb.chunks.length } chunks, { pretty_size(blorb.totallen) }
             </div>
+            { (blorb.errors.length ? 
+               <div className="BlorbInfoErrors">
+                   { blorb.errors.length } format errors found
+               </div>
+               : null) }
             <div className="BlorbControls">
                 <button onClick={ evhan_click_download }>Download</button>
                 <button>Add Chunk</button>
