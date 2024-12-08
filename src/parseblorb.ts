@@ -6,26 +6,23 @@ export function parse_blorb(dat: Uint8Array, filename?: string) : Blorb
 {
     let pos = 0;
     const len = dat.length;
+
+    let errors = [];
     
     if (len < 12) {
-        console.log('### Too short to be a valid blorb file');
-        return new_blorb();
+        errors.push(`Too short to be a valid blorb file (${len} bytes)`);
+        return { ...new_blorb(), errors:errors };
     }
 
-    if (u8ToString(dat, 0, 4) != 'FORM') {
-        console.log('### This does not appear to be a valid blorb file');
-        return new_blorb();
+    if (u8ToString(dat, 0, 4) != 'FORM' || u8ToString(dat, 8, 4) != 'IFRS') {
+        errors.push('This does not appear to be a blorb file');
+        return { ...new_blorb(), errors:errors };
     }
 
     let foundlen = u8read4(dat, 4);
     if (foundlen+8 != len) {
-        console.log('### Blorb length field is incorrect');
+        errors.push(`Blorb length field is incorrect (${foundlen+8} rather than ${len})`);
         // continue
-    }
-
-    if (u8ToString(dat, 8, 4) != 'IFRS') {
-        console.log('### This does not appear to be a valid blorb file');
-        return new_blorb();
     }
 
     let chunks: Chunk[] = [];
@@ -34,7 +31,7 @@ export function parse_blorb(dat: Uint8Array, filename?: string) : Blorb
 
     while (pos < len) {
         if (pos+8 > len) {
-            console.log('### Blorb data looks truncated');
+            errors.push(`Blorb data looks truncated (chunk ${chunks.length})`);
             break;
         }
         let uctype = dat.slice(pos, pos+4);
@@ -44,7 +41,7 @@ export function parse_blorb(dat: Uint8Array, filename?: string) : Blorb
         pos += 8;
 
         if (pos+clen > len) {
-            console.log('### Blorb chunk looks truncated');
+            errors.push(`Blorb chunk looks truncated (chunk ${chunks.length})`);
             break;
         }
 
@@ -72,20 +69,30 @@ export function parse_blorb(dat: Uint8Array, filename?: string) : Blorb
         filename: filename,
         chunks: (chunks as ReadonlyArray<Chunk>),
         totallen: pos,
+        errors: errors,
     };
 
     //### check for consistency errors before we recompute?
     
     blorb = blorb_recompute_positions(blorb);
 
+    errors = []; // new set of errors
+    
     for (let chunk of blorb.chunks) {
         let pos = origposmap.get(chunk.reactkey);
         if (pos != chunk.pos) {
-            console.log('### chunk position was wrong');
+            errors.push(`Chunk position was wrong (${pos} rather than ${chunk.pos})`);
         }
     }
     if (blorb.totallen != len) {
-        console.log('### inconsistent blorb length');
+        errors.push(`Blorb length was not constructed correctly (${blorb.totallen} rather than ${len})`);
+    }
+
+    if (errors.length) {
+        blorb = {
+            ...blorb,
+            errors: [ ...blorb.errors, ...errors ],
+        }
     }
 
     return blorb;

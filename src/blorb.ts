@@ -399,6 +399,9 @@ export type Blorb = {
     usagemap: Map<string, number>; // "Pict:1" to reactkey
     keymap: Map<number, Chunk>; // chunk.reactkey to chunk
     posmap: Map<number, Chunk>; // chunk.pos to chunk
+
+    // Built on load or update.
+    errors: ReadonlyArray<string>,
 };
 
 export function new_blorb() : Blorb
@@ -410,6 +413,7 @@ export function new_blorb() : Blorb
         usagemap: new Map(),
         keymap: new Map(),
         posmap: new Map(),
+        errors: [],
     };
 }
 
