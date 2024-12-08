@@ -3,10 +3,11 @@ import { useState, useContext } from 'react';
 
 import { u8ToBase64URL } from './datutil';
 import { Chunk, Blorb, CTypes } from './blorb';
-import { chunk_readable_desc, blorb_resentry_for_chunk } from './blorb';
+import { chunk_readable_desc, blorb_resentry_for_chunk, chunk_filename_info } from './blorb';
 import { pretty_size, byte_to_hex } from './readable';
 
-import { ChunkCmd, ChunkCmdCtx, SetChunkCmdCtx } from './contexts';
+import { BlorbCtx, ChunkCmd, ChunkCmdCtx, SetChunkCmdCtx } from './contexts';
+import { ArrowDownload } from './widgets';
 import { DispChunks } from './dispchunk';
 
 export function DisplayColumn({ blorb, selected }: { blorb:Blorb, selected:number })
@@ -73,14 +74,15 @@ export function DisplayColumn({ blorb, selected }: { blorb:Blorb, selected:numbe
 
 function DownloadChunkPanel({ chunk }: { chunk:Chunk })
 {
-    let dataurl = URL.createObjectURL(
-        new Blob([ chunk.data ], { type: 'application/octet-stream' })
-    );
+    let blorb = useContext(BlorbCtx);
+    let { filename, mimetype } = chunk_filename_info(chunk, blorb);
+    
+    console.log('###', filename, mimetype);
     
     return (
         <div className="PopPane">
             <div>Download this chunk ({ pretty_size(chunk.data.length) })</div>
-            <a href={ dataurl }>HERE</a>
+            <ArrowDownload data={ chunk.data } mimetype={ mimetype } />
         </div>
     );
 }

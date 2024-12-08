@@ -27,3 +27,16 @@ export function ArrowToChunk({ destkey }: { destkey:number })
         </>
     );
 }
+
+export function ArrowDownload({ data, mimetype }: { data:Uint8Array, mimetype:string })
+{
+    let dataurl = URL.createObjectURL(
+        new Blob([ data ], { type: mimetype })
+    );
+
+    return (
+        <>
+            <a className="JumpArrow" download href={ dataurl }>&#x21A7;</a>
+        </>
+    );
+}

@@ -337,6 +337,46 @@ export function chunk_readable_desc(chunk: Chunk) : string
     return 'Unrecognized chunk';
 }
 
+export function chunk_filename_info(chunk: Chunk, blorb: Blorb)
+{
+    let mimetype;
+    let suffix;
+    let filename = chunk.type.stype.trim();
+
+    let ent = blorb_resentry_for_chunk(blorb, chunk);
+    if (ent) {
+        filename = ent.usage.trim() + '-' + ent.resnum;
+    }
+    
+    switch (chunk.type.stype) {
+    case 'JPEG':
+        mimetype = 'image/jpeg';
+        suffix = '.jpeg';
+        break;
+    case 'PNG ':
+        mimetype = 'image/png';
+        suffix = '.png';
+        break;
+    case 'IFmd':
+        mimetype = 'text/xml';
+        suffix = '.xml';
+        break;
+    case 'GLUL':
+        mimetype = 'application/x-glulx';
+        suffix = '.ulx';
+        break;
+    case 'ZCOD':
+        mimetype = 'application/x-zmachine';
+        suffix = '.z' + chunk.data[0]; // cheap hack, yes
+        break;
+    default:
+        mimetype = 'application/octet-stream';
+        suffix = '.dat';
+        break;
+    }
+
+    return { filename:filename+suffix, mimetype:mimetype };
+}
 
 export type Blorb = {
     filename: string|undefined;
