@@ -46,7 +46,6 @@ function MyApp()
     };
     
     function evhan_click_background(ev: React.MouseEvent<HTMLDivElement, MouseEvent>) {
-        ev.preventDefault();
         ev.stopPropagation();
         setSelectedWrap(-1);
     }
@@ -134,7 +133,6 @@ function ChunkListEntry({ chunk, isselected } : { chunk:Chunk, isselected:boolea
     let resentry = blorb_resentry_for_chunk(blorb, chunk);
     
     function evhan_click(ev: React.MouseEvent<HTMLLIElement, MouseEvent>) {
-        ev.preventDefault();
         ev.stopPropagation();
         setSelection(chunk.reactkey);
     }
