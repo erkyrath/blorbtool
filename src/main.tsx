@@ -85,9 +85,12 @@ function BlorbInfoHeader()
 
     return (
         <div className="BlorbInfo">
-            <div className="BlorbTitle">{ blorb.filename || '(untitled)' }</div>
+            <div className="BlorbTitle">
+                { blorb.filename || '(untitled)' }
+            </div>
             <div className="BlorbGloss">
-            { blorb.chunks.length } chunks, { pretty_size(blorb.totallen) }</div>
+                { blorb.chunks.length } chunks, { pretty_size(blorb.totallen) }
+            </div>
         </div>
     );
 }
