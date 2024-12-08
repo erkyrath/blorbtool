@@ -151,6 +151,11 @@ button:active {
     color: white;
 }
 
+button:disabled {
+    background-color: #EEE;
+    color: #888;
+}
+
 pre {
     font-family: "Source Code Pro";
     font-size: 85%;
