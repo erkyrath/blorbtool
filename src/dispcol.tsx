@@ -73,9 +73,14 @@ export function DisplayColumn({ blorb, selected }: { blorb:Blorb, selected:numbe
 
 function DownloadChunkPanel({ chunk }: { chunk:Chunk })
 {
+    let dataurl = URL.createObjectURL(
+        new Blob([ chunk.data ], { type: 'application/octet-stream' })
+    );
+    
     return (
         <div className="PopPane">
-            <div>Download this chunk...</div>
+            <div>Download this chunk ({ pretty_size(chunk.data.length) })</div>
+            <a href={ dataurl }>HERE</a>
         </div>
     );
 }
