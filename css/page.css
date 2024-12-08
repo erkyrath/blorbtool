@@ -23,11 +23,13 @@ body {
     overflow-y: scroll;
 }
 
+.ChunkList {
+    border-top: 1px solid #AAA;
+}
+
 .ChunkList li {
-    background: white;
-    margin-top: 8px;
-    margin-bottom: 8px;
-    padding: 4px 8px;
+    padding: 8px 8px;
+    border-bottom: 1px solid #AAA;
 }
 
 .ChunkList li.Selected {
