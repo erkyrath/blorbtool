@@ -369,10 +369,21 @@ export function chunk_filename_info(chunk: Chunk, blorb: Blorb)
         mimetype = 'application/x-zmachine';
         suffix = '.z' + chunk.data[0]; // cheap hack, yes
         break;
+    //### others...
     default:
         mimetype = 'application/octet-stream';
         suffix = '.dat';
         break;
+    }
+
+    if (chunk.formtype) {
+        // Overrides the above
+        switch (chunk.formtype.stype) {
+        case 'AIFF':
+            mimetype = 'audio/aiff';
+            suffix = '.aiff';
+            break;
+        }
     }
 
     return { filename:filename+suffix, mimetype:mimetype };

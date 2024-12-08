@@ -77,12 +77,10 @@ function DownloadChunkPanel({ chunk }: { chunk:Chunk })
     let blorb = useContext(BlorbCtx);
     let { filename, mimetype } = chunk_filename_info(chunk, blorb);
     
-    console.log('###', filename, mimetype);
-    
     return (
         <div className="PopPane">
             <div>Download this chunk ({ pretty_size(chunk.data.length) })</div>
-            <ArrowDownload data={ chunk.data } mimetype={ mimetype } />
+            <ArrowDownload data={ chunk.data } filename={ filename } mimetype={ mimetype } />
         </div>
     );
 }
