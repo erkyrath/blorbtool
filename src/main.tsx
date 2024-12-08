@@ -11,6 +11,7 @@ import { BlorbCtx, SetSelectionCtx } from './contexts';
 import { ChunkCmd, ChunkCmdCtx, SetChunkCmdCtx } from './contexts';
 import { BlorbCmd, BlorbCmdCtx, SetBlorbCmdCtx } from './contexts';
 import { DisplayColumn } from './dispcol';
+import { ArrowDownload } from './widgets';
 
 let initialBlorb: Blorb|undefined;
 
@@ -80,6 +81,9 @@ function MyApp()
 function BlorbInfoHeader()
 {
     let blorb = useContext(BlorbCtx);
+    let blorbcmd = useContext(BlorbCmdCtx);
+    let setblorbcmd = useContext(SetBlorbCmdCtx);
+    let setchunkcmd = useContext(SetChunkCmdCtx);
 
     if (blorb.chunks.length == 0) {
         return (
@@ -89,6 +93,22 @@ function BlorbInfoHeader()
         );
     }
 
+    function evhan_click_download(ev: React.MouseEvent<HTMLElement, MouseEvent>) {
+        ev.stopPropagation();
+        setchunkcmd(null);
+        if (blorbcmd != 'download')
+            setblorbcmd('download');
+        else
+            setblorbcmd(null);
+    }
+
+    let cmdpanel = null;
+    switch (blorbcmd) {
+    case 'download':
+        cmdpanel = <DownloadBlorbPanel />;
+        break;
+    }
+    
     return (
         <div className="BlorbInfo">
             <div className="BlorbTitle">
@@ -98,9 +118,10 @@ function BlorbInfoHeader()
                 { blorb.chunks.length } chunks, { pretty_size(blorb.totallen) }
             </div>
             <div className="BlorbControls">
-                <button>Download</button>
+                <button onClick={ evhan_click_download }>Download</button>
                 <button>Add Chunk</button>
             </div>
+            { cmdpanel }
         </div>
     );
 }
@@ -136,6 +157,23 @@ function ChunkListEntry({ chunk, isselected } : { chunk:Chunk, isselected:boolea
             <div className="ChunkTitle">{ chunk_readable_desc(chunk) }</div>
             <div className="ChunkGloss">{ pretty_size(chunk.data.length) }</div>
         </li>
+    );
+}
+
+function DownloadBlorbPanel()
+{
+    let blorb = useContext(BlorbCtx);
+
+    let filename = 'blorb.blb'; //### from saved filename ### or zblorb/gblorb?
+    let mimetype = 'application/x-blorb';
+
+    let data = new Uint8Array(4); //###
+    
+    return (
+        <div className="InlinePane">
+            <ArrowDownload data={ data } filename={ filename } mimetype={ mimetype } />{' '}
+            Download blorb file ({ pretty_size(data.length) })
+        </div>
     );
 }
 

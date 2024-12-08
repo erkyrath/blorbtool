@@ -139,6 +139,13 @@ body {
     margin: 4px 4px;
 }
 
+.InlinePane {
+    font-family: "Helvetica Neue", "Helvetica", "Arial", sans-serif;
+    font-size: 85%;
+    margin-top: 16px;
+    margin-bottom: 16px;
+}
+
 button {
     font-family: "Helvetica Neue", "Helvetica", "Arial", sans-serif;
     font-size: 100%;

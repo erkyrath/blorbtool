@@ -6,7 +6,7 @@ import { Chunk, Blorb, CTypes } from './blorb';
 import { chunk_readable_desc, blorb_resentry_for_chunk, chunk_filename_info } from './blorb';
 import { pretty_size, byte_to_hex } from './readable';
 
-import { BlorbCtx, ChunkCmd, ChunkCmdCtx, SetChunkCmdCtx } from './contexts';
+import { BlorbCtx, ChunkCmd, ChunkCmdCtx, SetChunkCmdCtx, BlorbCmdCtx, SetBlorbCmdCtx } from './contexts';
 import { ArrowDownload } from './widgets';
 import { DispChunks } from './dispchunk';
 
@@ -15,6 +15,7 @@ export function DisplayColumn({ blorb, selected }: { blorb:Blorb, selected:numbe
     const [showhex, setShowHex] = useState(false);
     let chunkcmd = useContext(ChunkCmdCtx);
     let setchunkcmd = useContext(SetChunkCmdCtx);
+    let setblorbcmd = useContext(SetBlorbCmdCtx);
 
     let selchunk = blorb.chunks.find(chunk => (chunk.reactkey == selected));
     
@@ -22,12 +23,14 @@ export function DisplayColumn({ blorb, selected }: { blorb:Blorb, selected:numbe
         setShowHex(!showhex);
     }
     function evhan_click_download(ev: React.MouseEvent<HTMLElement, MouseEvent>) {
+        setblorbcmd(null);
         if (chunkcmd != 'download')
             setchunkcmd('download');
         else
             setchunkcmd(null);
     }
     function evhan_click_delete(ev: React.MouseEvent<HTMLElement, MouseEvent>) {
+        setblorbcmd(null);
         if (chunkcmd != 'delete')
             setchunkcmd('delete');
         else
