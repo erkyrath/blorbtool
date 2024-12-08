@@ -21,10 +21,16 @@ export function DisplayColumn({ blorb, selected }: { blorb:Blorb, selected:numbe
         setShowHex(!showhex);
     }
     function evhan_click_download(ev: React.MouseEvent<HTMLElement, MouseEvent>) {
-	setchunkcmd('download');
+	if (chunkcmd != 'download')
+	    setchunkcmd('download');
+	else
+	    setchunkcmd(null);
     }
     function evhan_click_delete(ev: React.MouseEvent<HTMLElement, MouseEvent>) {
-	setchunkcmd('delete');
+	if (chunkcmd != 'delete')
+	    setchunkcmd('delete');
+	else
+	    setchunkcmd(null);
     }
 
     let cmdpanel = null;
