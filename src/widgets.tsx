@@ -36,7 +36,7 @@ export function ArrowDownload({ data, filename, mimetype }: { data:Uint8Array, f
 
     return (
         <>
-            <a className="JumpArrow" download={ filename } href={ dataurl }>&#x21A7;</a>
+            <a className="DownloadArrow" download={ filename } href={ dataurl }>&#x21A7;</a>
         </>
     );
 }

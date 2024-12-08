@@ -207,6 +207,18 @@ a.JumpArrow:hover {
     font-size: 85%
 }
 
+a.DownloadArrow {
+    font-size: 140%;
+    text-decoration: none;
+    padding: 0px 6px;
+    border: 1px solid #CCF;
+    border-radius: 20px;
+}
+
+a.DownloadArrow:hover {
+    background: #0000FF40;
+}
+
 .ImageBox {
     text-align: center;
 }

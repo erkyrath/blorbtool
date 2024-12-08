@@ -79,8 +79,8 @@ function DownloadChunkPanel({ chunk }: { chunk:Chunk })
     
     return (
         <div className="PopPane">
-            <div>Download this chunk ({ pretty_size(chunk.data.length) })</div>
-            <ArrowDownload data={ chunk.data } filename={ filename } mimetype={ mimetype } />
+            <ArrowDownload data={ chunk.data } filename={ filename } mimetype={ mimetype } />{' '}
+            Download this chunk ({ pretty_size(chunk.data.length) })
         </div>
     );
 }
