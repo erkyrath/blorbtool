@@ -8,6 +8,7 @@ import { parse_blorb } from './parseblorb';
 import { pretty_size } from './readable';
 
 import { BlorbCtx, SetSelectionCtx } from './contexts';
+import { ChunkCmd, ChunkCmdCtx, SetChunkCmdCtx } from './contexts';
 import { DisplayColumn } from './dispcol';
 
 let initialBlorb: Blorb|undefined;
@@ -30,13 +31,22 @@ function MyApp()
     
     const [blorb, dispBlorb] = useReducer(reduceBlorb, initialBlorb!);
     const [selected, setSelected] = useState(-1);
+    const [chunkcmd, setChunkCmd] = useState(null as ChunkCmd);
+
+    let setSelectedWrap = function(val: number) {
+        if (val != selected) {
+            console.log('### selected', val);
+            setSelected(val);
+            setChunkCmd(null);
+        }
+    };
     
     (window as any).curblorb = blorb; //###
 
     function evhan_click_background(ev: React.MouseEvent<HTMLDivElement, MouseEvent>) {
         ev.preventDefault();
         ev.stopPropagation();
-        setSelected(-1);
+        setSelectedWrap(-1);
     }
     
     let chunkls = blorb.chunks.map(chunk =>
@@ -44,8 +54,10 @@ function MyApp()
     );
 
     return (
-        <SetSelectionCtx.Provider value={ setSelected }>
-            <BlorbCtx.Provider value={ blorb }>
+        <SetSelectionCtx.Provider value={ setSelectedWrap }>
+        <SetChunkCmdCtx.Provider value={ setChunkCmd }>
+        <ChunkCmdCtx.Provider value={ chunkcmd }>
+        <BlorbCtx.Provider value={ blorb }>
                 <div className="IndexCol" onClick={ evhan_click_background }>
                     <BlorbInfoHeader />
                     <ul className="ChunkList">
@@ -53,7 +65,9 @@ function MyApp()
                     </ul>
                 </div>
                 <DisplayColumn blorb={ blorb } selected={ selected } />
-            </BlorbCtx.Provider>
+        </BlorbCtx.Provider>
+        </ChunkCmdCtx.Provider>
+        </SetChunkCmdCtx.Provider>
         </SetSelectionCtx.Provider>
     );
 }

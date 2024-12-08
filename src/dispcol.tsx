@@ -6,17 +6,39 @@ import { Chunk, Blorb, CTypes } from './blorb';
 import { chunk_readable_desc, blorb_resentry_for_chunk } from './blorb';
 import { pretty_size, byte_to_hex } from './readable';
 
+import { ChunkCmd, ChunkCmdCtx, SetChunkCmdCtx } from './contexts';
 import { DispChunks } from './dispchunk';
 
 export function DisplayColumn({ blorb, selected }: { blorb:Blorb, selected:number })
 {
-    let selchunk = blorb.chunks.find(chunk => (chunk.reactkey == selected));
     const [showhex, setShowHex] = useState(false);
+    let chunkcmd = useContext(ChunkCmdCtx);
+    let setchunkcmd = useContext(SetChunkCmdCtx);
 
+    let selchunk = blorb.chunks.find(chunk => (chunk.reactkey == selected));
+    
     function evhan_change(ev: ChangeEv) {
         setShowHex(!showhex);
     }
-                                                   
+    function evhan_click_download(ev: React.MouseEvent<HTMLElement, MouseEvent>) {
+	setchunkcmd('download');
+    }
+    function evhan_click_delete(ev: React.MouseEvent<HTMLElement, MouseEvent>) {
+	setchunkcmd('delete');
+    }
+
+    let cmdpanel = null;
+    switch (chunkcmd) {
+    case 'download':
+	if (selchunk)
+	    cmdpanel = <DownloadChunkPanel chunk={selchunk} />;
+	break;
+    case 'delete':
+	if (selchunk)
+	    cmdpanel = <DeleteChunkPanel chunk={selchunk} />;
+	break;
+    }
+    
     return (
         <div className="DisplayCol">
             <div className="DisplayHeader">
@@ -26,10 +48,10 @@ export function DisplayColumn({ blorb, selected }: { blorb:Blorb, selected:numbe
 			<label htmlFor="control_showraw"> Display hex</label>
                     </div>
                     <div className="Control">
-			<button>Download</button>
+			<button onClick={ evhan_click_download }>Download</button>
                     </div>
                     <div className="Control">
-			<button>Delete</button>
+			<button onClick={ evhan_click_delete }>Delete</button>
                     </div>
                 </div>
             </div>
@@ -38,7 +60,28 @@ export function DisplayColumn({ blorb, selected }: { blorb:Blorb, selected:numbe
                    <DisplayChunk blorb={ blorb } chunk={ selchunk } showhex={ showhex } />
                    : null) }
             </div>
+	    { cmdpanel }
         </div>
+    );
+}
+
+function DownloadChunkPanel({ chunk }: { chunk:Chunk })
+{
+    return (
+	<div className="PopPane">
+	    <div>Download this chunk...</div>
+	</div>
+    );
+}
+
+function DeleteChunkPanel({ chunk }: { chunk:Chunk })
+{
+    return (
+	<div className="PopPane">
+	    <div>Delete this chunk?</div>
+	    <button>Cancel</button>
+	    <button>Delete</button>
+	</div>
     );
 }
 
