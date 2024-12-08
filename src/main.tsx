@@ -9,6 +9,7 @@ import { pretty_size } from './readable';
 
 import { BlorbCtx, SetSelectionCtx } from './contexts';
 import { ChunkCmd, ChunkCmdCtx, SetChunkCmdCtx } from './contexts';
+import { BlorbCmd, BlorbCmdCtx, SetBlorbCmdCtx } from './contexts';
 import { DisplayColumn } from './dispcol';
 
 let initialBlorb: Blorb|undefined;
@@ -32,6 +33,9 @@ function MyApp()
     const [blorb, dispBlorb] = useReducer(reduceBlorb, initialBlorb!);
     const [selected, setSelected] = useState(-1);
     const [chunkcmd, setChunkCmd] = useState(null as ChunkCmd);
+    const [blorbcmd, setBlorbCmd] = useState(null as BlorbCmd);
+
+    (window as any).curblorb = blorb; //###
 
     let setSelectedWrap = function(val: number) {
         if (val != selected) {
@@ -40,8 +44,6 @@ function MyApp()
         }
     };
     
-    (window as any).curblorb = blorb; //###
-
     function evhan_click_background(ev: React.MouseEvent<HTMLDivElement, MouseEvent>) {
         ev.preventDefault();
         ev.stopPropagation();
@@ -56,15 +58,19 @@ function MyApp()
         <SetSelectionCtx.Provider value={ setSelectedWrap }>
         <SetChunkCmdCtx.Provider value={ setChunkCmd }>
         <ChunkCmdCtx.Provider value={ chunkcmd }>
+        <SetBlorbCmdCtx.Provider value={ setBlorbCmd }>
+        <BlorbCmdCtx.Provider value={ blorbcmd }>
         <BlorbCtx.Provider value={ blorb }>
-                <div className="IndexCol" onClick={ evhan_click_background }>
-                    <BlorbInfoHeader />
-                    <ul className="ChunkList">
-                        { chunkls }
-                    </ul>
-                </div>
-                <DisplayColumn blorb={ blorb } selected={ selected } />
+            <div className="IndexCol" onClick={ evhan_click_background }>
+                <BlorbInfoHeader />
+                <ul className="ChunkList">
+                    { chunkls }
+                </ul>
+            </div>
+            <DisplayColumn blorb={ blorb } selected={ selected } />
         </BlorbCtx.Provider>
+        </BlorbCmdCtx.Provider>
+        </SetBlorbCmdCtx.Provider>
         </ChunkCmdCtx.Provider>
         </SetChunkCmdCtx.Provider>
         </SetSelectionCtx.Provider>
@@ -90,6 +96,10 @@ function BlorbInfoHeader()
             </div>
             <div className="BlorbGloss">
                 { blorb.chunks.length } chunks, { pretty_size(blorb.totallen) }
+            </div>
+            <div className="BlorbControls">
+                <button>Download</button>
+                <button>Add Chunk</button>
             </div>
         </div>
     );
