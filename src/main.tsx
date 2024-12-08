@@ -22,8 +22,6 @@ export function init()
         root.render( <MyApp /> );
 }
 
-type Product = { title:string, id:number };
-
 function MyApp()
 {
     if (!initialBlorb) {
