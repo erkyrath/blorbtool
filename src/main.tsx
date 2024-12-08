@@ -2,7 +2,7 @@ import React from 'react';
 import { useState, useContext, useReducer } from 'react';
 import { Root, createRoot } from 'react-dom/client';
 
-import { Chunk, Blorb, new_blorb } from './blorb';
+import { Chunk, Blorb, new_blorb, blorb_get_data } from './blorb';
 import { chunk_readable_desc, blorb_resentry_for_chunk } from './blorb';
 import { parse_blorb } from './parseblorb';
 import { pretty_size } from './readable';
@@ -167,7 +167,7 @@ function DownloadBlorbPanel()
     let filename = 'blorb.blb'; //### from saved filename ### or zblorb/gblorb?
     let mimetype = 'application/x-blorb';
 
-    let data = new Uint8Array(4); //###
+    let data = blorb_get_data(blorb);
     
     return (
         <div className="InlinePane">

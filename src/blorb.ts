@@ -1,4 +1,5 @@
-import { u8ToString, u16ToString, utf8ToString, stringToU8, u8read4 } from './datutil';
+import { u8ToString, u16ToString, utf8ToString, stringToU8 } from './datutil';
+import { u8read4, u8write4 } from './datutil';
 import { ImageSize, ImageRatio, find_dimensions_png, find_dimensions_jpeg } from './imgutil';
 
 export type ChunkType = {
@@ -412,6 +413,40 @@ export function new_blorb() : Blorb
     };
 }
 
+export function blorb_get_data(blorb: Blorb) : Uint8Array
+{
+    let data = new Uint8Array(blorb.totallen);
+
+    let pos = 0;
+
+    u8write4(data, pos, 0x464F524D); // "FORM"
+    pos += 4;
+    u8write4(data, pos, blorb.totallen-8);
+    pos += 4;
+    u8write4(data, pos, 0x49465253); // "IFRS"
+    pos += 4;
+    
+    for (let chunk of blorb.chunks) {
+        if (!chunk.formtype) {
+            data.set(chunk.type.utype, pos);
+            pos += 4;
+            u8write4(data, pos, chunk.data.length);
+            pos += 4;
+        }
+        
+        data.set(chunk.data, pos);
+        pos += chunk.data.length;
+        
+        if (pos & 1)
+            pos++;
+    }
+
+    if (pos != data.length)
+        console.log('### bad length?', pos, data.length);
+
+    return data;
+}
+
 export function blorb_recompute_positions(blorb: Blorb, oldusagemap?: Map<string, number>) : Blorb
 {
     if (blorb.chunks.length == 0)
@@ -423,7 +458,7 @@ export function blorb_recompute_positions(blorb: Blorb, oldusagemap?: Map<string
     }
     let ridx = blorb.chunks[0] as CTypes.CTResIndex;
 
-    //### if oldusagemap, restomp ridx.data!
+    //### if oldusagemap, pre-length the ridx.data!
 
     let index = 0;
     let pos = 12;
