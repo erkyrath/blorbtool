@@ -35,7 +35,6 @@ function MyApp()
 
     let setSelectedWrap = function(val: number) {
         if (val != selected) {
-            console.log('### selected', val);
             setSelected(val);
             setChunkCmd(null);
         }

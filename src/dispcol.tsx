@@ -54,10 +54,10 @@ export function DisplayColumn({ blorb, selected }: { blorb:Blorb, selected:numbe
                         <label htmlFor="control_showraw"> Display hex</label>
                     </div>
                     <div className="Control">
-                        <button onClick={ evhan_click_download }>Download</button>
+                        <button disabled={ !selchunk } onClick={ evhan_click_download }>Download</button>
                     </div>
                     <div className="Control">
-                        <button onClick={ evhan_click_delete }>Delete</button>
+                        <button disabled={ !selchunk } onClick={ evhan_click_delete }>Delete</button>
                     </div>
                 </div>
             </div>
