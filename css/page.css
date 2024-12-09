@@ -179,6 +179,7 @@ button:disabled {
     color: #888;
 }
 
+/*### visually hidden instead?*/
 input[type=file] {
     display: none;
 }

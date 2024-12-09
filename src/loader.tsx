@@ -15,17 +15,16 @@ export function LoaderIndex()
         let inputel = document.getElementById('fileinput') as HTMLInputElement;
         if (inputel && inputel.files && inputel.files.length) {
             let infile = inputel.files[0];
-            infile.bytes().then((arr) => {
+            infile.arrayBuffer().then((arr) => {
                 loadblorbfile({
                     filename: infile.name,
-                    data: arr,
+                    data: new Uint8Array(arr),
                 });
             });
         }
     };
 
     function evhan_drop(ev: DragEv) {
-        console.log('### drop', ev);
         ev.preventDefault();
 
         let infile: File|null = null;
@@ -39,10 +38,10 @@ export function LoaderIndex()
         }
 
         if (infile) {
-            infile.bytes().then((arr) => {
+            infile.arrayBuffer().then((arr) => {
                 loadblorbfile({
                     filename: infile.name,
-                    data: arr,
+                    data: new Uint8Array(arr),
                 });
             });
         }
