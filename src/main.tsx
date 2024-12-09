@@ -17,9 +17,10 @@ import { ArrowDownload, ArrowGeneric } from './widgets';
 
 let initialBlorb: Blorb|undefined;
 
-export function init()
+export function init(blorbdata: Uint8Array|undefined)
 {
-    initialBlorb = parse_blorb((window as any).sensory_blb_file); //###
+    if (blorbdata)
+        initialBlorb = parse_blorb(blorbdata);
     
     const appel = document.getElementById('appbody') as HTMLElement;
     let root = createRoot(appel);
