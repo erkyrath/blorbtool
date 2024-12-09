@@ -101,15 +101,25 @@ function AppLoading()
 {
     return (
         <>
-            <div className="IndexCol">
-                <LoaderIndex />
-            </div>
+            <LoaderIndex />
             <LoaderDisplay />
         </>
     );
 }
 
 function AppRunning()
+{
+    let selected = useContext(SelectionCtx);
+
+    return (
+        <>
+            <IndexColumn />
+            <DisplayColumn selected={ selected } />
+        </>
+    );
+}
+
+function IndexColumn()
 {
     let blorb = useContext(BlorbCtx);
     let selected = useContext(SelectionCtx);
@@ -123,17 +133,14 @@ function AppRunning()
     let chunkls = blorb.chunks.map(chunk =>
         <ChunkListEntry key={ chunk.reactkey } chunk={ chunk } isselected={ chunk.reactkey == selected } />
     );
-
+    
     return (
-        <>
-            <div className="IndexCol" onClick={ evhan_click_background }>
-                <BlorbInfoHeader />
-                <ul className="ChunkList">
-                    { chunkls }
-                </ul>
-            </div>
-            <DisplayColumn selected={ selected } />
-        </>
+        <div className="IndexCol" onClick={ evhan_click_background }>
+            <BlorbInfoHeader />
+            <ul className="ChunkList">
+                { chunkls }
+            </ul>
+        </div>
     );
 }
 

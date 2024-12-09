@@ -67,7 +67,7 @@ export function LoaderIndex()
     };
     
     return (
-        <div>
+        <div className="IndexCol">
             <h3>BlorbTool</h3>
             <p>Please select a blorb file...</p>
             <div id="dropzone" className="AlignCenter" onDrop={ evhan_drop } onDragOver={ evhan_dragover } onDragEnter={ evhan_dragenter } onDragLeave={ evhan_dragleave }>
