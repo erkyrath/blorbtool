@@ -175,6 +175,10 @@ button:disabled {
     color: #888;
 }
 
+p {
+    line-height: 1.45em;
+}
+
 pre {
     font-family: "Source Code Pro";
     font-size: 85%;

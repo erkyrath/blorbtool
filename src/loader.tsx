@@ -1,5 +1,7 @@
 import React from 'react';
 
+import { AboutPane } from './about';
+
 export function LoaderIndex()
 {
     return (
@@ -10,6 +12,12 @@ export function LoaderIndex()
 export function LoaderDisplay()
 {
     return (
-	<div>Welcome 2.</div>
+	<>
+            <div className="DisplayHeader">
+	    </div>
+            <div className="DisplayPane">
+		<AboutPane />
+	    </div>
+	</>
     );
 }
