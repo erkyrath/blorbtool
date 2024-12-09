@@ -178,6 +178,7 @@ button:disabled {
 pre {
     font-family: "Source Code Pro";
     font-size: 85%;
+    text-wrap-mode: wrap;
 }
 
 code {
@@ -209,6 +210,7 @@ ul.NestTree {
 ul.NestTreeSub {
     list-style: none;
     padding-left: 20px;
+    text-indent: 20px hanging;
 }
 
 a.JumpArrow {
