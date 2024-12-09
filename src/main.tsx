@@ -2,8 +2,9 @@ import React from 'react';
 import { useState, useContext, useReducer } from 'react';
 import { Root, createRoot } from 'react-dom/client';
 
-import { Chunk, Blorb, new_blorb, blorb_get_data } from './blorb';
-import { chunk_readable_desc, blorb_resentry_for_chunk } from './blorb';
+import { Chunk, chunk_readable_desc } from './chunk';
+import { Blorb, new_blorb, blorb_get_data } from './blorb';
+import { blorb_resentry_for_chunk } from './blorb';
 import { parse_blorb } from './parseblorb';
 import { pretty_size } from './readable';
 

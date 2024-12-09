@@ -1,5 +1,6 @@
 import { u8ToString, u8read4 } from './datutil';
-import { Chunk, Blorb, new_chunk, new_blorb } from './blorb';
+import { Chunk, new_chunk } from './chunk';
+import { Blorb, new_blorb } from './blorb';
 import { blorb_recompute_positions } from './blorb';
 
 export function parse_blorb(dat: Uint8Array, filename?: string) : Blorb

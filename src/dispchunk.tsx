@@ -1,8 +1,8 @@
 import React from 'react';
 import { useState, useContext } from 'react';
 
-import { Chunk, Blorb, CTypes } from './blorb';
-import { blorb_chunk_for_usage } from './blorb';
+import { Chunk, CTypes } from './chunk';
+import { Blorb, blorb_chunk_for_usage } from './blorb';
 import { byte_to_hex } from './readable';
 import { BlorbCtx } from './contexts';
 

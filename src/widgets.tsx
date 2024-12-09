@@ -1,7 +1,8 @@
 import React from 'react';
 import { useContext } from 'react';
 
-import { blorb_chunk_for_key, chunk_readable_desc } from './blorb';
+import { chunk_readable_desc } from './chunk';
+import { blorb_chunk_for_key } from './blorb';
 
 import { BlorbCtx, SetSelectionCtx } from './contexts';
 

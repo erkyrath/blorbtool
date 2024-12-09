@@ -2,8 +2,9 @@ import React from 'react';
 import { useState, useContext } from 'react';
 
 import { u8ToBase64URL } from './datutil';
-import { Chunk, Blorb, CTypes } from './blorb';
-import { chunk_readable_desc, blorb_resentry_for_chunk, chunk_filename_info } from './blorb';
+import { Chunk, CTypes } from './chunk';
+import { chunk_readable_desc, chunk_filename_info } from './chunk';
+import { Blorb, blorb_resentry_for_chunk } from './blorb';
 import { pretty_size, byte_to_hex } from './readable';
 
 import { BlorbCtx, ChunkCmd, ChunkCmdCtx, SetChunkCmdCtx, BlorbCmdCtx, SetBlorbCmdCtx } from './contexts';
