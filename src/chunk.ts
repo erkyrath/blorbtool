@@ -168,7 +168,7 @@ function new_chunk_RIdx(chunk: Chunk) : ChunkWithErrors
     if (chunk.data.length != 4 + count*12) {
         errors.push('Bad index chunk count');
         let reschunk: CTypes.CTResIndex = { ...chunk, entries:entries, usagemap:usagemap, invusagemap:invusagemap };
-	return [ reschunk, errors ];
+        return [ reschunk, errors ];
     }
 
     for (let ix=0; ix<count; ix++) {
@@ -198,7 +198,7 @@ function new_chunk_Fspc(chunk: Chunk) : ChunkWithErrors
     if (chunk.data.length != 4) {
         errors.push(`Fspc: bad chunk size (${chunk.data.length} rather than 4)`);
         let reschunk : CTypes.CTFrontispiece = { ...chunk, picnum:0 };
-	return [ reschunk, errors ];
+        return [ reschunk, errors ];
     }
     
     let num = u8read4(chunk.data, 0);

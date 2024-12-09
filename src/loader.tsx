@@ -15,7 +15,6 @@ export function LoaderIndex()
         let inputel = document.getElementById('fileinput') as HTMLInputElement;
         if (inputel && inputel.files && inputel.files.length) {
             let infile = inputel.files[0];
-            console.log('### got', infile);
             infile.bytes().then((arr) => {
                 loadblorbfile({
                     filename: infile.name,

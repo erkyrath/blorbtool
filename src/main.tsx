@@ -48,8 +48,8 @@ function MyApp()
     (window as any).curblorb = blorb; //###
     
     let loadBlorbFile = function(act: LoadBlorbAction) {
-        console.log('### load', act);
         let newblorb = parse_blorb(act.data, act.filename);
+        (window as any).curblorb = newblorb; //###
         setShowLoader(false);
         dispBlorb({ type:'load', blorb:newblorb });
     }
