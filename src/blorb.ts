@@ -58,7 +58,7 @@ export function blorb_get_data(blorb: Blorb) : Uint8Array
     }
 
     if (pos != data.length)
-        console.log('### bad length?', pos, data.length);
+        console.log('BUG: blorb_get_data: inconsistent length', pos, data.length);
 
     return data;
 }
@@ -68,9 +68,11 @@ export function blorb_recompute_positions(blorb: Blorb, oldusagemap?: Map<string
     if (blorb.chunks.length == 0)
         return blorb;
 
+    let errors: string[] = [ ...blorb.errors ];
+    
     if (blorb.chunks[0].type.stype != 'RIdx') {
-        console.log('### first chunk is not an index');
-        return blorb;
+        errors.push('First chunk is not a resource index');
+        return { ...blorb, errors:errors };
     }
     let ridx = blorb.chunks[0] as CTypes.CTResIndex;
 
@@ -134,11 +136,12 @@ export function blorb_recompute_positions(blorb: Blorb, oldusagemap?: Map<string
         let newridx = { ...ridx, entries:newents, usagemap:newusagemap, invusagemap:newinvusagemap };
         newls[0] = newridx;
     }
-    
+
     return {
         ...blorb,
         chunks: newls,
         totallen: pos,
+        errors: errors,
         usagemap: newusagemap,
         keymap: newkeymap,
         posmap: newposmap,
