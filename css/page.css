@@ -176,8 +176,25 @@ button:disabled {
 }
 
 input[type=file] {
+    display: none;
+}
+
+label.FileInput {
     font-family: "Helvetica Neue", "Helvetica", "Arial", sans-serif;
     font-size: 100%;
+    background-color: #E8E8FF;
+    padding: 4px 8px;
+    border: 1px solid #99F;
+    border-radius: 20px;
+}
+
+label.FileInput:hover {
+    background-color: #E0E0FF;
+}
+
+label.FileInput:active {
+    background-color: #78F;
+    color: white;
 }
 
 p {
