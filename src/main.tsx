@@ -8,7 +8,8 @@ import { blorb_resentry_for_chunk } from './blorb';
 import { parse_blorb } from './parseblorb';
 import { pretty_size } from './readable';
 
-import { BlorbCtx, SelectionCtx, SetSelectionCtx } from './contexts';
+import { BlorbCtx, LoadBlorbCtx, LoadBlorbAction } from './contexts';
+import { SelectionCtx, SetSelectionCtx } from './contexts';
 import { ChunkCmd, ChunkCmdCtx, SetChunkCmdCtx } from './contexts';
 import { BlorbCmd, BlorbCmdCtx, SetBlorbCmdCtx } from './contexts';
 import { AltDisplay, AltDisplayCtx, SetAltDisplayCtx } from './contexts';
@@ -45,7 +46,14 @@ function MyApp()
     const [blorbcmd, setBlorbCmd] = useState(null as BlorbCmd);
 
     (window as any).curblorb = blorb; //###
-
+    
+    let loadBlorbFile = function(act: LoadBlorbAction) {
+        console.log('### load', act);
+        let newblorb = parse_blorb(act.data, act.filename);
+        setShowLoader(false);
+        dispBlorb({ type:'load', blorb:newblorb });
+    }
+    
     let setSelectedWrap = function(val: number) {
         if (val != selected) {
             setSelected(val);
@@ -70,6 +78,7 @@ function MyApp()
         <ChunkCmdCtx.Provider value={ chunkcmd }>
         <SetBlorbCmdCtx.Provider value={ setBlorbCmd }>
         <BlorbCmdCtx.Provider value={ blorbcmd }>
+        <LoadBlorbCtx.Provider value={ loadBlorbFile }>
         <BlorbCtx.Provider value={ blorb }>
             { showloader ?
               <AppLoading />
@@ -77,6 +86,7 @@ function MyApp()
               <AppRunning />
             }
         </BlorbCtx.Provider>
+        </LoadBlorbCtx.Provider>
         </BlorbCmdCtx.Provider>
         </SetBlorbCmdCtx.Provider>
         </ChunkCmdCtx.Provider>
@@ -243,6 +253,9 @@ function DownloadBlorbPanel()
 
 function reduceBlorb(blorb: Blorb, act: any) : Blorb
 {
+    if (act.type == 'load') {
+        return act.blorb;
+    }
     return blorb;
 }
 

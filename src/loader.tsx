@@ -1,18 +1,35 @@
 import React from 'react';
+import { useContext } from 'react';
+
+import { LoadBlorbCtx, LoadBlorbAction } from './contexts';
 
 import { AboutPane } from './about';
 
 export function LoaderIndex()
 {
+    let loadblorbfile = useContext(LoadBlorbCtx);
+
     let filetypes = '.blb,.blorb,.zblorb,.gblorb,.ablorb,application-xblorb';
 
     function evhan_change(ev: ChangeEv) {
-        console.log('### got', ev);
+        let inputel = document.getElementById('fileinput') as HTMLInputElement;
+        if (inputel && inputel.files && inputel.files.length) {
+            let infile = inputel.files[0];
+            console.log('### got', infile);
+            infile.bytes().then((arr) => {
+                loadblorbfile({
+                    filename: infile.name,
+                    data: arr,
+                });
+            });
+        }
     };
     
     return (
         <div>
-            <input type="file" accept={ filetypes } onChange= { evhan_change } />
+            <h3>BlorbTool</h3>
+            <p>Please select a blorb file...</p>
+            <input id="fileinput" type="file" accept={ filetypes } onChange= { evhan_change } />
         </div>
     );
 }

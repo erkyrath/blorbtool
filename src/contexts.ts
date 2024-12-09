@@ -5,7 +5,7 @@ import { Blorb, new_blorb } from './blorb';
 export type AltDisplay = 'about' | 'errors' | null;
 export type ChunkCmd = 'download' | 'delete' | null;
 export type BlorbCmd = 'download' | 'addchunk' | null;
-export type LoadBlorbAction = { blorb:Blorb, filename:string, data:Uint8Array };
+export type LoadBlorbAction = { filename:string, data:Uint8Array };
 
 export const SelectionCtx = createContext(-1);
 export const SetSelectionCtx = createContext((val:number) => {});
