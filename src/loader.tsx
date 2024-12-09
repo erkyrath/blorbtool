@@ -67,10 +67,10 @@ export function LoaderIndex()
     };
     
     return (
-        <div className="IndexCol">
+        <div id="dropzone" className="IndexCol" onDrop={ evhan_drop } onDragOver={ evhan_dragover } onDragEnter={ evhan_dragenter } onDragLeave={ evhan_dragleave }>
             <h3>BlorbTool</h3>
             <p>Please select a blorb file...</p>
-            <div id="dropzone" className="AlignCenter" onDrop={ evhan_drop } onDragOver={ evhan_dragover } onDragEnter={ evhan_dragenter } onDragLeave={ evhan_dragleave }>
+            <div className="AlignCenter">
                 <label className="FileInput" htmlFor="fileinput">Choose File</label>
                 <input id="fileinput" type="file" accept={ filetypes } onChange= { evhan_change } />
             </div>
