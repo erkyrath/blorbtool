@@ -81,13 +81,13 @@ export function LoaderIndex()
 export function LoaderDisplay()
 {
     return (
-        <>
+        <div className="DisplayCol">
             <div className="DisplayHeader">
             </div>
             <div className="DisplayPane">
                 <AboutPane />
             </div>
-        </>
+        </div>
     );
 }
 

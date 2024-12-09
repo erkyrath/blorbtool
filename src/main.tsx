@@ -104,9 +104,7 @@ function AppLoading()
             <div className="IndexCol">
                 <LoaderIndex />
             </div>
-            <div className="DisplayCol">
-                <LoaderDisplay />
-            </div>
+            <LoaderDisplay />
         </>
     );
 }
@@ -134,9 +132,7 @@ function AppRunning()
                     { chunkls }
                 </ul>
             </div>
-            <div className="DisplayCol">
-                <DisplayColumn selected={ selected } />
-            </div>
+            <DisplayColumn selected={ selected } />
         </>
     );
 }
