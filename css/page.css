@@ -175,6 +175,11 @@ button:disabled {
     color: #888;
 }
 
+input[type=file] {
+    font-family: "Helvetica Neue", "Helvetica", "Arial", sans-serif;
+    font-size: 100%;
+}
+
 p {
     line-height: 1.45em;
 }
