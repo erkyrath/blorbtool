@@ -49,15 +49,31 @@ export function LoaderIndex()
     };
     
     function evhan_dragover(ev: DragEv) {
-        //console.log('### dragover', ev);
+        ev.stopPropagation();
         ev.preventDefault();
+        let el = document.getElementById('dropzone');
+        if (el) {
+            el.classList.add('Selected');
+        }
+    };
+    
+    function evhan_dragenter(ev: DragEv) {
+        ev.stopPropagation();
+    };
+    
+    function evhan_dragleave(ev: DragEv) {
+        ev.stopPropagation();
+        let el = document.getElementById('dropzone');
+        if (el) {
+            el.classList.remove('Selected');
+        }
     };
     
     return (
-        <div onDrop={ evhan_drop } onDragOver={ evhan_dragover }>
+        <div>
             <h3>BlorbTool</h3>
             <p>Please select a blorb file...</p>
-            <div className="AlignCenter">
+            <div id="dropzone" className="AlignCenter" onDrop={ evhan_drop } onDragOver={ evhan_dragover } onDragEnter={ evhan_dragenter } onDragLeave={ evhan_dragleave }>
                 <label className="FileInput" htmlFor="fileinput">Choose File</label>
                 <input id="fileinput" type="file" accept={ filetypes } onChange= { evhan_change } />
             </div>

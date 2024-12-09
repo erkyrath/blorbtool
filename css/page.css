@@ -183,6 +183,10 @@ input[type=file] {
     display: none;
 }
 
+#dropzone.Selected {
+    background: #CCD0FF;
+}
+
 label.FileInput {
     font-family: "Helvetica Neue", "Helvetica", "Arial", sans-serif;
     font-size: 100%;
