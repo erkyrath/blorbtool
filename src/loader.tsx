@@ -29,11 +29,9 @@ export function LoaderIndex()
 
         let infile: File|null = null;
         if (ev.dataTransfer.items && ev.dataTransfer.items.length) {
-            console.log('### transfer items', ev.dataTransfer.items);
             infile = ev.dataTransfer.items[0].getAsFile();
         }
         else if (ev.dataTransfer.files && ev.dataTransfer.files.length) {
-            console.log('### transfer files', ev.dataTransfer.files);
             infile = ev.dataTransfer.files[0];
         }
 
