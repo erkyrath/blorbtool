@@ -28,8 +28,10 @@ export function LoaderIndex()
         <div>
             <h3>BlorbTool</h3>
             <p>Please select a blorb file...</p>
-            <label className="FileInput" htmlFor="fileinput">Choose Blorb File</label>
-            <input id="fileinput" type="file" accept={ filetypes } onChange= { evhan_change } />
+            <div className="AlignCenter">
+                <label className="FileInput" htmlFor="fileinput">Choose File</label>
+                <input id="fileinput" type="file" accept={ filetypes } onChange= { evhan_change } />
+            </div>
         </div>
     );
 }

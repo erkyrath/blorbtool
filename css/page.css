@@ -152,6 +152,10 @@ body {
     margin-bottom: 16px;
 }
 
+.AlignCenter {
+    text-align: center;
+}
+
 button {
     font-family: "Helvetica Neue", "Helvetica", "Arial", sans-serif;
     font-size: 100%;
@@ -242,7 +246,7 @@ ul.NestTreeSub {
 a.JumpArrow {
     text-decoration: none;
     padding: 0px 4px;
-    border: 1px solid #CCF;
+    border: 1px solid #0000FF50;
     border-radius: 20px;
 }
 
@@ -258,7 +262,7 @@ a.DownloadArrow {
     font-size: 140%;
     text-decoration: none;
     padding: 0px 6px;
-    border: 1px solid #CCF;
+    border: 1px solid #0000FF50;
     border-radius: 20px;
 }
 
