@@ -8,7 +8,7 @@ import { blorb_resentry_for_chunk } from './blorb';
 import { parse_blorb } from './parseblorb';
 import { pretty_size } from './readable';
 
-import { BlorbCtx, SetSelectionCtx } from './contexts';
+import { BlorbCtx, SelectionCtx, SetSelectionCtx } from './contexts';
 import { ChunkCmd, ChunkCmdCtx, SetChunkCmdCtx } from './contexts';
 import { BlorbCmd, BlorbCmdCtx, SetBlorbCmdCtx } from './contexts';
 import { AltDisplay, AltDisplayCtx, SetAltDisplayCtx } from './contexts';
@@ -30,11 +30,14 @@ export function init(blorbdata: Uint8Array|undefined)
 
 function MyApp()
 {
+    let initialLoader = false;
     if (!initialBlorb) {
         initialBlorb = new_blorb();
+        initialLoader = true;
     }
     
     const [blorb, dispBlorb] = useReducer(reduceBlorb, initialBlorb!);
+    const [showloader, setShowLoader] = useState(initialLoader);
     const [selected, setSelected] = useState(-1);
     const [altdisplay, setAltDisplay ] = useState(null as AltDisplay);
     const [chunkcmd, setChunkCmd] = useState(null as ChunkCmd);
@@ -57,17 +60,9 @@ function MyApp()
         }
     }
     
-    function evhan_click_background(ev: React.MouseEvent<HTMLDivElement, MouseEvent>) {
-        ev.stopPropagation();
-        setSelectedWrap(-1);
-    }
-    
-    let chunkls = blorb.chunks.map(chunk =>
-        <ChunkListEntry key={ chunk.reactkey } chunk={ chunk } isselected={ chunk.reactkey == selected } />
-    );
-
     return (
         <SetSelectionCtx.Provider value={ setSelectedWrap }>
+        <SelectionCtx.Provider value={ selected }>
         <SetAltDisplayCtx.Provider value={ setAltDisplayWrap }>
         <AltDisplayCtx.Provider value={ altdisplay }>
         <SetChunkCmdCtx.Provider value={ setChunkCmd }>
@@ -75,13 +70,11 @@ function MyApp()
         <SetBlorbCmdCtx.Provider value={ setBlorbCmd }>
         <BlorbCmdCtx.Provider value={ blorbcmd }>
         <BlorbCtx.Provider value={ blorb }>
-            <div className="IndexCol" onClick={ evhan_click_background }>
-                <BlorbInfoHeader />
-                <ul className="ChunkList">
-                    { chunkls }
-                </ul>
-            </div>
-            <DisplayColumn blorb={ blorb } selected={ selected } />
+            { showloader ?
+              <AppLoading />
+              :
+              <AppRunning />
+            }
         </BlorbCtx.Provider>
         </BlorbCmdCtx.Provider>
         </SetBlorbCmdCtx.Provider>
@@ -89,7 +82,43 @@ function MyApp()
         </SetChunkCmdCtx.Provider>
         </AltDisplayCtx.Provider>
         </SetAltDisplayCtx.Provider>
+        </SelectionCtx.Provider>
         </SetSelectionCtx.Provider>
+    );
+}
+
+function AppLoading()
+{
+    return (
+        <div>LOADING</div>
+    );
+}
+
+function AppRunning()
+{
+    let blorb = useContext(BlorbCtx);
+    let selected = useContext(SelectionCtx);
+    let setSelection = useContext(SetSelectionCtx);
+    
+    function evhan_click_background(ev: React.MouseEvent<HTMLDivElement, MouseEvent>) {
+        ev.stopPropagation();
+        setSelection(-1);
+    }
+    
+    let chunkls = blorb.chunks.map(chunk =>
+        <ChunkListEntry key={ chunk.reactkey } chunk={ chunk } isselected={ chunk.reactkey == selected } />
+    );
+
+    return (
+        <>
+            <div className="IndexCol" onClick={ evhan_click_background }>
+                <BlorbInfoHeader />
+                <ul className="ChunkList">
+                    { chunkls }
+                </ul>
+            </div>
+            <DisplayColumn selected={ selected } />
+        </>
     );
 }
 

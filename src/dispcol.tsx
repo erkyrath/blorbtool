@@ -12,10 +12,11 @@ import { AltDisplay, AltDisplayCtx } from './contexts';
 import { ArrowDownload } from './widgets';
 import { DispChunks } from './dispchunk';
 
-export function DisplayColumn({ blorb, selected }: { blorb:Blorb, selected:number })
+export function DisplayColumn({ selected }: { selected:number })
 {
     const [showhex, setShowHex] = useState(false);
 
+    let blorb = useContext(BlorbCtx);
     let altdisplay = useContext(AltDisplayCtx);
     let chunkcmd = useContext(ChunkCmdCtx);
     let setchunkcmd = useContext(SetChunkCmdCtx);
