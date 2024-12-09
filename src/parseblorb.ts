@@ -47,18 +47,23 @@ export function parse_blorb(dat: Uint8Array, filename?: string) : Blorb
         }
 
         let chunk: Chunk;
+        let chunkerrors: string[];
         if (ctype == 'FORM') {
             let formtype = u8ToString(dat, pos, 4);
             let cdat = dat.slice(cpos, pos+clen);
-            chunk = new_chunk(uctype, cdat);
+            [ chunk, chunkerrors ] = new_chunk(uctype, cdat);
         }
         else {
             let cdat = dat.slice(pos, pos+clen);
-            chunk = new_chunk(uctype, cdat);
+            [ chunk, chunkerrors ] = new_chunk(uctype, cdat);
         }
 
         chunks.push(chunk);
         origposmap.set(chunk.reactkey, cpos);
+
+        if (chunkerrors.length) {
+            errors = [ ...errors, ...chunkerrors ];
+        }
 
         pos += clen;
         if (pos & 1)

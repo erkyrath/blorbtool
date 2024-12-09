@@ -105,7 +105,9 @@ export namespace CTypes {
     
 }
 
-export function new_chunk(type:string|Uint8Array, data:Uint8Array) : Chunk
+type ChunkWithErrors = [ Chunk, string[] ];
+
+export function new_chunk(type:string|Uint8Array, data:Uint8Array) : ChunkWithErrors
 {
     let ctype = make_chunk_type(type);
     
@@ -152,19 +154,21 @@ export function new_chunk(type:string|Uint8Array, data:Uint8Array) : Chunk
         return new_chunk_U16Text(chunk);
     }
 
-    return chunk;
+    return [ chunk, [] ];
 }
 
-function new_chunk_RIdx(chunk: Chunk) : CTypes.CTResIndex
+function new_chunk_RIdx(chunk: Chunk) : ChunkWithErrors
 {
+    let errors: string[] = [];
     let entries: CTypes.CTResIndexEntry[] = [];
     let usagemap: Map<string, number> = new Map();
     let invusagemap: Map<number, CTypes.CTResIndexEntry> = new Map();
 
     let count = u8read4(chunk.data, 0);
     if (chunk.data.length != 4 + count*12) {
-        console.log('### bad index chunk count');
-        return { ...chunk, entries:entries, usagemap:usagemap, invusagemap:invusagemap };
+        errors.push('Bad index chunk count');
+        let reschunk: CTypes.CTResIndex = { ...chunk, entries:entries, usagemap:usagemap, invusagemap:invusagemap };
+	return [ reschunk, errors ];
     }
 
     for (let ix=0; ix<count; ix++) {
@@ -183,35 +187,42 @@ function new_chunk_RIdx(chunk: Chunk) : CTypes.CTResIndex
         invusagemap.set(pos, ent);
     }
 
-    return { ...chunk, entries:entries, usagemap:usagemap, invusagemap:invusagemap };
+    let reschunk: CTypes.CTResIndex = { ...chunk, entries:entries, usagemap:usagemap, invusagemap:invusagemap };
+    return [ reschunk, errors ];
 }
 
-function new_chunk_Fspc(chunk: Chunk) : CTypes.CTFrontispiece
+function new_chunk_Fspc(chunk: Chunk) : ChunkWithErrors
 {
+    let errors: string[] = [];
+    
     if (chunk.data.length != 4) {
-        console.log('### bad chunk size');
-        return { ...chunk, picnum:0 };
+        errors.push(`Fspc: bad chunk size (${chunk.data.length} rather than 4)`);
+        let reschunk : CTypes.CTFrontispiece = { ...chunk, picnum:0 };
+	return [ reschunk, errors ];
     }
     
     let num = u8read4(chunk.data, 0);
-    return { ...chunk, picnum:num };
+    let reschunk : CTypes.CTFrontispiece = { ...chunk, picnum:num };
+    return [ reschunk, errors ];
 }
 
-function new_chunk_IFmd(chunk: Chunk) : CTypes.CTMetadata
+function new_chunk_IFmd(chunk: Chunk) : ChunkWithErrors
 {
     let metadata = utf8ToString(chunk.data);
-    return { ...chunk, metadata:metadata };
+    let reschunk: CTypes.CTMetadata = { ...chunk, metadata:metadata };
+    return [ reschunk, [] ];
 }
 
-function new_chunk_ZCOD(chunk: Chunk) : CTypes.CTZCode
+function new_chunk_ZCOD(chunk: Chunk) : ChunkWithErrors
 {
     let zversion = chunk.data[0];
     let release = 0x100 * chunk.data[2] + chunk.data[3];
     let serial = u8ToString(chunk.data, 18, 6);
-    return { ...chunk, zversion, release, serial };
+    let reschunk: CTypes.CTZCode = { ...chunk, zversion, release, serial };
+    return [ reschunk, [] ];
 }
 
-function new_chunk_GLUL(chunk: Chunk) : CTypes.CTGlulx
+function new_chunk_GLUL(chunk: Chunk) : ChunkWithErrors
 {
     let majversion = 0x100 * chunk.data[4] + chunk.data[5];
     let gversion = '' + majversion + '.' + chunk.data[6];
@@ -229,40 +240,46 @@ function new_chunk_GLUL(chunk: Chunk) : CTypes.CTGlulx
         }
     }
     
-    return { ...chunk, gversion, infversion, release, serial };
+    let reschunk: CTypes.CTGlulx = { ...chunk, gversion, infversion, release, serial };
+    return [ reschunk, [] ];
 }
 
-function new_chunk_PNG(chunk: Chunk) : CTypes.CTImage
+function new_chunk_PNG(chunk: Chunk) : ChunkWithErrors
 {
     let imgsize = find_dimensions_png(chunk.data);
-    return { ...chunk, imgsize:imgsize };
+    let reschunk: CTypes.CTImage = { ...chunk, imgsize:imgsize };
+    return [ reschunk, [] ];
 }
 
-function new_chunk_JPEG(chunk: Chunk) : CTypes.CTImage
+function new_chunk_JPEG(chunk: Chunk) : ChunkWithErrors
 {
     let imgsize = find_dimensions_jpeg(chunk.data);
-    return { ...chunk, imgsize:imgsize };
+    let reschunk: CTypes.CTImage = { ...chunk, imgsize:imgsize };
+    return [ reschunk, [] ];
 }
 
-function new_chunk_ASCIIText(chunk: Chunk) : CTypes.CTText
+function new_chunk_ASCIIText(chunk: Chunk) : ChunkWithErrors
 {
     let text = u8ToString(chunk.data);
-    return { ...chunk, text:text };
+    let reschunk: CTypes.CTText = { ...chunk, text:text };
+    return [ reschunk, [] ];
 }
 
-function new_chunk_U16Text(chunk: Chunk) : CTypes.CTText
+function new_chunk_U16Text(chunk: Chunk) : ChunkWithErrors
 {
     let text = u16ToString(chunk.data);
-    return { ...chunk, text:text };
+    let reschunk: CTypes.CTText = { ...chunk, text:text };
+    return [ reschunk, [] ];
 }
 
-function new_chunk_RelN(chunk: Chunk) : CTypes.CTReleaseNumber
+function new_chunk_RelN(chunk: Chunk) : ChunkWithErrors
 {
     let release = 0x100 * chunk.data[0] + chunk.data[1];
-    return { ...chunk, release:release };
+    let reschunk: CTypes.CTReleaseNumber = { ...chunk, release:release };
+    return [ reschunk, [] ];
 }
 
-function new_chunk_Reso(chunk: Chunk) : CTypes.CTResolution
+function new_chunk_Reso(chunk: Chunk) : ChunkWithErrors
 {
     let winsize = { width:u8read4(chunk.data, 0), height:u8read4(chunk.data, 4) };
     let minwinsize = { width:u8read4(chunk.data, 8), height:u8read4(chunk.data, 12) };
@@ -282,7 +299,8 @@ function new_chunk_Reso(chunk: Chunk) : CTypes.CTResolution
         pos += 28;
     }
     
-    return { ...chunk, winsize:winsize, minwinsize:minwinsize, maxwinsize:maxwinsize, entries:entries };
+    let reschunk: CTypes.CTResolution = { ...chunk, winsize:winsize, minwinsize:minwinsize, maxwinsize:maxwinsize, entries:entries };
+    return [ reschunk, [] ];
 }
 
 export function chunk_readable_desc(chunk: Chunk) : string
