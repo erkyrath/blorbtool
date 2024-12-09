@@ -12,7 +12,7 @@ import { ChunkCmd, ChunkCmdCtx, SetChunkCmdCtx } from './contexts';
 import { BlorbCmd, BlorbCmdCtx, SetBlorbCmdCtx } from './contexts';
 import { AltDisplay, AltDisplayCtx, SetAltDisplayCtx } from './contexts';
 import { DisplayColumn } from './dispcol';
-import { ArrowDownload } from './widgets';
+import { ArrowDownload, ArrowGeneric } from './widgets';
 
 let initialBlorb: Blorb|undefined;
 
@@ -47,6 +47,13 @@ function MyApp()
             setAltDisplay(null);
         }
     };
+    let setAltDisplayWrap = function(val: AltDisplay) {
+        if (val != altdisplay) {
+            setSelected(-1);
+            setChunkCmd(null);
+            setAltDisplay(val);
+        }
+    }
     
     function evhan_click_background(ev: React.MouseEvent<HTMLDivElement, MouseEvent>) {
         ev.stopPropagation();
@@ -59,7 +66,7 @@ function MyApp()
 
     return (
         <SetSelectionCtx.Provider value={ setSelectedWrap }>
-        <SetAltDisplayCtx.Provider value={ setAltDisplay }>
+        <SetAltDisplayCtx.Provider value={ setAltDisplayWrap }>
         <AltDisplayCtx.Provider value={ altdisplay }>
         <SetChunkCmdCtx.Provider value={ setChunkCmd }>
         <ChunkCmdCtx.Provider value={ chunkcmd }>
@@ -90,6 +97,7 @@ function BlorbInfoHeader()
     let blorbcmd = useContext(BlorbCmdCtx);
     let setblorbcmd = useContext(SetBlorbCmdCtx);
     let setchunkcmd = useContext(SetChunkCmdCtx);
+    let setaltdisplay = useContext(SetAltDisplayCtx);
 
     if (blorb.chunks.length == 0) {
         return (
@@ -106,6 +114,10 @@ function BlorbInfoHeader()
             setblorbcmd('download');
         else
             setblorbcmd(null);
+    }
+
+    function evhan_click_errors() {
+        setaltdisplay('errors');
     }
 
     let cmdpanel = null;
@@ -126,6 +138,7 @@ function BlorbInfoHeader()
             { (blorb.errors.length ? 
                <div className="BlorbInfoErrors">
                    { blorb.errors.length } format errors found
+                   {' '}<ArrowGeneric func={ evhan_click_errors } />
                </div>
                : null) }
             <div className="BlorbControls">

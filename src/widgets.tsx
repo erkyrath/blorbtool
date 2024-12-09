@@ -5,6 +5,21 @@ import { blorb_chunk_for_key, chunk_readable_desc } from './blorb';
 
 import { BlorbCtx, SetSelectionCtx } from './contexts';
 
+export function ArrowGeneric({ func }: { func:()=>void })
+{
+    function evhan_click(ev: React.MouseEvent<HTMLElement, MouseEvent>) {
+        ev.preventDefault();
+        ev.stopPropagation();
+        func();
+    }
+
+    return (
+        <>
+            <a className="JumpArrow" href="#" onClick={ evhan_click }>&#x279C;</a>
+        </>
+    );
+}
+
 export function ArrowToChunk({ destkey }: { destkey:number })
 {
     let blorb = useContext(BlorbCtx);
