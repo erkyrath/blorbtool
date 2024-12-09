@@ -13,6 +13,7 @@ import { ChunkCmd, ChunkCmdCtx, SetChunkCmdCtx } from './contexts';
 import { BlorbCmd, BlorbCmdCtx, SetBlorbCmdCtx } from './contexts';
 import { AltDisplay, AltDisplayCtx, SetAltDisplayCtx } from './contexts';
 import { DisplayColumn } from './dispcol';
+import { LoaderIndex, LoaderDisplay } from './loader';
 import { ArrowDownload, ArrowGeneric } from './widgets';
 
 let initialBlorb: Blorb|undefined;
@@ -92,10 +93,10 @@ function AppLoading()
     return (
         <>
             <div className="IndexCol">
-                <BlorbInfoHeader />
+                <LoaderIndex />
             </div>
             <div className="DisplayCol">
-                <DisplayColumn selected={ -1 } />
+                <LoaderDisplay />
             </div>
         </>
     );
