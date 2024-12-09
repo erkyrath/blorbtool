@@ -90,7 +90,14 @@ function MyApp()
 function AppLoading()
 {
     return (
-        <div>LOADING</div>
+        <>
+            <div className="IndexCol">
+                <BlorbInfoHeader />
+            </div>
+            <div className="DisplayCol">
+                <DisplayColumn selected={ -1 } />
+            </div>
+        </>
     );
 }
 
@@ -117,7 +124,9 @@ function AppRunning()
                     { chunkls }
                 </ul>
             </div>
-            <DisplayColumn selected={ selected } />
+            <div className="DisplayCol">
+                <DisplayColumn selected={ selected } />
+            </div>
         </>
     );
 }

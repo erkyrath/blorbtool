@@ -71,7 +71,7 @@ export function DisplayColumn({ selected }: { selected:number })
     }
     
     return (
-        <div className="DisplayCol">
+        <>
             <div className="DisplayHeader">
                 <div className="ControlBox">
                     <div className="Control">
@@ -90,7 +90,7 @@ export function DisplayColumn({ selected }: { selected:number })
                 { contentpane }
             </div>
             { cmdpanel }
-        </div>
+        </>
     );
 }
 
