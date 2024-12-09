@@ -78,7 +78,7 @@ export function parse_blorb(dat: Uint8Array, filename?: string) : Blorb
         errors: errors,
     };
 
-    //### check for consistency errors before we recompute?
+    //### check for consistency errors before we recompute? RIdx matching real chunks, etc
     
     blorb = blorb_recompute_positions(blorb);
 
