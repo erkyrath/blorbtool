@@ -19,10 +19,10 @@ import { ArrowDownload, ArrowGeneric } from './widgets';
 
 let initialBlorb: Blorb|undefined;
 
-export function init(blorbdata: Uint8Array|undefined)
+export function init(blorbdata: Uint8Array|undefined, filename: string|undefined)
 {
     if (blorbdata)
-        initialBlorb = parse_blorb(blorbdata);
+        initialBlorb = parse_blorb(blorbdata, filename);
     
     const appel = document.getElementById('appbody') as HTMLElement;
     let root = createRoot(appel);
