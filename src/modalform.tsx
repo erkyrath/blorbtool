@@ -13,9 +13,13 @@ export function ModalFormOverlay()
         setmodalform(null);
     }
     
+    function evhan_click_foreground(ev: React.MouseEvent<HTMLDivElement, MouseEvent>) {
+        ev.stopPropagation();
+    }
+    
     return (
         <div className="ModalBack" onClick={ evhan_click_background }>
-            <div className="ModalBox">
+            <div className="ModalBox" onClick={ evhan_click_foreground }>
                 BOX
             </div>
         </div>
