@@ -17,7 +17,7 @@ body {
     left: 0px;
     width: 33%;
     height: 100%;
-    background-color: #EEE;
+    background-color: #F2E5F6;
     padding: 10px 20px;
     box-sizing: border-box;
     overflow-y: scroll;
@@ -33,7 +33,7 @@ body {
 }
 
 .ChunkList li.Selected {
-    background: #78F;
+    background: #D6B;
     color: white;
 }
 
@@ -91,7 +91,7 @@ body {
     width: 100%;
     top: 0px;
     height: 50px;
-    background: #EEE;
+    background: #F2E5F6;
 }
 
 .DisplayPane {
@@ -118,7 +118,7 @@ body {
     position: absolute;
     top: 0px;
     right: 0px;
-    background: #EEE;
+    background: #F2E5F6;
 }
 
 .ControlBox .Control {
@@ -137,7 +137,7 @@ body {
     top: 54px;
     right: 24px;
     padding: 10px 20px;
-    background: #EEE;
+    background: #F2E5F6;
     border: 1px solid #CCC;
     font-family: "Helvetica Neue", "Helvetica", "Arial", sans-serif;
     font-size: 85%;
@@ -161,23 +161,23 @@ body {
 button {
     font-family: "Helvetica Neue", "Helvetica", "Arial", sans-serif;
     font-size: 100%;
-    background-color: #EEE;
+    background-color: #F2D4F2;
     border-radius: 6px;
     border: 1px solid #888;
     padding: 3px 8px;
 }
 
 button:hover {
-    background-color: #DDD;
+    background-color: #F2BBF2;
 }
 
 button:active {
-    background-color: #78F;
+    background-color: #D6B;
     color: white;
 }
 
 button:disabled {
-    background-color: #EEE;
+    background-color: #F2E5F6;
     color: #888;
 }
 
@@ -212,7 +212,7 @@ label.FileInput:hover {
 }
 
 label.FileInput:active {
-    background-color: #78F;
+    background-color: #D6B;
     color: white;
 }
 
@@ -231,7 +231,7 @@ code {
 }
 
 code.IType {
-    background: #00008811;
+    background: #44008811;
     white-space: pre;
     padding: 1px 2px;
 }
