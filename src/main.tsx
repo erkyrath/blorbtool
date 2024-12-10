@@ -101,6 +101,7 @@ function AppLoading()
 {
     return (
         <>
+            <IndexColumnBack />
             <LoaderIndex />
             <LoaderDisplay />
         </>
@@ -113,6 +114,7 @@ function AppRunning()
 
     return (
         <>
+            <IndexColumnBack />
             <IndexColumn />
             <DisplayColumn selected={ selected } />
         </>
@@ -249,6 +251,16 @@ function DownloadBlorbPanel()
         <div className="InlinePane">
             <ArrowDownload data={ data } filename={ filename } mimetype={ mimetype } />{' '}
             Download blorb file ({ pretty_size(data.length) })
+        </div>
+    );
+}
+
+function IndexColumnBack()
+{
+    return (
+        <div className="IndexColBack">
+            <img className="IndexColBackUpper" src="css/index-upper.svg" />
+            <img className="IndexColBackLower" src="css/index-lower.svg" />
         </div>
     );
 }
