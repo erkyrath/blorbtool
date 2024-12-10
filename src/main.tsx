@@ -10,8 +10,7 @@ import { pretty_size } from './readable';
 
 import { BlorbCtx, LoadBlorbCtx, LoadBlorbAction } from './contexts';
 import { SelectionCtx, SetSelectionCtx } from './contexts';
-import { ChunkCmd, ChunkCmdCtx, SetChunkCmdCtx } from './contexts';
-import { BlorbCmd, BlorbCmdCtx, SetBlorbCmdCtx } from './contexts';
+import { ModalForm, ModalFormCtx, SetModalFormCtx } from './contexts';
 import { AltDisplay, AltDisplayCtx, SetAltDisplayCtx } from './contexts';
 import { DisplayColumn } from './dispcol';
 import { LoaderIndex, LoaderDisplay } from './loader';
@@ -42,8 +41,7 @@ function MyApp()
     const [showloader, setShowLoader] = useState(initialLoader);
     const [selected, setSelected] = useState(-1);
     const [altdisplay, setAltDisplay ] = useState(null as AltDisplay);
-    const [chunkcmd, setChunkCmd] = useState(null as ChunkCmd);
-    const [blorbcmd, setBlorbCmd] = useState(null as BlorbCmd);
+    const [modalform, setModalForm] = useState(null as ModalForm);
 
     (window as any).curblorb = blorb; //###
     
@@ -56,14 +54,14 @@ function MyApp()
     let setSelectedWrap = function(val: number) {
         if (val != selected) {
             setSelected(val);
-            setChunkCmd(null);
+            setModalForm(null);
             setAltDisplay(null);
         }
     };
     let setAltDisplayWrap = function(val: AltDisplay) {
         if (val != altdisplay) {
             setSelected(-1);
-            setChunkCmd(null);
+            setModalForm(null);
             setAltDisplay(val);
         }
     }
@@ -73,10 +71,8 @@ function MyApp()
         <SelectionCtx.Provider value={ selected }>
         <SetAltDisplayCtx.Provider value={ setAltDisplayWrap }>
         <AltDisplayCtx.Provider value={ altdisplay }>
-        <SetChunkCmdCtx.Provider value={ setChunkCmd }>
-        <ChunkCmdCtx.Provider value={ chunkcmd }>
-        <SetBlorbCmdCtx.Provider value={ setBlorbCmd }>
-        <BlorbCmdCtx.Provider value={ blorbcmd }>
+        <SetModalFormCtx.Provider value={ setModalForm }>
+        <ModalFormCtx.Provider value={ modalform }>
         <LoadBlorbCtx.Provider value={ loadBlorbFile }>
         <BlorbCtx.Provider value={ blorb }>
             { showloader ?
@@ -86,10 +82,8 @@ function MyApp()
             }
         </BlorbCtx.Provider>
         </LoadBlorbCtx.Provider>
-        </BlorbCmdCtx.Provider>
-        </SetBlorbCmdCtx.Provider>
-        </ChunkCmdCtx.Provider>
-        </SetChunkCmdCtx.Provider>
+        </ModalFormCtx.Provider>
+        </SetModalFormCtx.Provider>
         </AltDisplayCtx.Provider>
         </SetAltDisplayCtx.Provider>
         </SelectionCtx.Provider>
@@ -149,9 +143,7 @@ function IndexColumn()
 function BlorbInfoHeader()
 {
     let blorb = useContext(BlorbCtx);
-    let blorbcmd = useContext(BlorbCmdCtx);
-    let setblorbcmd = useContext(SetBlorbCmdCtx);
-    let setchunkcmd = useContext(SetChunkCmdCtx);
+    let setmodalform = useContext(SetModalFormCtx);
     let setaltdisplay = useContext(SetAltDisplayCtx);
 
     if (blorb.chunks.length == 0) {
@@ -164,24 +156,13 @@ function BlorbInfoHeader()
 
     function evhan_click_download(ev: React.MouseEvent<HTMLElement, MouseEvent>) {
         ev.stopPropagation();
-        setchunkcmd(null);
-        if (blorbcmd != 'download')
-            setblorbcmd('download');
-        else
-            setblorbcmd(null);
+        setmodalform({ type:'fetchblorb' });
     }
 
     function evhan_click_errors() {
         setaltdisplay('errors');
     }
 
-    let cmdpanel = null;
-    switch (blorbcmd) {
-    case 'download':
-        cmdpanel = <DownloadBlorbPanel />;
-        break;
-    }
-    
     return (
         <div className="BlorbInfo">
             <div className="BlorbTitle">
@@ -200,7 +181,6 @@ function BlorbInfoHeader()
                 <button onClick={ evhan_click_download }>Download</button>
                 <button>Add Chunk</button>
             </div>
-            { cmdpanel }
         </div>
     );
 }

@@ -7,14 +7,22 @@ export type ChunkCmd = 'download' | 'delete' | null;
 export type BlorbCmd = 'download' | 'addchunk' | null;
 export type LoadBlorbAction = { filename:string, data:Uint8Array };
 
+export type ModalForm = (
+    null 
+    | { type:'fetchchunk', key:number }
+    | { type:'delchunk', key:number }
+    | { type:'fetchblorb' }
+    | { type:'addchunk' }
+);
+
 export const SelectionCtx = createContext(-1);
 export const SetSelectionCtx = createContext((val:number) => {});
 
 export const AltDisplayCtx = createContext(null as AltDisplay);
 export const SetAltDisplayCtx = createContext((val:AltDisplay) => {});
 
-export const ChunkCmdCtx = createContext(null as ChunkCmd);
-export const SetChunkCmdCtx = createContext((val:ChunkCmd) => {});
+export const ModalFormCtx = createContext(null as ModalForm);
+export const SetModalFormCtx = createContext((val:ModalForm) => {});
 
 export const BlorbCmdCtx = createContext(null as BlorbCmd);
 export const SetBlorbCmdCtx = createContext((val:BlorbCmd) => {});

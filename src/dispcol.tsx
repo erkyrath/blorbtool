@@ -7,7 +7,8 @@ import { chunk_readable_desc, chunk_filename_info } from './chunk';
 import { Blorb, blorb_resentry_for_chunk } from './blorb';
 import { pretty_size, byte_to_hex } from './readable';
 
-import { BlorbCtx, ChunkCmd, ChunkCmdCtx, SetChunkCmdCtx, BlorbCmdCtx, SetBlorbCmdCtx } from './contexts';
+import { BlorbCtx } from './contexts';
+import { SetModalFormCtx } from './contexts';
 import { AltDisplay, AltDisplayCtx } from './contexts';
 import { ArrowDownload } from './widgets';
 import { DispChunks } from './dispchunk';
@@ -18,9 +19,7 @@ export function DisplayColumn({ selected }: { selected:number })
 
     let blorb = useContext(BlorbCtx);
     let altdisplay = useContext(AltDisplayCtx);
-    let chunkcmd = useContext(ChunkCmdCtx);
-    let setchunkcmd = useContext(SetChunkCmdCtx);
-    let setblorbcmd = useContext(SetBlorbCmdCtx);
+    let setmodalform = useContext(SetModalFormCtx);
 
     let selchunk = blorb.chunks.find(chunk => (chunk.reactkey == selected));
     
@@ -28,30 +27,10 @@ export function DisplayColumn({ selected }: { selected:number })
         setShowHex(!showhex);
     }
     function evhan_click_download(ev: React.MouseEvent<HTMLElement, MouseEvent>) {
-        setblorbcmd(null);
-        if (chunkcmd != 'download')
-            setchunkcmd('download');
-        else
-            setchunkcmd(null);
+        setmodalform({ type:'fetchchunk', key:selected });
     }
     function evhan_click_delete(ev: React.MouseEvent<HTMLElement, MouseEvent>) {
-        setblorbcmd(null);
-        if (chunkcmd != 'delete')
-            setchunkcmd('delete');
-        else
-            setchunkcmd(null);
-    }
-
-    let cmdpanel = null;
-    switch (chunkcmd) {
-    case 'download':
-        if (selchunk)
-            cmdpanel = <DownloadChunkPanel chunk={selchunk} />;
-        break;
-    case 'delete':
-        if (selchunk)
-            cmdpanel = <DeleteChunkPanel chunk={selchunk} />;
-        break;
+        setmodalform({ type:'delchunk', key:selected });
     }
 
     let contentpane = null;
@@ -89,7 +68,6 @@ export function DisplayColumn({ selected }: { selected:number })
             <div className="DisplayPane">
                 { contentpane }
             </div>
-            { cmdpanel }
         </div>
     );
 }
