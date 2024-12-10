@@ -125,6 +125,7 @@ body {
     bottom: 0px;
     padding: 10px 20px;
     overflow-y: scroll;
+    background-color: #FFFDFF;
 }
 
 .IndexCol ul {
