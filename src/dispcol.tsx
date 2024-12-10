@@ -72,30 +72,6 @@ export function DisplayColumn({ selected }: { selected:number })
     );
 }
 
-function DownloadChunkPanel({ chunk }: { chunk:Chunk })
-{
-    let blorb = useContext(BlorbCtx);
-    let { filename, mimetype } = chunk_filename_info(chunk, blorb);
-    
-    return (
-        <div className="PopPane">
-            <ArrowDownload data={ chunk.data } filename={ filename } mimetype={ mimetype } />{' '}
-            Download this chunk ({ pretty_size(chunk.data.length) })
-        </div>
-    );
-}
-
-function DeleteChunkPanel({ chunk }: { chunk:Chunk })
-{
-    return (
-        <div className="PopPane">
-            <div>Delete this chunk?</div>
-            <button>Cancel</button>
-            <button>Delete</button>
-        </div>
-    );
-}
-
 export function DisplayErrors({ errors }: { errors:ReadonlyArray<string> })
 {
     let counter = 0;
