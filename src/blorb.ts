@@ -8,7 +8,8 @@ export type Blorb = {
     totallen: number;
 
     // Maps are recomputed whenever the blorb updates.
-    usagemap: Map<string, number>; // "Pict:1" to reactkey
+    usagemap: Map<string, number>; // usage ("Pict:1") to reactkey
+    typemap: Map<string, Chunk>; // type ("RIdx") to (first) chunk
     keymap: Map<number, Chunk>; // chunk.reactkey to chunk
     posmap: Map<number, Chunk>; // chunk.pos to chunk
 
@@ -23,6 +24,7 @@ export function new_blorb() : Blorb
         chunks: [],
         totallen: 0,
         usagemap: new Map(),
+        typemap: new Map(),
         keymap: new Map(),
         posmap: new Map(),
         errors: [],
@@ -82,6 +84,7 @@ export function blorb_recompute_positions(blorb: Blorb, oldusagemap?: Map<string
     let pos = 12;
     let newls: Chunk[] = [];
     let newusagemap: Map<string, number> = new Map();
+    let newtypemap: Map<string, Chunk> = new Map();
     let newkeymap: Map<number, Chunk> = new Map();
     let newposmap: Map<number, Chunk> = new Map();
     
@@ -94,7 +97,9 @@ export function blorb_recompute_positions(blorb: Blorb, oldusagemap?: Map<string
             chunk = { ...origchunk, pos:pos, index:index };
         }
         newls.push(chunk);
-        
+
+        if (!newtypemap.has(chunk.type.stype))
+            newtypemap.set(chunk.type.stype, chunk);
         newkeymap.set(chunk.reactkey, chunk);
         newposmap.set(chunk.pos, chunk);
         
@@ -143,9 +148,15 @@ export function blorb_recompute_positions(blorb: Blorb, oldusagemap?: Map<string
         totallen: pos,
         errors: errors,
         usagemap: newusagemap,
+        typemap: newtypemap,
         keymap: newkeymap,
         posmap: newposmap,
     };
+}
+
+export function blorb_first_chunk_for_type(blorb: Blorb, type: string) : Chunk|undefined
+{
+    return blorb.typemap.get(type);
 }
 
 export function blorb_chunk_for_key(blorb: Blorb, key: number) : Chunk|undefined
