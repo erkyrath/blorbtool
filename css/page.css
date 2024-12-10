@@ -224,14 +224,14 @@ input[type=file] {
 label.FileInput {
     font-family: "Helvetica Neue", "Helvetica", "Arial", sans-serif;
     font-size: 100%;
-    background-color: #E8E8FF;
+    background-color: #F2D4F2;
     padding: 4px 8px;
     border: 1px solid #99F;
     border-radius: 20px;
 }
 
 label.FileInput:hover {
-    background-color: #E0E0FF;
+    background-color: #F2BBF2;
 }
 
 label.FileInput:active {
