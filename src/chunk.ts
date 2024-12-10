@@ -4,8 +4,8 @@ import { ImageSize, ImageRatio, find_dimensions_png, find_dimensions_jpeg } from
 import { Blorb, blorb_resentry_for_chunk } from './blorb';
 
 export type ChunkType = {
-    stype: string, // four characters
-    utype: Uint8Array, // four bytes
+    stype: string; // four characters
+    utype: Uint8Array; // four bytes
 }
 
 function make_chunk_type(type:string|Uint8Array) : ChunkType
@@ -29,29 +29,29 @@ let keycounter = 1;
 
 export interface Chunk {
     // unique identifier for this chunk -- internal use only
-    reactkey: number, 
+    reactkey: number;
 
-    type: ChunkType,
+    type: ChunkType;
     formtype: ChunkType|undefined, // set if type is 'FORM'
 
-    data: Uint8Array,
+    data: Uint8Array;
 
     // These values are recomputed every time the blorb updates.
-    index: number,
-    pos: number,
+    index: number;
+    pos: number;
 };
 
 export namespace CTypes {
     
     type ChunkUsage = 'Pict' | 'Snd ' | 'Data' | 'Exec';
     export type CTResIndexEntry = {
-        usage: ChunkUsage,
-        resnum: number,
-        pos: number,
+        usage: ChunkUsage;
+        resnum: number;
+        pos: number;
     };
     
     export interface CTResIndex extends Chunk {
-        entries: ReadonlyArray<CTResIndexEntry>,
+        entries: ReadonlyArray<CTResIndexEntry>;
         usagemap: Map<string, number>; // "Pict:1" to pos
         invusagemap: Map<number, CTypes.CTResIndexEntry>; // the inverse
     };
@@ -61,9 +61,9 @@ export namespace CTypes {
     }
 
     export type CTResourceDescEntry = {
-        usage: ChunkUsage,
-        resnum: number,
-        text: string,
+        usage: ChunkUsage;
+        resnum: number;
+        text: string;
     };
     
     export interface CTResourceDescs extends Chunk {

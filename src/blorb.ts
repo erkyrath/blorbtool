@@ -14,7 +14,7 @@ export type Blorb = {
     posmap: Map<number, Chunk>; // chunk.pos to chunk
 
     // Built on load or update.
-    errors: ReadonlyArray<string>,
+    errors: ReadonlyArray<string>;
 };
 
 export function new_blorb() : Blorb
