@@ -169,18 +169,26 @@ body {
     position: relative;
     min-width: 200px;
     top: 80px;
-    padding: 20px 20px;
+    padding: 10px 20px;
     background: #E2E0F6;
     border: 4px solid #D0C8FF;
     border-radius: 6px 12px;
     box-shadow: 4px 4px 12px 2px #00000080;
     font-family: "Helvetica Neue", "Helvetica", "Arial", sans-serif;
-    font-size: 85%;
     text-align: center;
+}
+
+.ModalBox .ControlRow {
+    margin-top: 10px;
+    margin-bottom: 10px;
 }
 
 .AlignCenter {
     text-align: center;
+}
+
+.AlignRight {
+    text-align: right;
 }
 
 button {

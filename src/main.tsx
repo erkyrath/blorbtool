@@ -221,23 +221,6 @@ function ChunkListEntry({ chunk, isselected } : { chunk:Chunk, isselected:boolea
     );
 }
 
-function DownloadBlorbPanel()
-{
-    let blorb = useContext(BlorbCtx);
-
-    let filename = 'blorb.blb'; //### from saved filename ### or zblorb/gblorb?
-    let mimetype = 'application/x-blorb';
-
-    let data = blorb_get_data(blorb);
-    
-    return (
-        <div className="InlinePane">
-            <ArrowDownload data={ data } filename={ filename } mimetype={ mimetype } />{' '}
-            Download blorb file ({ pretty_size(data.length) })
-        </div>
-    );
-}
-
 function IndexColumnBack()
 {
     return (
