@@ -14,10 +14,10 @@ export function ModalFormOverlay()
     }
     
     return (
-	<div className="ModalBack" onClick={ evhan_click_background }>
-	    <div className="ModalBox">
-		BOX
-	    </div>
-	</div>
+        <div className="ModalBack" onClick={ evhan_click_background }>
+            <div className="ModalBox">
+                BOX
+            </div>
+        </div>
     );
 }
