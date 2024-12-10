@@ -14,6 +14,7 @@ import { ModalForm, ModalFormCtx, SetModalFormCtx } from './contexts';
 import { AltDisplay, AltDisplayCtx, SetAltDisplayCtx } from './contexts';
 import { DisplayColumn } from './dispcol';
 import { LoaderIndex, LoaderDisplay } from './loader';
+import { ModalFormOverlay } from './modalform';
 import { ArrowDownload, ArrowGeneric } from './widgets';
 
 let initialBlorb: Blorb|undefined;
@@ -105,12 +106,14 @@ function AppLoading()
 function AppRunning()
 {
     let selected = useContext(SelectionCtx);
-
+    let modalform = useContext(ModalFormCtx);
+    
     return (
         <>
             <IndexColumnBack />
             <IndexColumn />
             <DisplayColumn selected={ selected } />
+            { (modalform ? <ModalFormOverlay /> : null) }
         </>
     );
 }
