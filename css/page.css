@@ -12,12 +12,35 @@ body {
     margin: 0px;
 }
 
+.IndexColBack {
+    position: absolute;
+    left: 0px;
+    width: 33%;
+    height: 100%;
+    margin: 0px;
+    box-sizing: border-box;
+    background-color: #F2E5F6;
+    overflow: clip;
+}
+
+.IndexColBack .IndexColBackUpper {
+    position: absolute;
+    width: 100%;
+    height: 500px;
+    top: 0px;
+}
+
+.IndexColBack .IndexColBackLower {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+}
+
 .IndexCol {
     position: absolute;
     left: 0px;
     width: 33%;
     height: 100%;
-    background-color: #F2E5F6;
     padding: 10px 20px;
     box-sizing: border-box;
     overflow-y: scroll;
@@ -91,7 +114,7 @@ body {
     width: 100%;
     top: 0px;
     height: 50px;
-    background: #F2E5F6;
+    background: #FFE5F2;
 }
 
 .DisplayPane {
@@ -118,7 +141,7 @@ body {
     position: absolute;
     top: 0px;
     right: 0px;
-    background: #F2E5F6;
+    background: #FFE5F2;
 }
 
 .ControlBox .Control {
@@ -311,3 +334,4 @@ a.DownloadArrow:hover {
 .ImageBox img {
     max-width: 95%;
 }
+
