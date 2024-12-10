@@ -59,7 +59,17 @@ export namespace CTypes {
     export interface CTFrontispiece extends Chunk {
         picnum: number;
     }
+
+    export type CTResourceDescEntry = {
+        usage: ChunkUsage,
+        resnum: number,
+        text: string,
+    };
     
+    export interface CTResourceDescs extends Chunk {
+        entries: ReadonlyArray<CTResourceDescEntry>;
+    }
+
     export interface CTMetadata extends Chunk {
         metadata: string;
     }
@@ -130,6 +140,8 @@ export function new_chunk(type:string|Uint8Array, data:Uint8Array) : ChunkWithEr
         return new_chunk_RIdx(chunk);
     case 'Fspc':
         return new_chunk_Fspc(chunk);
+    case 'RDes':
+        return new_chunk_RDes(chunk);
     case 'IFmd':
         return new_chunk_IFmd(chunk);
     case 'ZCOD':
@@ -203,6 +215,35 @@ function new_chunk_Fspc(chunk: Chunk) : ChunkWithErrors
     
     let num = u8read4(chunk.data, 0);
     let reschunk : CTypes.CTFrontispiece = { ...chunk, picnum:num };
+    return [ reschunk, errors ];
+}
+
+function new_chunk_RDes(chunk: Chunk) : ChunkWithErrors
+{
+    let errors: string[] = [];
+    let entries: CTypes.CTResourceDescEntry[] = [];
+
+    let count = u8read4(chunk.data, 0);
+    let pos = 4;
+
+    for (let ix=0; ix<count; ix++) {
+        let usage = u8ToString(chunk.data, pos, 4);
+        let resnum = u8read4(chunk.data, pos+4);
+        let textlen = u8read4(chunk.data, pos+8);
+        let text = utf8ToString(chunk.data.slice(pos+12, pos+12+textlen));
+        pos += (12+textlen);
+        if (usage != 'Pict' && usage != 'Snd ' && usage != 'Data' && usage != 'Exec') {
+            console.log('### bad rdes entry usage');
+            continue;
+        }
+        entries.push({ usage, resnum, text });
+    }
+    
+    if (chunk.data.length != pos) {
+        errors.push(`Fspc: bad chunk size (${chunk.data.length} rather than ${pos})`);
+    }
+    
+    let reschunk : CTypes.CTResourceDescs = { ...chunk, entries:entries };
     return [ reschunk, errors ];
 }
 
@@ -317,7 +358,7 @@ export function chunk_readable_desc(chunk: Chunk) : string
         
     case 'IFhd': return 'Game identifier';
     case 'Fspc': return 'Frontispiece';
-    case 'RDes': return 'Resource description';
+    case 'RDes': return 'Resource descriptions';
     case 'Plte': return 'Color palette';
     case 'IFmd': return 'Metadata';
 
