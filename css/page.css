@@ -266,6 +266,10 @@ ul.NestTreeSub {
     margin-bottom: 12px;
 }
 
+.AltText {
+    font-size: 85%;
+}
+
 a.JumpArrow {
     text-decoration: none;
     padding: 0px 4px;

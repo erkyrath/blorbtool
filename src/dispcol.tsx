@@ -165,10 +165,10 @@ export function DisplayChunk({ blorb, chunk, showhex }: { blorb:Blorb, chunk:Chu
             display = <DispChunks.DCGlulx chunk={ chunk as CTypes.CTGlulx } />
             break;
         case 'PNG ':
-            display = <DispChunks.DCImgPNG chunk={ chunk as CTypes.CTImage } />
+            display = <DispChunks.DCImgPNG chunk={ chunk as CTypes.CTImage } resentry={ resentry } />
             break;
         case 'JPEG':
-            display = <DispChunks.DCImgJPEG chunk={ chunk as CTypes.CTImage } />
+            display = <DispChunks.DCImgJPEG chunk={ chunk as CTypes.CTImage } resentry={ resentry } />
             break;
         case 'RelN':
             display = <DispChunks.DCReleaseNumber chunk={ chunk as CTypes.CTReleaseNumber } />

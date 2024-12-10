@@ -2,7 +2,7 @@ import React from 'react';
 import { useState, useContext } from 'react';
 
 import { Chunk, CTypes } from './chunk';
-import { Blorb, blorb_chunk_for_usage } from './blorb';
+import { Blorb, blorb_chunk_for_usage, blorb_first_chunk_for_type } from './blorb';
 import { byte_to_hex } from './readable';
 import { BlorbCtx } from './contexts';
 
@@ -265,13 +265,25 @@ export namespace DispChunks {
         );
     }
 
-    export function DCImgPNG({ chunk }: { chunk:CTypes.CTImage })
+    export function DCImgPNG({ chunk, resentry }: { chunk:CTypes.CTImage, resentry:CTypes.CTResIndexEntry|undefined })
     {
+        let blorb = useContext(BlorbCtx);
+        
         if (!chunk.imgsize) {
             return (
                 <div>Unable to recognize PNG data.</div>
             );
         };
+
+        let alttext: string|undefined;
+        let rdeschunk = blorb_first_chunk_for_type(blorb, 'RDes') as CTypes.CTResourceDescs;
+        if (rdeschunk && resentry) {
+            //### map lookup
+            for (let ent of rdeschunk.entries) {
+                if (ent.usage == 'Pict' && ent.resnum == resentry.resnum)
+                    alttext = ent.text;
+            }
+        }
     
         let dataurl = URL.createObjectURL(
             new Blob([ chunk.data ], { type: 'image/png' })
@@ -285,6 +297,12 @@ export namespace DispChunks {
                         { chunk.imgsize.width }&#xD7;
                         { chunk.imgsize.height }
                     </li>
+                    { (alttext ?
+                       <li>
+                           <span className="InfoLabel">Alt text:</span>{' '}
+                           <span className="AltText">{ alttext }</span>
+                       </li>
+                       : null) }
                 </ul>
                 <div className="ImageBox">
                     <img src={dataurl} />
@@ -293,13 +311,25 @@ export namespace DispChunks {
         );
     }
 
-    export function DCImgJPEG({ chunk }: { chunk:CTypes.CTImage })
+    export function DCImgJPEG({ chunk, resentry }: { chunk:CTypes.CTImage, resentry:CTypes.CTResIndexEntry|undefined })
     {
+        let blorb = useContext(BlorbCtx);
+        
         if (!chunk.imgsize) {
             return (
                 <div>Unable to recognize JPEG data.</div>
             );
         };
+    
+        let alttext: string|undefined;
+        let rdeschunk = blorb_first_chunk_for_type(blorb, 'RDes') as CTypes.CTResourceDescs;
+        if (rdeschunk && resentry) {
+            //### map lookup
+            for (let ent of rdeschunk.entries) {
+                if (ent.usage == 'Pict' && ent.resnum == resentry.resnum)
+                    alttext = ent.text;
+            }
+        }
     
         let dataurl = URL.createObjectURL(
             new Blob([ chunk.data ], { type: 'image/jpeg' })
@@ -313,6 +343,12 @@ export namespace DispChunks {
                         { chunk.imgsize.width }&#xD7;
                         { chunk.imgsize.height }
                     </li>
+                    { (alttext ?
+                       <li>
+                           <span className="InfoLabel">Alt text:</span>{' '}
+                           <span className="AltText">{ alttext }</span>
+                       </li>
+                       : null) }
                 </ul>
                 <div className="ImageBox">
                     <img src={dataurl} />
