@@ -65,6 +65,45 @@ export namespace DispChunks {
         );
     }
 
+    export function DCResourceDescs({ chunk }: { chunk:CTypes.CTResourceDescs })
+    {
+        let counter = 0;
+        let entls = chunk.entries.map(ent =>
+            <DCResourceDescEntry ent={ ent } key={ counter++ } />
+        );
+    
+        return (
+            <div>
+                <ul className="InfoList">
+                    { entls }
+                </ul>
+            </div>
+        );
+    }
+    
+    function DCResourceDescEntry({ ent }: { ent:CTypes.CTResourceDescEntry })
+    {
+        let blorb = useContext(BlorbCtx);
+        let chunk = blorb_chunk_for_usage(blorb, ent.usage, ent.resnum);
+    
+        //### or error if not found
+    
+        return (
+            <li>
+                <code className="IType">{ ent.usage }</code>
+                {' #'}{ ent.resnum }
+                { ( chunk ?
+                    <>
+                        {' '}&nbsp; <ArrowToChunk destkey={ chunk.reactkey } />
+                    </>
+                    : null) }
+                <div className="SubText">
+                    { ent.text }
+                </div>
+            </li>
+        );
+    }
+
     export function DCFrontispiece({ chunk }: { chunk:CTypes.CTFrontispiece })
     {
         let blorb = useContext(BlorbCtx);

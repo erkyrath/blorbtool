@@ -258,6 +258,14 @@ ul.NestTreeSub {
     text-indent: 20px hanging;
 }
 
+.SubText {
+    font-size: 85%;
+    padding-left: 20px;
+    text-indent: 20px hanging;
+    margin-top: 4px;
+    margin-bottom: 12px;
+}
+
 a.JumpArrow {
     text-decoration: none;
     padding: 0px 4px;

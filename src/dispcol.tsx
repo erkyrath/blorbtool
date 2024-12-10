@@ -152,6 +152,9 @@ export function DisplayChunk({ blorb, chunk, showhex }: { blorb:Blorb, chunk:Chu
         case 'Fspc':
             display = <DispChunks.DCFrontispiece chunk={ chunk as CTypes.CTFrontispiece } />;
             break;
+        case 'RDes':
+            display = <DispChunks.DCResourceDescs chunk={ chunk as CTypes.CTResourceDescs } />;
+            break;
         case 'IFmd':
             display = <DispChunks.DCMetadata chunk={ chunk as CTypes.CTMetadata } />;
             break;
