@@ -36,9 +36,11 @@ export namespace DispChunks {
     
         return (
             <div>
-                <ul className="InfoList">
-                    { entls }
-                </ul>
+                <table className="InfoTable">
+                    <tbody>
+                        { entls }
+                    </tbody>
+                </table>
             </div>
         );
     }
@@ -51,17 +53,23 @@ export namespace DispChunks {
         //### or error if not found
     
         return (
-            <li>
-                <code className="IType">{ ent.usage }</code>
-                {' #'}{ ent.resnum }
-                { ( chunk ?
-                    <>
-                        {' '}&nbsp; <ArrowToChunk destkey={ chunk.reactkey } />
-                    </>
-                    : null) }
-                {' '}&nbsp;{' '}
-                <span className="InfoLabel">(starts at { ent.pos })</span>
-            </li>
+            <tr>
+                <td>
+                    <code className="IType">{ ent.usage }</code>
+                    {' #'}{ ent.resnum }
+                </td>
+                <td>
+                    { ( chunk ?
+                        <>
+                            {' '}&nbsp; <ArrowToChunk destkey={ chunk.reactkey } />
+                        </>
+                        : null) }
+                    {' '}&nbsp;{' '}
+                </td>
+                <td>
+                    <span className="InfoLabel">(starts at { ent.pos })</span>
+                </td>
+            </tr>
         );
     }
 
