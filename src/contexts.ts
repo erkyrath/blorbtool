@@ -4,7 +4,6 @@ import { Blorb, new_blorb } from './blorb';
 
 export type AltDisplay = 'about' | 'errors' | null;
 export type ChunkCmd = 'download' | 'delete' | null;
-export type BlorbCmd = 'download' | 'addchunk' | null;
 export type LoadBlorbAction = { filename:string, data:Uint8Array };
 
 export type ModalForm = (
@@ -23,9 +22,6 @@ export const SetAltDisplayCtx = createContext((val:AltDisplay) => {});
 
 export const ModalFormCtx = createContext(null as ModalForm);
 export const SetModalFormCtx = createContext((val:ModalForm) => {});
-
-export const BlorbCmdCtx = createContext(null as BlorbCmd);
-export const SetBlorbCmdCtx = createContext((val:BlorbCmd) => {});
 
 export const BlorbCtx = createContext(new_blorb());
 export const LoadBlorbCtx = createContext((act:LoadBlorbAction) => {});
