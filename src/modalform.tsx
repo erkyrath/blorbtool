@@ -51,12 +51,18 @@ export function ModalFormOverlay()
 function ModalFetchBlorb()
 {
     let blorb = useContext(BlorbCtx);
+    let setmodalform = useContext(SetModalFormCtx);
 
     let filename = 'blorb.blb'; //### from saved filename ### or zblorb/gblorb?
     let mimetype = 'application/x-blorb';
 
     let data = blorb_get_data(blorb);
     
+    function evhan_click_close(ev: React.MouseEvent<HTMLElement, MouseEvent>) {
+        ev.stopPropagation();
+        setmodalform(null);
+    }
+
     return (
         <>
             <div className="ControlRow">
@@ -64,7 +70,7 @@ function ModalFetchBlorb()
                 Download blorb file ({ pretty_size(data.length) })
             </div>
             <div className="ControlRow AlignRight">
-                <button>Got it</button>
+                <button onClick={ evhan_click_close }>Got it</button>
             </div>
         </>
     );
@@ -76,8 +82,14 @@ function ModalFetchChunk({ reactkey }: { reactkey:number })
     let chunk = blorb_chunk_for_key(blorb, reactkey);
     if (!chunk)
         return null;
+    let setmodalform = useContext(SetModalFormCtx);
     
     let { filename, mimetype } = chunk_filename_info(chunk, blorb);
+
+    function evhan_click_close(ev: React.MouseEvent<HTMLElement, MouseEvent>) {
+        ev.stopPropagation();
+        setmodalform(null);
+    }
 
     return (
         <>
@@ -89,7 +101,7 @@ function ModalFetchChunk({ reactkey }: { reactkey:number })
                 Download this chunk ({ pretty_size(chunk.data.length) })
             </div>
             <div className="ControlRow AlignRight">
-                <button>Got it</button>
+                <button onClick={ evhan_click_close }>Got it</button>
             </div>
         </>
     );
