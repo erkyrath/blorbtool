@@ -284,6 +284,13 @@ export namespace DispChunks {
                     alttext = ent.text;
             }
         }
+
+        let frontis = false;
+        let fspcchunk = blorb_first_chunk_for_type(blorb, 'Fspc') as CTypes.CTFrontispiece;
+        if (fspcchunk && resentry) {
+            if (resentry.resnum == fspcchunk.picnum)
+                frontis = true;
+        }
     
         let dataurl = URL.createObjectURL(
             new Blob([ chunk.data ], { type: 'image/png' })
@@ -297,6 +304,11 @@ export namespace DispChunks {
                         { chunk.imgsize.width }&#xD7;
                         { chunk.imgsize.height }
                     </li>
+                    { (frontis ?
+                       <li>
+                           <span className="InfoLabel">Frontispiece</span>: true
+                       </li>
+                       : null) }
                     { (alttext ?
                        <li>
                            <span className="InfoLabel">Alt text:</span>{' '}
@@ -331,6 +343,13 @@ export namespace DispChunks {
             }
         }
     
+        let frontis = false;
+        let fspcchunk = blorb_first_chunk_for_type(blorb, 'Fspc') as CTypes.CTFrontispiece;
+        if (fspcchunk && resentry) {
+            if (resentry.resnum == fspcchunk.picnum)
+                frontis = true;
+        }
+    
         let dataurl = URL.createObjectURL(
             new Blob([ chunk.data ], { type: 'image/jpeg' })
         );
@@ -343,6 +362,11 @@ export namespace DispChunks {
                         { chunk.imgsize.width }&#xD7;
                         { chunk.imgsize.height }
                     </li>
+                    { (frontis ?
+                       <li>
+                           <span className="InfoLabel">Frontispiece</span>: true
+                       </li>
+                       : null) }
                     { (alttext ?
                        <li>
                            <span className="InfoLabel">Alt text:</span>{' '}
