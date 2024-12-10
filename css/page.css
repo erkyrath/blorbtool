@@ -55,6 +55,8 @@ body {
 
 .BlorbInfo .BlorbTitle {
     font-size: 110%;
+    margin-top: 8px;
+    margin-bottom: 8px;
 }
 
 .BlorbInfo .BlorbGloss {
