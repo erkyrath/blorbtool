@@ -188,6 +188,14 @@ input[type=file] {
     background: #CCD0FF;
 }
 
+.WhileDragging {
+    display: none;
+    pointer-events: none;
+}
+#dropzone.Selected .WhileDragging {
+    display: block;
+}
+
 label.FileInput {
     font-family: "Helvetica Neue", "Helvetica", "Arial", sans-serif;
     font-size: 100%;
@@ -273,6 +281,13 @@ a.DownloadArrow {
 
 a.DownloadArrow:hover {
     background: #0000FF40;
+}
+
+.BigArrow {
+    text-align: center;
+    font-size: 8em;
+    margin-top: 40px;
+    color: #88A;
 }
 
 .ImageBox {

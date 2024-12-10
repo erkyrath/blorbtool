@@ -74,6 +74,14 @@ export function LoaderIndex()
                 <label className="FileInput" htmlFor="fileinput">Choose File</label>
                 <input id="fileinput" type="file" accept={ filetypes } onChange= { evhan_change } />
             </div>
+            <div className="WhileDragging">
+                <p className="AlignCenter">
+                    Drop your file here!
+                </p>
+                <div className="BigArrow">
+                    &#x21A7;
+                </div>
+            </div>
         </div>
     );
 }
