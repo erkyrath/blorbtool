@@ -4,5 +4,5 @@
   xmlns="http://www.w3.org/2000/svg">
   
   <path d="M 0,0 L 0,2 C 100,0, 100,0, 100,100 L 100,0 z" fill="#F8E0FF" stroke="none" />
-  <path d="M 0,2 C 100,0, 100,0, 100,100" fill="none" stroke="#F2D8F6" />
+  <path d="M 0,2 C 100,0, 100,0, 100,100" fill="none" stroke="#FCE8FF" />
 </svg>
