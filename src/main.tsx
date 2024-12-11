@@ -9,11 +9,8 @@ import { parse_blorb, new_blorb_with_index } from './parseblorb';
 import { blorb_apply_change } from './editblorb';
 import { pretty_size } from './readable';
 
-import { ReactCtx, ContextContent } from './contexts';
-import { BlorbCtx, EditBlorbCtx, LoadBlorbCtx, LoadBlorbAction } from './contexts';
-import { SelectionCtx, SetSelectionCtx } from './contexts';
-import { ModalForm, ModalFormCtx, SetModalFormCtx } from './contexts';
-import { AltDisplay, AltDisplayCtx, SetAltDisplayCtx } from './contexts';
+import { AltDisplay, ModalForm, LoadBlorbAction, ContextContent } from './contexts';
+import { ReactCtx, BlorbCtx } from './contexts';
 import { DisplayColumn } from './dispcol';
 import { LoaderIndex, LoaderDisplay } from './loader';
 import { ModalFormOverlay } from './modalform';
@@ -89,14 +86,6 @@ function MyApp()
     
     return (
         <ReactCtx.Provider value={ rctx }>
-        <SetSelectionCtx.Provider value={ setSelectedWrap }>
-        <SelectionCtx.Provider value={ selected }>
-        <SetAltDisplayCtx.Provider value={ setAltDisplayWrap }>
-        <AltDisplayCtx.Provider value={ altdisplay }>
-        <SetModalFormCtx.Provider value={ setModalForm }>
-        <ModalFormCtx.Provider value={ modalform }>
-        <LoadBlorbCtx.Provider value={ loadBlorbFile }>
-        <EditBlorbCtx.Provider value={ editBlorb }>
         <BlorbCtx.Provider value={ blorb }>
             { showloader ?
               <AppLoading />
@@ -104,14 +93,6 @@ function MyApp()
               <AppRunning />
             }
         </BlorbCtx.Provider>
-        </EditBlorbCtx.Provider>
-        </LoadBlorbCtx.Provider>
-        </ModalFormCtx.Provider>
-        </SetModalFormCtx.Provider>
-        </AltDisplayCtx.Provider>
-        </SetAltDisplayCtx.Provider>
-        </SelectionCtx.Provider>
-        </SetSelectionCtx.Provider>
         </ReactCtx.Provider>
     );
 }

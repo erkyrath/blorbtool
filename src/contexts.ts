@@ -42,18 +42,7 @@ export const ReactCtx = createContext({
     editBlorb: (act:BlorbEditCmd) => {},
 } as ContextContent);
 
-export const SelectionCtx = createContext(-1);
-export const SetSelectionCtx = createContext((val:number) => {});
-
-export const AltDisplayCtx = createContext(null as AltDisplay);
-export const SetAltDisplayCtx = createContext((val:AltDisplay) => {});
-
-export const ModalFormCtx = createContext(null as ModalForm);
-export const SetModalFormCtx = createContext((val:ModalForm) => {});
-
 export const BlorbCtx = createContext(new_blorb());
-export const LoadBlorbCtx = createContext((act:LoadBlorbAction) => {});
-export const EditBlorbCtx = createContext((act:BlorbEditCmd) => {});
 
 
 
