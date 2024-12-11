@@ -154,6 +154,26 @@ export function blorb_recompute_positions(blorb: Blorb, oldusagemap?: Map<string
     };
 }
 
+export function blorb_delete_chunk(blorb: Blorb, key: number) : Blorb
+{
+    let chunk = blorb.keymap.get(key);
+    if (!chunk) {
+        console.log('BUG: blorb_delete_chunk: no such chunk', key);
+        return blorb;
+    }
+    if (chunk.type.stype == 'RIdx') {
+        console.log('BUG: blorb_delete_chunk: cannot delete index');
+        return blorb;
+    }
+
+    let resentry = blorb_resentry_for_chunk(blorb, chunk);
+
+    //###
+    let newblorb = { ...blorb };
+    
+    return newblorb;
+}
+
 export function blorb_first_chunk_for_type(blorb: Blorb, type: string) : Chunk|undefined
 {
     return blorb.typemap.get(type);
