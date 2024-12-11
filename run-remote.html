@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>BlorbTool</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<link rel="stylesheet" href="./css/font.css" type="text/css">
+<link rel="stylesheet" href="./css/page.css" type="text/css">
+
+<script src="./js/gi_load.js" type="text/javascript"></script>
+<script src="./js/bundle.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+game_options = {
+  use_query_story: true,
+  story_loader: (callback) => {
+    bundle.init();
+  },
+  GlkOte: {
+    log: console.log
+  },
+  vm: {
+    init: (image, opts) => {
+      game_options.dataimage = image;
+    }
+  },
+  io: {
+    fatal_error: console.log,
+    init: (opts) => {
+      bundle.init(game_options.dataimage);
+    }
+  }
+};
+</script>
+
+</head>
+<body onLoad="GiLoad.load_run();">
+<div id="appbody"></div>
+</body>
+</html>
