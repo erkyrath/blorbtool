@@ -1,4 +1,4 @@
-import { u8ToString } from './datutil';
+import { u8ToString, stringToU8 } from './datutil';
 import { u8read4, u8write4 } from './datutil';
 import { Chunk, CTypes } from './chunk';
 
@@ -78,13 +78,15 @@ export function blorb_recompute_positions(blorb: Blorb, oldusagemap?: Map<string
     }
     let ridx = blorb.chunks[0] as CTypes.CTResIndex;
 
+    let origchunksmod = blorb.chunks;
+
     if (oldusagemap) {
         /* Tricky bit: to compute the positions, the RIdx chunk must be
            the right length. But we're going to alter its data soon.
            Precompute the correct length and stick in some dummy
            data. */
         let keysinuse: Set<number> = new Set();
-        for (let origchunk of blorb.chunks) {
+        for (let origchunk of origchunksmod) {
             keysinuse.add(origchunk.reactkey);
         }
         
@@ -100,6 +102,8 @@ export function blorb_recompute_positions(blorb: Blorb, oldusagemap?: Map<string
         }
         let tempridxdata = new Uint8Array(4 + 12 * entcount);
         ridx = { ...ridx, data:tempridxdata };
+
+        origchunksmod = [ ridx, ...(origchunksmod.slice(1)) ];
     }
 
     let index = 0;
@@ -112,7 +116,7 @@ export function blorb_recompute_positions(blorb: Blorb, oldusagemap?: Map<string
     /* Run through the chunks noting the new positions. (We have to
        clone each chunk to set its new position.)
        While we're at it, we fill in all the cached tables. */
-    for (let origchunk of blorb.chunks) {
+    for (let origchunk of origchunksmod) {
         let chunk: Chunk;
         if (origchunk.pos == pos && origchunk.index == index) {
             chunk = origchunk;
@@ -156,10 +160,26 @@ export function blorb_recompute_positions(blorb: Blorb, oldusagemap?: Map<string
                 }
             }
         }
+
+        //### sort newents by pos?
         
-        //### rebuild ridx.data as well
+        // Rebuild the data (bytes) of ridx so we can save
+        let tempridxdata = new Uint8Array(4 + 12 * newents.length);
+        let pos = 0;
+        u8write4(tempridxdata, pos, newents.length);
+        pos += 4;
+        for (let ent of newents) {
+            tempridxdata.set(stringToU8(ent.usage), pos);
+            u8write4(tempridxdata, pos+4, ent.resnum);
+            u8write4(tempridxdata, pos+8, ent.pos);
+            pos += 12;
+        }
+        if (tempridxdata.length != ridx.data.length) {
+            errors.push(`RIdx: recomputed length does not match estimate (${tempridxdata.length}, ${ridx.data.length})`);
+        }
+        ridx = { ...ridx, data:tempridxdata };
         
-        let newridx: CTypes.CTResIndex = { ...ridx, entries:newents, forusagemap:newforusagemap, invusagemap:newinvusagemap };
+        let newridx: CTypes.CTResIndex = { ...ridx, data:tempridxdata, entries:newents, forusagemap:newforusagemap, invusagemap:newinvusagemap };
         newls[0] = newridx;
         
         ridx = newridx; // for the next step
