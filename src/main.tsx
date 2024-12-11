@@ -167,9 +167,8 @@ function IndexColumn()
 
 function BlorbInfoHeader()
 {
-    let blorb = useContext(BlorbCtx);
-    let setmodalform = useContext(SetModalFormCtx);
-    let setaltdisplay = useContext(SetAltDisplayCtx);
+    let rctx = useContext(ReactCtx);
+    let blorb = rctx.blorb;
 
     if (blorb.chunks.length == 0) {
         return (
@@ -181,11 +180,11 @@ function BlorbInfoHeader()
 
     function evhan_click_download(ev: React.MouseEvent<HTMLElement, MouseEvent>) {
         ev.stopPropagation();
-        setmodalform({ type:'fetchblorb' });
+        rctx.setModalForm({ type:'fetchblorb' });
     }
 
     function evhan_click_errors() {
-        setaltdisplay('errors');
+        rctx.setAltDisplay('errors');
     }
 
     return (
@@ -216,14 +215,14 @@ function BlorbInfoHeader()
 
 function ChunkListEntry({ chunk, isselected } : { chunk:Chunk, isselected:boolean })
 {
-    let blorb = useContext(BlorbCtx);
-    let setSelection = useContext(SetSelectionCtx);
+    let rctx = useContext(ReactCtx);
+    let blorb = rctx.blorb;
     
     let resentry = blorb_resentry_for_chunk(blorb, chunk);
     
     function evhan_click(ev: React.MouseEvent<HTMLLIElement, MouseEvent>) {
         ev.stopPropagation();
-        setSelection(chunk.reactkey);
+        rctx.setSelection(chunk.reactkey);
     }
     
     return (
