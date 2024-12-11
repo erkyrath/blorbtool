@@ -193,6 +193,7 @@ body {
 button {
     font-family: "Helvetica Neue", "Helvetica", "Arial", sans-serif;
     font-size: 100%;
+    color: #111;
     background-color: #F2D4F2;
     border-radius: 6px;
     border: 1px solid #888;
