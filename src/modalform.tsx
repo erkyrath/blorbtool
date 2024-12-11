@@ -73,7 +73,9 @@ function ModalFetchBlorb()
                 Download blorb file ({ pretty_size(data.length) })
             </div>
             <div className="ControlRow AlignRight">
-                <button onClick={ evhan_click_close }>Got it</button>
+                <div className="Control">
+                    <button onClick={ evhan_click_close }>Got it</button>
+                </div>
             </div>
         </>
     );
@@ -104,7 +106,9 @@ function ModalFetchChunk({ reactkey }: { reactkey:number })
                 Download this chunk ({ pretty_size(chunk.data.length) })
             </div>
             <div className="ControlRow AlignRight">
-                <button onClick={ evhan_click_close }>Got it</button>
+                <div className="Control">
+                    <button onClick={ evhan_click_close }>Got it</button>
+                </div>
             </div>
         </>
     );
@@ -137,8 +141,12 @@ function ModalDeleteChunk({ reactkey }: { reactkey:number })
                 Delete this chunk?
             </div>
             <div className="ControlRow AlignRight">
-                <button onClick={ evhan_click_close }>Cancel</button>
-                <button onClick={ evhan_click_delete }>Delete</button>
+                <div className="Control">
+                    <button onClick={ evhan_click_close }>Cancel</button>
+                </div>
+                <div className="Control">
+                    <button onClick={ evhan_click_delete }>Delete</button>
+                </div>
             </div>
         </>
     );

@@ -170,6 +170,16 @@ body {
     margin-right: 16px;
 }
 
+.ControlRow .Control {
+    display: inline-block;
+    margin-left: 8px;
+}
+
+.BlorbControls .Control {
+    display: inline-block;
+    margin-left: 8px;
+}
+
 .ModalBack {
     position: absolute;
     width: 100%;
