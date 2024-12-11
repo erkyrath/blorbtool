@@ -6,6 +6,7 @@ import { Chunk, chunk_readable_desc } from './chunk';
 import { Blorb, new_blorb, blorb_get_data } from './blorb';
 import { blorb_resentry_for_chunk } from './blorb';
 import { parse_blorb, new_blorb_with_index } from './parseblorb';
+import { blorb_apply_change } from './editblorb';
 import { pretty_size } from './readable';
 
 import { BlorbCtx, LoadBlorbCtx, LoadBlorbAction } from './contexts';
@@ -38,7 +39,7 @@ function MyApp()
         initialLoader = true;
     }
     
-    const [blorb, dispBlorb] = useReducer(reduceBlorb, initialBlorb!);
+    const [blorb, editBlorb] = useReducer(blorb_apply_change, initialBlorb!);
     const [showloader, setShowLoader] = useState(initialLoader);
     const [selected, setSelected] = useState(-1);
     const [altdisplay, setAltDisplay ] = useState(null as AltDisplay);
@@ -55,7 +56,7 @@ function MyApp()
             newblorb = new_blorb_with_index();
         }
         setShowLoader(false);
-        dispBlorb({ type:'load', blorb:newblorb });
+        editBlorb({ type:'load', blorb:newblorb });
     }
     
     let setSelectedWrap = function(val: number) {
@@ -235,13 +236,5 @@ function IndexColumnBack()
             <img className="IndexColBackLower" src="css/index-lower.svg" />
         </div>
     );
-}
-
-function reduceBlorb(blorb: Blorb, act: any) : Blorb
-{
-    if (act.type == 'load') {
-        return act.blorb;
-    }
-    return blorb;
 }
 
