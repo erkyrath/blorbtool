@@ -82,6 +82,7 @@ function MyApp()
         <SetModalFormCtx.Provider value={ setModalForm }>
         <ModalFormCtx.Provider value={ modalform }>
         <LoadBlorbCtx.Provider value={ loadBlorbFile }>
+        <EditBlorbCtx.Provider value={ editBlorb }>
         <BlorbCtx.Provider value={ blorb }>
             { showloader ?
               <AppLoading />
@@ -89,6 +90,7 @@ function MyApp()
               <AppRunning />
             }
         </BlorbCtx.Provider>
+        </EditBlorbCtx.Provider>
         </LoadBlorbCtx.Provider>
         </ModalFormCtx.Provider>
         </SetModalFormCtx.Provider>
