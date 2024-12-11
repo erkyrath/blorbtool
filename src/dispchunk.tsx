@@ -6,7 +6,7 @@ import { Blorb, blorb_chunk_for_usage, blorb_first_chunk_for_type } from './blor
 import { byte_to_hex } from './readable';
 import { BlorbCtx } from './contexts';
 
-import { ArrowToChunk } from './widgets';
+import { ArrowToChunk, EditButton } from './widgets';
 
 export namespace DispChunks {
 
@@ -142,7 +142,7 @@ export namespace DispChunks {
             ev.stopPropagation();
             setShowRaw(!showraw);
         }
-    
+        
         if (showraw) {
             return (
                 <>
@@ -156,10 +156,10 @@ export namespace DispChunks {
                 </>
             );
         }
-    
+        
         let xmlparser = new DOMParser();
         let xmldoc = xmlparser.parseFromString(chunk.metadata, 'text/xml');
-    
+        
         if (!xmldoc.childNodes.length) {
             return (
                 <div>
@@ -167,9 +167,9 @@ export namespace DispChunks {
                 </div>
             );
         }
-    
+        
         let xmlnod = xmldoc.childNodes[0];
-    
+        
         return (
             <>
                 <div className="InfoLabel">
@@ -192,7 +192,7 @@ export namespace DispChunks {
                 </div>
             )
         }
-    
+        
         if (nod.childNodes.length == 1 && nod.childNodes[0].nodeType == nod.TEXT_NODE) {
             let subnod = nod.childNodes[0];
             return (
@@ -201,14 +201,14 @@ export namespace DispChunks {
                 </div>
             )
         }
-    
+        
         let counter = 0;
         let subls = [ ...nod.childNodes ].map(subnod =>
             <div key={ counter++ }>
                 <ShowXMLNode nod={ subnod } />
             </div>
         );
-    
+        
         return (
             <li>
                 { nod.nodeName }:
@@ -299,6 +299,12 @@ export namespace DispChunks {
             if (resentry.resnum == fspcchunk.picnum)
                 frontis = true;
         }
+
+        function evhan_edit_frontis() {
+        }
+    
+        function evhan_edit_alttext() {
+        }
     
         let dataurl = URL.createObjectURL(
             new Blob([ chunk.data ], { type: 'image/png' })
@@ -312,17 +318,16 @@ export namespace DispChunks {
                         { chunk.imgsize.width }&#xD7;
                         { chunk.imgsize.height }
                     </li>
-                    { (frontis ?
-                       <li>
-                           <span className="InfoLabel">Frontispiece</span>: true
-                       </li>
-                       : null) }
-                    { (alttext ?
-                       <li>
-                           <span className="InfoLabel">Alt text:</span>{' '}
-                           <span className="AltText">{ alttext }</span>
-                       </li>
-                       : null) }
+                    <li>
+                        <span className="InfoLabel">Frontispiece</span>:{' '}
+                        <EditButton func={ evhan_edit_frontis } />{' '}
+                        { frontis ? "yes" : "(no)" }
+                    </li>
+                    <li>
+                        <span className="InfoLabel">Alt text:</span>{' '}
+                        <EditButton func={ evhan_edit_alttext } />{' '}
+                        <span className="AltText">{ alttext }</span>
+                    </li>
                 </ul>
                 <div className="ImageBox">
                     <img src={dataurl} />
