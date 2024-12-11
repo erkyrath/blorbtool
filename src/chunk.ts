@@ -169,6 +169,11 @@ export function new_chunk(type:string|Uint8Array, data:Uint8Array) : ChunkWithEr
     return [ chunk, [] ];
 }
 
+export function new_chunk_RIdx_empty() : ChunkWithErrors
+{
+    return new_chunk('RIdx', new Uint8Array(4));
+}
+
 function new_chunk_RIdx(chunk: Chunk) : ChunkWithErrors
 {
     let errors: string[] = [];

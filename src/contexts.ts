@@ -4,7 +4,7 @@ import { Blorb, new_blorb } from './blorb';
 
 export type AltDisplay = 'about' | 'errors' | null;
 export type ChunkCmd = 'download' | 'delete' | null;
-export type LoadBlorbAction = { filename:string, data:Uint8Array };
+export type LoadBlorbAction = { filename:string, data:Uint8Array } | undefined;
 
 export type ModalForm = (
     null 

@@ -1,7 +1,21 @@
 import { u8ToString, u8read4 } from './datutil';
-import { Chunk, new_chunk } from './chunk';
+import { Chunk, new_chunk, new_chunk_RIdx_empty } from './chunk';
 import { Blorb, new_blorb } from './blorb';
 import { blorb_recompute_positions } from './blorb';
+
+export function new_blorb_with_index() : Blorb
+{
+    let blorb = new_blorb();
+
+    let [ newridx, errors ] = new_chunk_RIdx_empty();
+    blorb = { ...blorb, chunks: [ newridx ], errors: errors };
+
+    blorb = blorb_recompute_positions(blorb);
+
+    //### add construction errors?
+    
+    return blorb;
+}
 
 export function parse_blorb(dat: Uint8Array, filename?: string) : Blorb
 {

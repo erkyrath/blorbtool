@@ -5,7 +5,7 @@ import { Root, createRoot } from 'react-dom/client';
 import { Chunk, chunk_readable_desc } from './chunk';
 import { Blorb, new_blorb, blorb_get_data } from './blorb';
 import { blorb_resentry_for_chunk } from './blorb';
-import { parse_blorb } from './parseblorb';
+import { parse_blorb, new_blorb_with_index } from './parseblorb';
 import { pretty_size } from './readable';
 
 import { BlorbCtx, LoadBlorbCtx, LoadBlorbAction } from './contexts';
@@ -47,7 +47,13 @@ function MyApp()
     (window as any).curblorb = blorb; //###
     
     let loadBlorbFile = function(act: LoadBlorbAction) {
-        let newblorb = parse_blorb(act.data, act.filename);
+        let newblorb: Blorb;
+        if (act) {
+            newblorb = parse_blorb(act.data, act.filename);
+        }
+        else {
+            newblorb = new_blorb_with_index();
+        }
         setShowLoader(false);
         dispBlorb({ type:'load', blorb:newblorb });
     }

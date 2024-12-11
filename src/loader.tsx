@@ -11,6 +11,11 @@ export function LoaderIndex()
 
     let filetypes = '.blb,.blorb,.zblorb,.gblorb,.ablorb,application-xblorb';
 
+    function evhan_click_new(ev: React.MouseEvent<HTMLElement, MouseEvent>) {
+        ev.stopPropagation();
+        loadblorbfile(undefined);
+    }
+    
     function evhan_change(ev: ChangeEv) {
         let inputel = document.getElementById('fileinput') as HTMLInputElement;
         if (inputel && inputel.files && inputel.files.length) {
@@ -73,6 +78,12 @@ export function LoaderIndex()
             <div className="AlignCenter">
                 <label className="FileInput" htmlFor="fileinput">Choose File</label>
                 <input id="fileinput" type="file" accept={ filetypes } onChange= { evhan_change } />
+            </div>
+            <div className="WhileNotDragging">
+                <p>Or you can start editing a with an empty blorb file.</p>
+                <div className="AlignCenter">
+                    <button onClick={ evhan_click_new }>New Blorb</button>
+                </div>
             </div>
             <div className="WhileDragging">
                 <p className="AlignCenter">
