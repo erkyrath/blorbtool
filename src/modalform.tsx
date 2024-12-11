@@ -1,13 +1,13 @@
 import React from 'react';
 import { useState, useContext } from 'react';
 
-import { chunk_readable_desc, chunk_filename_info } from './chunk';
+import { chunk_filename_info } from './chunk';
 import { blorb_get_data, blorb_chunk_for_key } from './blorb';
 import { pretty_size } from './readable';
 
 import { BlorbCtx } from './contexts';
 import { ModalForm, ModalFormCtx, SetModalFormCtx } from './contexts';
-import { ArrowDownload} from './widgets';
+import { ArrowDownload, ChunkReadableDesc } from './widgets';
 
 export function ModalFormOverlay()
 {
@@ -24,6 +24,9 @@ export function ModalFormOverlay()
         break;
     case 'fetchchunk':
         modalpane = <ModalFetchChunk reactkey={ modalform.key } />;
+        break;
+    case 'delchunk':
+        modalpane = <ModalDeleteChunk reactkey={ modalform.key } />;
         break;
     default:
         modalpane = <div>###{ modalform.type }</div>;
@@ -94,7 +97,7 @@ function ModalFetchChunk({ reactkey }: { reactkey:number })
     return (
         <>
             <div className="ControlRow">
-                { chunk_readable_desc(chunk) }
+                <ChunkReadableDesc chunk={ chunk } />
             </div>
             <div className="ControlRow">
                 <ArrowDownload data={ chunk.data } filename={ filename } mimetype={ mimetype } />{' '}
@@ -107,3 +110,36 @@ function ModalFetchChunk({ reactkey }: { reactkey:number })
     );
 }
 
+function ModalDeleteChunk({ reactkey }: { reactkey:number })
+{
+    let blorb = useContext(BlorbCtx);
+    let chunk = blorb_chunk_for_key(blorb, reactkey);
+    if (!chunk)
+        return null;
+    let setmodalform = useContext(SetModalFormCtx);
+    
+    function evhan_click_close(ev: React.MouseEvent<HTMLElement, MouseEvent>) {
+        ev.stopPropagation();
+        setmodalform(null);
+    }
+
+    function evhan_click_delete(ev: React.MouseEvent<HTMLElement, MouseEvent>) {
+        ev.stopPropagation();
+        //###
+    }
+
+    return (
+        <>
+            <div className="ControlRow">
+                <ChunkReadableDesc chunk={ chunk } />
+            </div>
+            <div className="ControlRow">
+                Delete this chunk?
+            </div>
+            <div className="ControlRow AlignRight">
+                <button onClick={ evhan_click_close }>Cancel</button>
+                <button onClick={ evhan_click_delete }>Delete</button>
+            </div>
+        </>
+    );
+}

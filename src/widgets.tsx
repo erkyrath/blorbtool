@@ -1,10 +1,32 @@
 import React from 'react';
 import { useContext } from 'react';
 
-import { chunk_readable_desc } from './chunk';
-import { blorb_chunk_for_key } from './blorb';
+import { Chunk, chunk_readable_desc } from './chunk';
+import { blorb_chunk_for_key, blorb_resentry_for_chunk } from './blorb';
 
 import { BlorbCtx, SetSelectionCtx } from './contexts';
+
+export function ChunkReadableDesc({ chunk }: { chunk:Chunk})
+{
+    let blorb = useContext(BlorbCtx);
+    
+    let desc = chunk_readable_desc(chunk);
+    let resentry = blorb_resentry_for_chunk(blorb, chunk);
+    
+    return (
+        <span>
+            { desc }
+            { (resentry ?
+               <>
+                   {' ('}
+                   <code className="IType">{ resentry.usage }</code>
+                   {' #'}{ resentry.resnum }
+                   {')'}
+               </>
+               : null) }
+        </span>
+    );
+}
 
 export function ArrowGeneric({ func }: { func:()=>void })
 {
