@@ -51,6 +51,9 @@ export function DisplayColumn({ selected }: { selected:number })
     
     return (
         <div className="DisplayCol">
+            <div className="DisplayHeaderBack">
+                <img className="DisplayHeaderBackAcross" src="css/disphead-across.svg" />
+            </div>
             <div className="DisplayHeader">
                 <div className="ControlBox">
                     <div className="Control">

@@ -90,6 +90,9 @@ export function LoaderDisplay()
 {
     return (
         <div className="DisplayCol">
+            <div className="DisplayHeaderBack">
+                <img className="DisplayHeaderBackAcross" src="css/disphead-across.svg" />
+            </div>
             <div className="DisplayHeader">
             </div>
             <div className="DisplayPane">
