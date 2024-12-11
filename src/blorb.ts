@@ -115,20 +115,9 @@ export function blorb_recompute_positions(blorb: Blorb, oldusagemap?: Map<string
         index++;
     }
 
-    // And now the usage map, which is based on the RIdx.
-    let newusagemap: Map<string, number> = new Map();
-    
-    if (!oldusagemap) {
-        /* This is a freshly loaded Blorb. We assume the RIdx is correct
-           and just fill in the usagemap. */
-        for (let [key, pos] of ridx.forusagemap) {
-            let chunk = newposmap.get(pos);
-            if (chunk)
-                newusagemap.set(key, chunk.reactkey);
-        }
-    }
-    else {
-        /* Gotta rebuild the RIdx to fill in the usagemap. */
+    /* If there is no oldusagemap, we presume the RIdx is correct as-is.
+       If there is one, rebuild the RIdx based on it. */
+    if (oldusagemap) {
         let newents: CTypes.CTResIndexEntry[] = [];
         let newforusagemap: Map<string, number> = new Map();
         let newinvusagemap: Map<number, CTypes.CTResIndexEntry> = new Map();
@@ -150,6 +139,15 @@ export function blorb_recompute_positions(blorb: Blorb, oldusagemap?: Map<string
         newls[0] = newridx;
     }
 
+    // And now the usage map, which is based on the RIdx.
+    let newusagemap: Map<string, number> = new Map();
+    
+    for (let [key, pos] of ridx.forusagemap) {
+        let chunk = newposmap.get(pos);
+        if (chunk)
+            newusagemap.set(key, chunk.reactkey);
+    }
+    
     return {
         ...blorb,
         chunks: newls,
