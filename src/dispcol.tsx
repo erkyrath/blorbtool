@@ -7,9 +7,7 @@ import { chunk_readable_desc, chunk_filename_info } from './chunk';
 import { Blorb, blorb_resentry_for_chunk } from './blorb';
 import { pretty_size, byte_to_hex } from './readable';
 
-import { BlorbCtx } from './contexts';
-import { SetModalFormCtx } from './contexts';
-import { AltDisplay, AltDisplayCtx } from './contexts';
+import { ReactCtx } from './contexts';
 import { ArrowDownload } from './widgets';
 import { DispChunks } from './dispchunk';
 
@@ -17,9 +15,8 @@ export function DisplayColumn({ selected }: { selected:number })
 {
     const [showhex, setShowHex] = useState(false);
 
-    let blorb = useContext(BlorbCtx);
-    let altdisplay = useContext(AltDisplayCtx);
-    let setmodalform = useContext(SetModalFormCtx);
+    let rctx = useContext(ReactCtx);
+    let blorb = rctx.blorb;
 
     let selchunk = blorb.chunks.find(chunk => (chunk.reactkey == selected));
     
@@ -27,14 +24,14 @@ export function DisplayColumn({ selected }: { selected:number })
         setShowHex(!showhex);
     }
     function evhan_click_download(ev: React.MouseEvent<HTMLElement, MouseEvent>) {
-        setmodalform({ type:'fetchchunk', key:selected });
+        rctx.setModalForm({ type:'fetchchunk', key:selected });
     }
     function evhan_click_delete(ev: React.MouseEvent<HTMLElement, MouseEvent>) {
-        setmodalform({ type:'delchunk', key:selected });
+        rctx.setModalForm({ type:'delchunk', key:selected });
     }
 
     let contentpane = null;
-    switch (altdisplay) {
+    switch (rctx.altdisplay) {
     case 'errors':
         if (blorb.errors.length) {
             contentpane = <DisplayErrors errors={ blorb.errors } />
