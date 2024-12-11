@@ -16,7 +16,7 @@ export function ArrowGeneric({ func }: { func:()=>void })
 
     return (
         <>
-            <a className="JumpArrow" href="#" onClick={ evhan_click }>&#x279C;</a>
+            <a className="ForwardArrow" href="#" onClick={ evhan_click }>&#x279C;</a>
         </>
     );
 }

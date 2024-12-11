@@ -334,6 +334,18 @@ a.JumpArrow:hover {
     font-size: 85%
 }
 
+a.ForwardArrow {
+    text-decoration: none;
+    padding: 0px 4px;
+    border: 1px solid #888;
+    border-radius: 20px;
+    background: #F2D4F2;
+}
+
+a.ForwardArrow:hover {
+    background: #F2BBF2;
+}
+
 a.DownloadArrow {
     font-size: 140%;
     text-decoration: none;
