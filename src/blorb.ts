@@ -83,11 +83,13 @@ export function blorb_recompute_positions(blorb: Blorb, oldusagemap?: Map<string
     let index = 0;
     let pos = 12;
     let newls: Chunk[] = [];
-    let newusagemap: Map<string, number> = new Map();
     let newtypemap: Map<string, Chunk> = new Map();
     let newkeymap: Map<number, Chunk> = new Map();
     let newposmap: Map<number, Chunk> = new Map();
-    
+
+    /* Run through the chunks noting the new positions. (We have to
+       clone each chunk to set its new position.)
+       While we're at it, we fill in all the cached tables. */
     for (let origchunk of blorb.chunks) {
         let chunk: Chunk;
         if (origchunk.pos == pos && origchunk.index == index) {
@@ -113,7 +115,12 @@ export function blorb_recompute_positions(blorb: Blorb, oldusagemap?: Map<string
         index++;
     }
 
+    // And now the usage map, which is based on the RIdx.
+    let newusagemap: Map<string, number> = new Map();
+    
     if (!oldusagemap) {
+        /* This is a freshly loaded Blorb. We assume the RIdx is correct
+           and just fill in the usagemap. */
         for (let [key, pos] of ridx.usagemap) {
             let chunk = newposmap.get(pos);
             if (chunk)
@@ -121,6 +128,7 @@ export function blorb_recompute_positions(blorb: Blorb, oldusagemap?: Map<string
         }
     }
     else {
+        /* Gotta rebuild the RIdx to fill in the usagemap. */
         let newents: CTypes.CTResIndexEntry[] = [];
         let newusagemap: Map<string, number> = new Map();
         let newinvusagemap: Map<number, CTypes.CTResIndexEntry> = new Map();
@@ -168,8 +176,10 @@ export function blorb_delete_chunk(blorb: Blorb, key: number) : Blorb
 
     let resentry = blorb_resentry_for_chunk(blorb, chunk);
 
-    //###
-    let newblorb = { ...blorb };
+    let newchunks = blorb.chunks.filter((chu) => (chu.reactkey != key));
+    let newblorb: Blorb = { ...blorb, chunks:newchunks };
+
+    newblorb = blorb_recompute_positions(newblorb, blorb.usagemap);
     
     return newblorb;
 }
