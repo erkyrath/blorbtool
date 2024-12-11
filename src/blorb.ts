@@ -78,7 +78,29 @@ export function blorb_recompute_positions(blorb: Blorb, oldusagemap?: Map<string
     }
     let ridx = blorb.chunks[0] as CTypes.CTResIndex;
 
-    //### if oldusagemap, pre-length the ridx.data!
+    if (oldusagemap) {
+        /* Tricky bit: to compute the positions, the RIdx chunk must be
+           the right length. But we're going to alter its data soon.
+           Precompute the correct length and stick in some dummy
+           data. */
+        let keysinuse: Set<number> = new Set();
+        for (let origchunk of blorb.chunks) {
+            keysinuse.add(origchunk.reactkey);
+        }
+        
+        let entcount = 0;
+        for (let ent of ridx.entries) {
+            let usekey = ent.usage+':'+ent.resnum;
+            let reactkey = oldusagemap.get(usekey);
+            if (reactkey !== undefined) {
+                if (keysinuse.has(reactkey)) {
+                    entcount++;
+                }
+            }
+        }
+        let tempridxdata = new Uint8Array(4 + 12 * entcount);
+        ridx = { ...ridx, data:tempridxdata };
+    }
 
     let index = 0;
     let pos = 12;
@@ -115,8 +137,6 @@ export function blorb_recompute_positions(blorb: Blorb, oldusagemap?: Map<string
         index++;
     }
 
-    let newridx: CTypes.CTResIndex;
-    
     /* If there is no oldusagemap, we presume the RIdx is correct as-is.
        If there is one, rebuild the RIdx based on it. */
     if (oldusagemap) {
@@ -136,18 +156,19 @@ export function blorb_recompute_positions(blorb: Blorb, oldusagemap?: Map<string
                 }
             }
         }
+        
         //### rebuild ridx.data as well
-        newridx = { ...ridx, entries:newents, forusagemap:newforusagemap, invusagemap:newinvusagemap };
+        
+        let newridx: CTypes.CTResIndex = { ...ridx, entries:newents, forusagemap:newforusagemap, invusagemap:newinvusagemap };
         newls[0] = newridx;
-    }
-    else {
-        newridx = ridx;
+        
+        ridx = newridx; // for the next step
     }
 
     // And now the usage map, which is based on the (new) RIdx.
     let newusagemap: Map<string, number> = new Map();
     
-    for (let [key, pos] of newridx.forusagemap) {
+    for (let [key, pos] of ridx.forusagemap) {
         let chunk = newposmap.get(pos);
         if (chunk)
             newusagemap.set(key, chunk.reactkey);
