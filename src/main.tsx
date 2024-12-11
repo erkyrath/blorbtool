@@ -9,7 +9,7 @@ import { parse_blorb, new_blorb_with_index } from './parseblorb';
 import { blorb_apply_change } from './editblorb';
 import { pretty_size } from './readable';
 
-import { BlorbCtx, LoadBlorbCtx, LoadBlorbAction } from './contexts';
+import { BlorbCtx, EditBlorbCtx, LoadBlorbCtx, LoadBlorbAction } from './contexts';
 import { SelectionCtx, SetSelectionCtx } from './contexts';
 import { ModalForm, ModalFormCtx, SetModalFormCtx } from './contexts';
 import { AltDisplay, AltDisplayCtx, SetAltDisplayCtx } from './contexts';

@@ -6,6 +6,7 @@ import { blorb_get_data, blorb_chunk_for_key } from './blorb';
 import { pretty_size } from './readable';
 
 import { BlorbCtx } from './contexts';
+import { EditBlorbCtx } from './contexts';
 import { ModalForm, ModalFormCtx, SetModalFormCtx } from './contexts';
 import { ArrowDownload, ChunkReadableDesc } from './widgets';
 
@@ -121,6 +122,7 @@ function ModalDeleteChunk({ reactkey }: { reactkey:number })
     if (!chunk)
         return null;
     let setmodalform = useContext(SetModalFormCtx);
+    let editblorb = useContext(EditBlorbCtx);
     
     function evhan_click_close(ev: React.MouseEvent<HTMLElement, MouseEvent>) {
         ev.stopPropagation();
@@ -129,7 +131,7 @@ function ModalDeleteChunk({ reactkey }: { reactkey:number })
 
     function evhan_click_delete(ev: React.MouseEvent<HTMLElement, MouseEvent>) {
         ev.stopPropagation();
-        //###
+        editblorb({ type:'delchunk', reactkey:reactkey });
     }
 
     return (

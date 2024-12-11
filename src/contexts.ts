@@ -1,6 +1,7 @@
 import { createContext } from 'react';
 
 import { Blorb, new_blorb } from './blorb';
+import { BlorbEditCmd } from './editblorb';
 
 export type AltDisplay = 'about' | 'errors' | null;
 export type ChunkCmd = 'download' | 'delete' | null;
@@ -25,6 +26,7 @@ export const SetModalFormCtx = createContext((val:ModalForm) => {});
 
 export const BlorbCtx = createContext(new_blorb());
 export const LoadBlorbCtx = createContext((act:LoadBlorbAction) => {});
+export const EditBlorbCtx = createContext((act:BlorbEditCmd) => {});
 
 
 
