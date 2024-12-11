@@ -121,7 +121,7 @@ export function blorb_recompute_positions(blorb: Blorb, oldusagemap?: Map<string
     if (!oldusagemap) {
         /* This is a freshly loaded Blorb. We assume the RIdx is correct
            and just fill in the usagemap. */
-        for (let [key, pos] of ridx.usagemap) {
+        for (let [key, pos] of ridx.forusagemap) {
             let chunk = newposmap.get(pos);
             if (chunk)
                 newusagemap.set(key, chunk.reactkey);
@@ -130,7 +130,7 @@ export function blorb_recompute_positions(blorb: Blorb, oldusagemap?: Map<string
     else {
         /* Gotta rebuild the RIdx to fill in the usagemap. */
         let newents: CTypes.CTResIndexEntry[] = [];
-        let newusagemap: Map<string, number> = new Map();
+        let newforusagemap: Map<string, number> = new Map();
         let newinvusagemap: Map<number, CTypes.CTResIndexEntry> = new Map();
         for (let ent of ridx.entries) {
             let usekey = ent.usage+':'+ent.resnum;
@@ -140,13 +140,13 @@ export function blorb_recompute_positions(blorb: Blorb, oldusagemap?: Map<string
                 if (chunk) {
                     let newent = { usage:ent.usage, resnum:ent.resnum, pos:chunk.pos };
                     newents.push(newent);
-                    newusagemap.set(usekey, chunk.reactkey);
+                    newforusagemap.set(usekey, chunk.reactkey);
                     newinvusagemap.set(chunk.reactkey, newent);
                 }
             }
         }
         //### rebuild ridx.data as well
-        let newridx = { ...ridx, entries:newents, usagemap:newusagemap, invusagemap:newinvusagemap };
+        let newridx = { ...ridx, entries:newents, forusagemap:newforusagemap, invusagemap:newinvusagemap };
         newls[0] = newridx;
     }
 

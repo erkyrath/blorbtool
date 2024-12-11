@@ -52,7 +52,7 @@ export namespace CTypes {
     
     export interface CTResIndex extends Chunk {
         entries: ReadonlyArray<CTResIndexEntry>;
-        usagemap: Map<string, number>; // "Pict:1" to pos
+        forusagemap: Map<string, number>; // "Pict:1" to pos
         invusagemap: Map<number, CTypes.CTResIndexEntry>; // the inverse
     };
     
@@ -178,13 +178,13 @@ function new_chunk_RIdx(chunk: Chunk) : ChunkWithErrors
 {
     let errors: string[] = [];
     let entries: CTypes.CTResIndexEntry[] = [];
-    let usagemap: Map<string, number> = new Map();
+    let forusagemap: Map<string, number> = new Map();
     let invusagemap: Map<number, CTypes.CTResIndexEntry> = new Map();
 
     let count = u8read4(chunk.data, 0);
     if (chunk.data.length != 4 + count*12) {
         errors.push('Bad index chunk count');
-        let reschunk: CTypes.CTResIndex = { ...chunk, entries:entries, usagemap:usagemap, invusagemap:invusagemap };
+        let reschunk: CTypes.CTResIndex = { ...chunk, entries:entries, forusagemap:forusagemap, invusagemap:invusagemap };
         return [ reschunk, errors ];
     }
 
@@ -200,11 +200,11 @@ function new_chunk_RIdx(chunk: Chunk) : ChunkWithErrors
         entries.push(ent);
 
         let usekey = usage+':'+resnum;
-        usagemap.set(usekey, pos);
+        forusagemap.set(usekey, pos);
         invusagemap.set(pos, ent);
     }
 
-    let reschunk: CTypes.CTResIndex = { ...chunk, entries:entries, usagemap:usagemap, invusagemap:invusagemap };
+    let reschunk: CTypes.CTResIndex = { ...chunk, entries:entries, forusagemap:forusagemap, invusagemap:invusagemap };
     return [ reschunk, errors ];
 }
 
