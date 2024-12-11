@@ -246,6 +246,13 @@ input[type=file] {
     display: block;
 }
 
+.WhileNotDragging {
+}
+#dropzone.Selected .WhileNotDragging {
+    display: none;
+    pointer-events: none;
+}
+
 label.FileInput {
     font-family: "Helvetica Neue", "Helvetica", "Arial", sans-serif;
     font-size: 100%;
