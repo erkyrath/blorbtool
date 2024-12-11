@@ -4,11 +4,12 @@ import { useContext } from 'react';
 import { Chunk, chunk_readable_desc } from './chunk';
 import { blorb_chunk_for_key, blorb_resentry_for_chunk } from './blorb';
 
-import { BlorbCtx, SetSelectionCtx } from './contexts';
+import { ReactCtx } from './contexts';
 
 export function ChunkReadableDesc({ chunk }: { chunk:Chunk})
 {
-    let blorb = useContext(BlorbCtx);
+    let rctx = useContext(ReactCtx);
+    let blorb = rctx.blorb;
     
     let desc = chunk_readable_desc(chunk);
     let resentry = blorb_resentry_for_chunk(blorb, chunk);
@@ -45,15 +46,15 @@ export function ArrowGeneric({ func }: { func:()=>void })
 
 export function ArrowToChunk({ destkey }: { destkey:number })
 {
-    let blorb = useContext(BlorbCtx);
-    let setSelection = useContext(SetSelectionCtx);
+    let rctx = useContext(ReactCtx);
+    let blorb = rctx.blorb;
 
     let chunk = blorb_chunk_for_key(blorb, destkey);
     
     function evhan_click(ev: React.MouseEvent<HTMLElement, MouseEvent>) {
         ev.preventDefault();
         ev.stopPropagation();
-        setSelection(destkey);
+        rctx.setSelection(destkey);
     }
 
     return (
