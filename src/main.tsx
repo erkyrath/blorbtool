@@ -9,6 +9,7 @@ import { parse_blorb, new_blorb_with_index } from './parseblorb';
 import { blorb_apply_change } from './editblorb';
 import { pretty_size } from './readable';
 
+import { ReactCtx, ContextContent } from './contexts';
 import { BlorbCtx, EditBlorbCtx, LoadBlorbCtx, LoadBlorbAction } from './contexts';
 import { SelectionCtx, SetSelectionCtx } from './contexts';
 import { ModalForm, ModalFormCtx, SetModalFormCtx } from './contexts';
@@ -73,8 +74,21 @@ function MyApp()
             setAltDisplay(val);
         }
     }
+
+    let rctx: ContextContent = {
+        selection: selected,
+        setSelection: setSelectedWrap,
+        altdisplay: altdisplay,
+        setAltDisplay: setAltDisplayWrap,
+        modalform: modalform,
+        setModalForm: setModalForm,
+        blorb: blorb,
+        loadBlorb: loadBlorbFile,
+        editBlorb: editBlorb,
+    };
     
     return (
+        <ReactCtx.Provider value={ rctx }>
         <SetSelectionCtx.Provider value={ setSelectedWrap }>
         <SelectionCtx.Provider value={ selected }>
         <SetAltDisplayCtx.Provider value={ setAltDisplayWrap }>
@@ -98,6 +112,7 @@ function MyApp()
         </SetAltDisplayCtx.Provider>
         </SelectionCtx.Provider>
         </SetSelectionCtx.Provider>
+        </ReactCtx.Provider>
     );
 }
 

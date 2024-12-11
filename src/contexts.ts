@@ -15,6 +15,33 @@ export type ModalForm = (
     | { type:'addchunk' }
 );
 
+export type ContextContent = {
+    selection: number;
+    setSelection: (val:number) => void;
+    
+    altdisplay: AltDisplay;
+    setAltDisplay: (val:AltDisplay) => void;
+    
+    modalform: ModalForm;
+    setModalForm: (val:ModalForm) => void;
+    
+    blorb: Blorb;
+    loadBlorb: (act:LoadBlorbAction) => void;
+    editBlorb: (act:BlorbEditCmd) => void;
+};
+
+export const ReactCtx = createContext({
+    selection: -1,
+    setSelection: (val:number) => {},
+    altdisplay: null,
+    setAltDisplay: (val:AltDisplay) => {},
+    modalform: null,
+    setModalForm: (val:ModalForm) => {},
+    blorb: new_blorb(),
+    loadBlorb: (act:LoadBlorbAction) =>	{},
+    editBlorb: (act:BlorbEditCmd) => {},
+} as ContextContent);
+
 export const SelectionCtx = createContext(-1);
 export const SetSelectionCtx = createContext((val:number) => {});
 

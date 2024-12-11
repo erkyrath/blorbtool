@@ -5,6 +5,7 @@ import { chunk_filename_info } from './chunk';
 import { blorb_get_data, blorb_chunk_for_key } from './blorb';
 import { pretty_size } from './readable';
 
+import { ReactCtx } from './contexts';
 import { BlorbCtx } from './contexts';
 import { EditBlorbCtx } from './contexts';
 import { ModalForm, ModalFormCtx, SetModalFormCtx } from './contexts';
@@ -12,8 +13,8 @@ import { ArrowDownload, ChunkReadableDesc } from './widgets';
 
 export function ModalFormOverlay()
 {
-    let modalform = useContext(ModalFormCtx);
-    let setmodalform = useContext(SetModalFormCtx);
+    let rctx = useContext(ReactCtx);
+    let modalform = rctx.modalform;
 
     if (!modalform)
         return null;
@@ -36,7 +37,7 @@ export function ModalFormOverlay()
     
     function evhan_click_background(ev: React.MouseEvent<HTMLDivElement, MouseEvent>) {
         ev.stopPropagation();
-        setmodalform(null);
+        rctx.setModalForm(null);
     }
     
     function evhan_click_foreground(ev: React.MouseEvent<HTMLDivElement, MouseEvent>) {
@@ -54,8 +55,8 @@ export function ModalFormOverlay()
 
 function ModalFetchBlorb()
 {
-    let blorb = useContext(BlorbCtx);
-    let setmodalform = useContext(SetModalFormCtx);
+    let rctx = useContext(ReactCtx);
+    let blorb = rctx.blorb;
 
     let filename = blorb.filename || 'blorb.blb';
     let mimetype = 'application/x-blorb';
@@ -64,7 +65,7 @@ function ModalFetchBlorb()
     
     function evhan_click_close(ev: React.MouseEvent<HTMLElement, MouseEvent>) {
         ev.stopPropagation();
-        setmodalform(null);
+        rctx.setModalForm(null);
     }
 
     return (
@@ -84,17 +85,17 @@ function ModalFetchBlorb()
 
 function ModalFetchChunk({ reactkey }: { reactkey:number })
 {
-    let blorb = useContext(BlorbCtx);
+    let rctx = useContext(ReactCtx);
+    let blorb = rctx.blorb;
     let chunk = blorb_chunk_for_key(blorb, reactkey);
     if (!chunk)
         return null;
-    let setmodalform = useContext(SetModalFormCtx);
     
     let { filename, mimetype } = chunk_filename_info(chunk, blorb);
 
     function evhan_click_close(ev: React.MouseEvent<HTMLElement, MouseEvent>) {
         ev.stopPropagation();
-        setmodalform(null);
+        rctx.setModalForm(null);
     }
 
     return (
@@ -117,21 +118,21 @@ function ModalFetchChunk({ reactkey }: { reactkey:number })
 
 function ModalDeleteChunk({ reactkey }: { reactkey:number })
 {
-    let blorb = useContext(BlorbCtx);
+    let rctx = useContext(ReactCtx);
+    let blorb = rctx.blorb;
     let chunk = blorb_chunk_for_key(blorb, reactkey);
     if (!chunk)
         return null;
-    let setmodalform = useContext(SetModalFormCtx);
-    let editblorb = useContext(EditBlorbCtx);
     
     function evhan_click_close(ev: React.MouseEvent<HTMLElement, MouseEvent>) {
         ev.stopPropagation();
-        setmodalform(null);
+        rctx.setModalForm(null);
     }
 
     function evhan_click_delete(ev: React.MouseEvent<HTMLElement, MouseEvent>) {
         ev.stopPropagation();
-        editblorb({ type:'delchunk', reactkey:reactkey });
+        rctx.editBlorb({ type:'delchunk', reactkey:reactkey });
+        rctx.setModalForm(null);
     }
 
     return (
