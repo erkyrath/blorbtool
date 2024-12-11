@@ -273,13 +273,26 @@ export namespace DispChunks {
         );
     }
 
-    export function DCImgPNG({ chunk, resentry }: { chunk:CTypes.CTImage, resentry:CTypes.CTResIndexEntry|undefined })
+    export function DCImage({ chunk, resentry }: { chunk:CTypes.CTImage, resentry:CTypes.CTResIndexEntry|undefined })
     {
         let blorb = useContext(BlorbCtx);
+
+        let label = '???';
+        let mimetype = '???';
+        switch (chunk.type.stype) {
+        case 'PNG ':
+            label = 'PNG';
+            mimetype = 'image/png';
+            break;
+        case 'JPEG':
+            label = 'JPEG';
+            mimetype = 'image/jpeg';
+            break;
+        }
         
         if (!chunk.imgsize) {
             return (
-                <div>Unable to recognize PNG data.</div>
+                <div>Unable to recognize { label } data.</div>
             );
         };
 
@@ -307,7 +320,7 @@ export namespace DispChunks {
         }
     
         let dataurl = URL.createObjectURL(
-            new Blob([ chunk.data ], { type: 'image/png' })
+            new Blob([ chunk.data ], { type: mimetype })
         );
     
         return (
@@ -328,64 +341,6 @@ export namespace DispChunks {
                         <EditButton func={ evhan_edit_alttext } />{' '}
                         <span className="AltText">{ alttext }</span>
                     </li>
-                </ul>
-                <div className="ImageBox">
-                    <img src={dataurl} />
-                </div>
-            </>
-        );
-    }
-
-    export function DCImgJPEG({ chunk, resentry }: { chunk:CTypes.CTImage, resentry:CTypes.CTResIndexEntry|undefined })
-    {
-        let blorb = useContext(BlorbCtx);
-        
-        if (!chunk.imgsize) {
-            return (
-                <div>Unable to recognize JPEG data.</div>
-            );
-        };
-    
-        let alttext: string|undefined;
-        let rdeschunk = blorb_first_chunk_for_type(blorb, 'RDes') as CTypes.CTResourceDescs;
-        if (rdeschunk && resentry) {
-            //### map lookup
-            for (let ent of rdeschunk.entries) {
-                if (ent.usage == 'Pict' && ent.resnum == resentry.resnum)
-                    alttext = ent.text;
-            }
-        }
-    
-        let frontis = false;
-        let fspcchunk = blorb_first_chunk_for_type(blorb, 'Fspc') as CTypes.CTFrontispiece;
-        if (fspcchunk && resentry) {
-            if (resentry.resnum == fspcchunk.picnum)
-                frontis = true;
-        }
-    
-        let dataurl = URL.createObjectURL(
-            new Blob([ chunk.data ], { type: 'image/jpeg' })
-        );
-    
-        return (
-            <>
-                <ul className="InfoList">
-                    <li>
-                        <span className="InfoLabel">Image size:</span>{' '}
-                        { chunk.imgsize.width }&#xD7;
-                        { chunk.imgsize.height }
-                    </li>
-                    { (frontis ?
-                       <li>
-                           <span className="InfoLabel">Frontispiece</span>: true
-                       </li>
-                       : null) }
-                    { (alttext ?
-                       <li>
-                           <span className="InfoLabel">Alt text:</span>{' '}
-                           <span className="AltText">{ alttext }</span>
-                       </li>
-                       : null) }
                 </ul>
                 <div className="ImageBox">
                     <img src={dataurl} />
