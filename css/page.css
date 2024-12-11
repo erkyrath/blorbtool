@@ -19,7 +19,7 @@ body {
     height: 100%;
     margin: 0px;
     box-sizing: border-box;
-    background-color: #F2E5F6;
+    background-color: #F2E5FE;
     overflow: clip;
 }
 
@@ -114,7 +114,7 @@ body {
     width: 100%;
     top: 0px;
     height: 50px;
-    background: #FFE5F2;
+    background: #F8E4FF;
 }
 
 .DisplayPane {
@@ -142,7 +142,6 @@ body {
     position: absolute;
     top: 0px;
     right: 0px;
-    background: #FFE5F2;
 }
 
 .ControlBox .Control {
