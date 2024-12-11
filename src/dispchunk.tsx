@@ -429,9 +429,11 @@ export namespace DispChunks {
                         { chunk.maxwinsize.height }
                     </li>
                 </ul>
-                <ul className="InfoList">
-                    { entls }
-                </ul>
+                <table className="InfoTable">
+                    <tbody>
+                        { entls }
+                    </tbody>
+                </table>
             </div>
         );
     }
@@ -443,19 +445,25 @@ export namespace DispChunks {
     
     
         return (
-            <li>
-                <code className="IType">Pict</code>
-                {' #'}{ ent.resnum }
-                { ( chunk ?
-                    <>
-                        {' '}&nbsp; <ArrowToChunk destkey={ chunk.reactkey } />
-                    </>
-                    : null) }
-                {' : '}
-                stdratio { ent.stdratio.numerator }/{ ent.stdratio.numerator },
-                minratio { ent.minratio.numerator }/{ ent.minratio.numerator },
-                maxratio { ent.maxratio.numerator }/{ ent.maxratio.numerator }
-            </li>
+            <tr>
+                <td>
+                    <code className="IType">Pict</code>
+                    {' #'}{ ent.resnum }
+                </td>
+                <td>
+                    { ( chunk ?
+                        <>
+                            {' '}&nbsp; <ArrowToChunk destkey={ chunk.reactkey } />
+                        </>
+                        : null) }
+                    {' \xA0 '}
+                </td>
+                <td>
+                    stdratio { ent.stdratio.numerator }/{ ent.stdratio.numerator },
+                    minratio { ent.minratio.numerator }/{ ent.minratio.numerator },
+                    maxratio { ent.maxratio.numerator }/{ ent.maxratio.numerator }
+                </td>
+            </tr>
         );
     }
 
