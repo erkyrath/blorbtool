@@ -20,6 +20,7 @@ let initialBlorb: Blorb|undefined;
 
 export function init(blorbdata: Uint8Array|undefined, filename: string|undefined)
 {
+    //### maybe fix up filename? Remove .js, add .blb
     if (blorbdata)
         initialBlorb = parse_blorb(blorbdata, filename);
     
