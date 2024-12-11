@@ -265,9 +265,9 @@ input[type=file] {
 
 label.FileInput {
     font-family: "Helvetica Neue", "Helvetica", "Arial", sans-serif;
-    font-size: 100%;
+    font-size: 120%;
     background-color: #F2D4F2;
-    padding: 4px 8px;
+    padding: 4px 12px;
     border: 1px solid #888;
     border-radius: 20px;
 }
