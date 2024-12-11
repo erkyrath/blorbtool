@@ -53,7 +53,7 @@ function ModalFetchBlorb()
     let blorb = useContext(BlorbCtx);
     let setmodalform = useContext(SetModalFormCtx);
 
-    let filename = 'blorb.blb'; //### from saved filename ### or zblorb/gblorb?
+    let filename = blorb.filename || 'blorb.blb';
     let mimetype = 'application/x-blorb';
 
     let data = blorb_get_data(blorb);
