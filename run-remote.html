@@ -27,7 +27,7 @@ game_options = {
   io: {
     fatal_error: console.log,
     init: (opts) => {
-      bundle.init(game_options.dataimage);
+      bundle.init(game_options.dataimage, opts.recording_label);
     }
   }
 };
