@@ -129,32 +129,30 @@ function AppLoading()
 
 function AppRunning()
 {
-    let selected = useContext(SelectionCtx);
-    let modalform = useContext(ModalFormCtx);
+    let rctx = useContext(ReactCtx);
     
     return (
         <>
             <IndexColumnBack />
             <IndexColumn />
-            <DisplayColumn selected={ selected } />
-            { (modalform ? <ModalFormOverlay /> : null) }
+            <DisplayColumn selected={ rctx.selection } />
+            { (rctx.modalform ? <ModalFormOverlay /> : null) }
         </>
     );
 }
 
 function IndexColumn()
 {
-    let blorb = useContext(BlorbCtx);
-    let selected = useContext(SelectionCtx);
-    let setSelection = useContext(SetSelectionCtx);
+    let rctx = useContext(ReactCtx);
+    let blorb = rctx.blorb;
     
     function evhan_click_background(ev: React.MouseEvent<HTMLDivElement, MouseEvent>) {
         ev.stopPropagation();
-        setSelection(-1);
+        rctx.setSelection(-1);
     }
     
     let chunkls = blorb.chunks.map(chunk =>
-        <ChunkListEntry key={ chunk.reactkey } chunk={ chunk } isselected={ chunk.reactkey == selected } />
+        <ChunkListEntry key={ chunk.reactkey } chunk={ chunk } isselected={ chunk.reactkey == rctx.selection } />
     );
     
     return (
