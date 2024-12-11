@@ -1,19 +1,19 @@
 import React from 'react';
 import { useContext } from 'react';
 
-import { LoadBlorbCtx, LoadBlorbAction } from './contexts';
+import { ReactCtx } from './contexts';
 
 import { AboutPane } from './about';
 
 export function LoaderIndex()
 {
-    let loadblorbfile = useContext(LoadBlorbCtx);
+    let rctx = useContext(ReactCtx);
 
     let filetypes = '.blb,.blorb,.zblorb,.gblorb,.ablorb,application-xblorb';
 
     function evhan_click_new(ev: React.MouseEvent<HTMLElement, MouseEvent>) {
         ev.stopPropagation();
-        loadblorbfile(undefined);
+        rctx.loadBlorbFile(undefined);
     }
     
     function evhan_change(ev: ChangeEv) {
@@ -21,7 +21,7 @@ export function LoaderIndex()
         if (inputel && inputel.files && inputel.files.length) {
             let infile = inputel.files[0];
             infile.arrayBuffer().then((arr) => {
-                loadblorbfile({
+                rctx.loadBlorbFile({
                     filename: infile.name,
                     data: new Uint8Array(arr),
                 });
@@ -42,7 +42,7 @@ export function LoaderIndex()
 
         if (infile) {
             infile.arrayBuffer().then((arr) => {
-                loadblorbfile({
+                rctx.loadBlorbFile({
                     filename: infile.name,
                     data: new Uint8Array(arr),
                 });

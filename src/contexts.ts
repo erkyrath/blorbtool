@@ -26,7 +26,7 @@ export type ContextContent = {
     setModalForm: (val:ModalForm) => void;
     
     blorb: Blorb;
-    loadBlorb: (act:LoadBlorbAction) => void;
+    loadBlorbFile: (act:LoadBlorbAction) => void;
     editBlorb: (act:BlorbEditCmd) => void;
 };
 
@@ -38,7 +38,7 @@ export const ReactCtx = createContext({
     modalform: null,
     setModalForm: (val:ModalForm) => {},
     blorb: new_blorb(),
-    loadBlorb: (act:LoadBlorbAction) =>	{},
+    loadBlorbFile: (act:LoadBlorbAction) =>	{},
     editBlorb: (act:BlorbEditCmd) => {},
 } as ContextContent);
 

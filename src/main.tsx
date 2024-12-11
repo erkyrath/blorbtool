@@ -83,7 +83,7 @@ function MyApp()
         modalform: modalform,
         setModalForm: setModalForm,
         blorb: blorb,
-        loadBlorb: loadBlorbFile,
+        loadBlorbFile: loadBlorbFile,
         editBlorb: editBlorb,
     };
     
