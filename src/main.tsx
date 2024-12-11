@@ -56,7 +56,7 @@ function MyApp()
             newblorb = new_blorb_with_index();
         }
         setShowLoader(false);
-        editBlorb({ type:'load', blorb:newblorb });
+        editBlorb({ type:'loadnew', blorb:newblorb });
     }
     
     let setSelectedWrap = function(val: number) {
