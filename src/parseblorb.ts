@@ -2,6 +2,7 @@ import { u8ToString, u8read4 } from './datutil';
 import { Chunk, new_chunk, new_chunk_RIdx_empty } from './chunk';
 import { Blorb, new_blorb } from './blorb';
 import { blorb_recompute_positions } from './blorb';
+import { check_blorb_against_origpos } from './checkblorb';
 
 export function new_blorb_with_index() : Blorb
 {
@@ -96,25 +97,9 @@ export function parse_blorb(dat: Uint8Array, filename?: string) : Blorb
     
     blorb = blorb_recompute_positions(blorb);
 
-    errors = []; // new set of errors
+    // Check for inconsistency with the original layout during loading. Nothing should have changed.
+    blorb = check_blorb_against_origpos(blorb, len, origposmap);
     
-    for (let chunk of blorb.chunks) {
-        let pos = origposmap.get(chunk.reactkey);
-        if (pos != chunk.pos) {
-            errors.push(`Chunk position was wrong (${pos} rather than ${chunk.pos})`);
-        }
-    }
-    if (blorb.totallen != len) {
-        errors.push(`Blorb length was not constructed correctly (${blorb.totallen} rather than ${len})`);
-    }
-
-    if (errors.length) {
-        blorb = {
-            ...blorb,
-            errors: [ ...blorb.errors, ...errors ],
-        }
-    }
-
     return blorb;
 }
 
