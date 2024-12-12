@@ -32,6 +32,9 @@ export function check_blorb_consistency(blorb: Blorb) : Blorb
 
     for (let chunk of blorb.chunks) {
         switch (chunk.type.stype) {
+        case 'IFmd':
+            check_chunk_IFmd(blorb, chunk as CTypes.CTMetadata, errors);
+            break;
         case 'Fspc':
             check_chunk_Fspc(blorb, chunk as CTypes.CTFrontispiece, errors);
             break;
@@ -49,6 +52,23 @@ export function check_blorb_consistency(blorb: Blorb) : Blorb
     }
 
     return blorb;
+}
+
+function check_chunk_IFmd(blorb: Blorb, chunk: CTypes.CTMetadata, errors: string[])
+{
+    let xmlparser = new DOMParser();
+    let xmldoc = xmlparser.parseFromString(chunk.metadata, 'text/xml');
+
+    if (!xmldoc.childNodes.length) {
+        errors.push('Metadata chunk has no XML content');
+    }
+    else {
+        let xmlnod = xmldoc.childNodes[0];
+        if (xmlnod.nodeName != 'ifindex') {
+            errors.push(`Metadata chunk has XML node "${xmlnod.nodeName}", not "ifindex"`);
+        }
+    }
+    
 }
 
 function check_chunk_Fspc(blorb: Blorb, chunk: CTypes.CTFrontispiece, errors: string[])
