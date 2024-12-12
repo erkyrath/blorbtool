@@ -73,11 +73,11 @@ export namespace DispChunks {
         );
     }
 
-    export function DCResourceDescs({ chunk }: { chunk:CTypes.CTResDescs })
+    export function DCResDescs({ chunk }: { chunk:CTypes.CTResDescs })
     {
         let counter = 0;
         let entls = chunk.entries.map(ent =>
-            <DCResourceDescEntry ent={ ent } key={ counter++ } />
+            <DCResDescEntry ent={ ent } key={ counter++ } />
         );
     
         return (
@@ -89,7 +89,7 @@ export namespace DispChunks {
         );
     }
     
-    function DCResourceDescEntry({ ent }: { ent:CTypes.CTResDescEntry })
+    function DCResDescEntry({ ent }: { ent:CTypes.CTResDescEntry })
     {
         let blorb = useContext(BlorbCtx);
         let chunk = blorb_chunk_for_usage(blorb, ent.usage, ent.resnum);
