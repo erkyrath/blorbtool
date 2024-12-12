@@ -63,11 +63,6 @@ function ModalFetchBlorb()
 
     let data = blorb_get_data(blorb);
     
-    function evhan_click_close(ev: React.MouseEvent<HTMLElement, MouseEvent>) {
-        ev.stopPropagation();
-        rctx.setModalForm(null);
-    }
-
     return (
         <>
             <div className="ControlRow">
@@ -76,7 +71,7 @@ function ModalFetchBlorb()
             </div>
             <div className="ControlRow AlignRight">
                 <div className="Control">
-                    <button onClick={ evhan_click_close }>Got it</button>
+                    <button onClick={ (ev)=>evhan_click_close_modal(ev, rctx) }>Got it</button>
                 </div>
             </div>
         </>
@@ -93,11 +88,6 @@ function ModalFetchChunk({ reactkey }: { reactkey:number })
     
     let { filename, mimetype } = chunk_filename_info(chunk, blorb);
 
-    function evhan_click_close(ev: React.MouseEvent<HTMLElement, MouseEvent>) {
-        ev.stopPropagation();
-        rctx.setModalForm(null);
-    }
-
     return (
         <>
             <div className="ControlRow">
@@ -109,7 +99,7 @@ function ModalFetchChunk({ reactkey }: { reactkey:number })
             </div>
             <div className="ControlRow AlignRight">
                 <div className="Control">
-                    <button onClick={ evhan_click_close }>Got it</button>
+                    <button onClick={ (ev)=>evhan_click_close_modal(ev, rctx) }>Got it</button>
                 </div>
             </div>
         </>
@@ -124,11 +114,6 @@ function ModalDeleteChunk({ reactkey }: { reactkey:number })
     if (!chunk)
         return null;
     
-    function evhan_click_close(ev: React.MouseEvent<HTMLElement, MouseEvent>) {
-        ev.stopPropagation();
-        rctx.setModalForm(null);
-    }
-
     function evhan_click_delete(ev: React.MouseEvent<HTMLElement, MouseEvent>) {
         ev.stopPropagation();
         rctx.setModalForm(null);
@@ -145,7 +130,7 @@ function ModalDeleteChunk({ reactkey }: { reactkey:number })
             </div>
             <div className="ControlRow AlignRight">
                 <div className="Control">
-                    <button onClick={ evhan_click_close }>Cancel</button>
+                    <button onClick={ (ev)=>evhan_click_close_modal(ev, rctx) }>Cancel</button>
                 </div>
                 <div className="Control">
                     <button onClick={ evhan_click_delete }>Delete</button>
