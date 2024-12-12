@@ -5,7 +5,7 @@ import { chunk_filename_info } from './chunk';
 import { blorb_get_data, blorb_chunk_for_key, blorb_resentry_for_key } from './blorb';
 import { pretty_size } from './readable';
 
-import { ReactCtx } from './contexts';
+import { ReactCtx, ContextContent } from './contexts';
 import { ArrowDownload, ChunkReadableDesc } from './widgets';
 
 export function ModalFormOverlay()
@@ -167,11 +167,6 @@ function ModalChangeFrontis({ oldkey, reactkey }: { oldkey:number, reactkey:numb
     if (!oldresentry)
         return null;
 
-    function evhan_click_close(ev: React.MouseEvent<HTMLElement, MouseEvent>) {
-        ev.stopPropagation();
-        rctx.setModalForm(null);
-    }
-
     function evhan_click_change(ev: React.MouseEvent<HTMLElement, MouseEvent>) {
         ev.stopPropagation();
         rctx.setModalForm(null);
@@ -190,7 +185,7 @@ function ModalChangeFrontis({ oldkey, reactkey }: { oldkey:number, reactkey:numb
             </div>
             <div className="ControlRow AlignRight">
                 <div className="Control">
-                    <button onClick={ evhan_click_close }>Cancel</button>
+                    <button onClick={ (ev)=>evhan_click_close_modal(ev, rctx) }>Cancel</button>
                 </div>
                 <div className="Control">
                     <button onClick={ evhan_click_change }>Change</button>
@@ -199,3 +194,9 @@ function ModalChangeFrontis({ oldkey, reactkey }: { oldkey:number, reactkey:numb
         </>
     );
 }
+
+function evhan_click_close_modal(ev: React.MouseEvent<HTMLElement, MouseEvent>, rctx: ContextContent) {
+    ev.stopPropagation();
+    rctx.setModalForm(null);
+}
+
