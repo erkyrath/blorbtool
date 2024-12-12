@@ -39,7 +39,7 @@ export const ReactCtx = createContext({
     modalform: null,
     setModalForm: (val:ModalForm) => {},
     blorb: new_blorb(),
-    loadBlorbFile: (act:LoadBlorbAction) =>	{},
+    loadBlorbFile: (act:LoadBlorbAction) => {},
     editBlorb: (act:BlorbEditCmd) => {},
 } as ContextContent);
 
