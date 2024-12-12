@@ -76,7 +76,7 @@ export function DisplayErrors({ errors }: { errors:ReadonlyArray<string> })
 {
     let counter = 0;
     let errls = errors.map((msg) =>
-        <div key={ counter++ }>
+        <div className="ErrorLine" key={ counter++ }>
             { msg }
         </div>
     );

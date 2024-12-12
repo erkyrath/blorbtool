@@ -396,6 +396,11 @@ a.EditButton:hover {
     color: #88A;
 }
 
+.ErrorLine {
+    margin-top: 8px;
+    margin-bottom: 8px;
+}
+
 .ImageBox {
     text-align: center;
 }
