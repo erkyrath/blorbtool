@@ -1,7 +1,6 @@
 import { u8ToString, stringToU8 } from './datutil';
 import { u8read4, u8write4 } from './datutil';
 import { Chunk, CTypes } from './chunk';
-import { check_blorb_consistency } from './checkblorb';
 
 export type Blorb = {
     filename: string|undefined;
@@ -207,7 +206,12 @@ export function blorb_recompute_positions(blorb: Blorb, oldusagemap?: Map<string
     };
 }
 
-export function blorb_delete_chunk(blorb: Blorb, key: number) : Blorb
+export function blorb_clear_errors(blorb: Blorb) : Blorb
+{
+    return { ...blorb, errors: [] };
+}
+
+export function blorb_delete_chunk_by_key(blorb: Blorb, key: number) : Blorb
 {
     let chunk = blorb.keymap.get(key);
     if (!chunk) {
@@ -225,7 +229,6 @@ export function blorb_delete_chunk(blorb: Blorb, key: number) : Blorb
     let newblorb: Blorb = { ...blorb, chunks:newchunks };
 
     newblorb = blorb_recompute_positions(newblorb, blorb.usagemap);
-    newblorb = check_blorb_consistency(newblorb);
     
     return newblorb;
 }
@@ -251,7 +254,6 @@ export function blorb_addreplace_chunk(blorb: Blorb, chunk: Chunk) : Blorb
     }
 
     newblorb = blorb_recompute_positions(newblorb, blorb.usagemap);
-    newblorb = check_blorb_consistency(newblorb);
     
     return newblorb;
 }
