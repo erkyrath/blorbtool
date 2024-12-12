@@ -1,4 +1,4 @@
-import { u8ToString, u16ToString, utf8ToString, stringToU8 } from './datutil';
+import { u8ToString, u16ToString, utf8ToString, stringToU8, u8write4 } from './datutil';
 import { u8read4 } from './datutil';
 import { ImageSize, ImageRatio, find_dimensions_png, find_dimensions_jpeg } from './imgutil';
 import { Blorb, blorb_resentry_for_chunk } from './blorb';
@@ -228,6 +228,16 @@ function new_chunk_Fspc(chunk: Chunk) : ChunkWithErrors
     let num = u8read4(chunk.data, 0);
     let reschunk : CTypes.CTFrontispiece = { ...chunk, picnum:num };
     return [ reschunk, errors ];
+}
+
+export function new_chunk_Fspc_with(picnum: number) : Chunk
+{
+    let data = new Uint8Array(4);
+    u8write4(data, 0, picnum);
+    
+    let chunk = new_chunk_noinit('Fspc', data);
+    let reschunk : CTypes.CTFrontispiece = { ...chunk, picnum:picnum };
+    return reschunk;
 }
 
 function new_chunk_RDes(chunk: Chunk) : ChunkWithErrors

@@ -1,6 +1,7 @@
-import { Chunk } from './chunk';
+import { Chunk, CTypes } from './chunk';
+import { new_chunk_Fspc_with } from './chunk';
 import { Blorb } from './blorb';
-import { blorb_delete_chunk, blorb_first_chunk_for_type } from './blorb';
+import { blorb_delete_chunk, blorb_addreplace_chunk, blorb_first_chunk_for_type, blorb_resentry_for_chunk } from './blorb';
 
 export type BlorbEditCmd = (
     null 
@@ -35,8 +36,19 @@ function blorb_set_frontis(blorb: Blorb, key: number)
         return blorb;
     }
     
-    let frontischunk = blorb_first_chunk_for_type(blorb, 'Fspc');
+    let resentry = blorb_resentry_for_chunk(blorb, chunk);
+    if (!resentry) {
+        console.log('BUG: blorb_set_frontis: chunk is not resource', key);
+        return blorb;
+    }
+    
+    let frontischunk = blorb_first_chunk_for_type(blorb, 'Fspc') as CTypes.CTFrontispiece;
+    if (frontischunk && frontischunk.picnum == resentry.resnum) {
+        return blorb;
+    }
 
-    //###
-    return blorb;
+    let newfchunk = new_chunk_Fspc_with(resentry.resnum);
+    let newblorb = blorb_addreplace_chunk(blorb, newfchunk);
+    
+    return newblorb;
 }
