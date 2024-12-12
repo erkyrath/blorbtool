@@ -2,7 +2,7 @@ import { u8ToString, u8read4 } from './datutil';
 import { Chunk, new_chunk, new_chunk_RIdx_empty } from './chunk';
 import { Blorb, new_blorb } from './blorb';
 import { blorb_recompute_positions } from './blorb';
-import { check_blorb_against_origpos } from './checkblorb';
+import { check_blorb_against_origpos, check_blorb_consistency } from './checkblorb';
 
 export function new_blorb_with_index() : Blorb
 {
@@ -13,7 +13,7 @@ export function new_blorb_with_index() : Blorb
 
     blorb = blorb_recompute_positions(blorb);
 
-    //### add construction errors?
+    blorb = check_blorb_consistency(blorb);
     
     return blorb;
 }
@@ -99,6 +99,8 @@ export function parse_blorb(dat: Uint8Array, filename?: string) : Blorb
 
     // Check for inconsistency with the original layout during loading. Nothing should have changed.
     blorb = check_blorb_against_origpos(blorb, len, origposmap);
+
+    blorb = check_blorb_consistency(blorb);
     
     return blorb;
 }

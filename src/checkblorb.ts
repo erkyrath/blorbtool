@@ -24,3 +24,17 @@ export function check_blorb_against_origpos(blorb: Blorb, origlen: number, map: 
 
     return blorb;
 }
+
+export function check_blorb_consistency(blorb: Blorb) : Blorb
+{
+    let errors: string[] = []; // new set of errors
+
+    if (errors.length) {
+        blorb = {
+            ...blorb,
+            errors: [ ...blorb.errors, ...errors ],
+        }
+    }
+
+    return blorb;
+}
