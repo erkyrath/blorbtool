@@ -4,7 +4,7 @@ import { useState, useContext } from 'react';
 import { Chunk, CTypes } from './chunk';
 import { Blorb, blorb_chunk_for_usage, blorb_first_chunk_for_type } from './blorb';
 import { byte_to_hex } from './readable';
-import { BlorbCtx } from './contexts';
+import { ReactCtx, BlorbCtx } from './contexts';
 
 import { ArrowToChunk, EditButton } from './widgets';
 
@@ -275,7 +275,8 @@ export namespace DispChunks {
 
     export function DCImage({ chunk, resentry }: { chunk:CTypes.CTImage, resentry:CTypes.CTResIndexEntry|undefined })
     {
-        let blorb = useContext(BlorbCtx);
+        let rctx = useContext(ReactCtx);
+        let blorb = rctx.blorb;
 
         let label = '???';
         let mimetype = '???';
@@ -314,6 +315,16 @@ export namespace DispChunks {
         }
 
         function evhan_edit_frontis() {
+            let frontischunk = blorb_first_chunk_for_type(blorb, 'Fspc');
+            if (!frontis) {
+                // If there is no frontispiece chunk, create one.
+                rctx.editBlorb({ type:'setfrontis', reactkey:chunk.reactkey });                
+            }
+            else {
+                // Simply delete the frontispiece chunk to clear this flag.
+                if (frontischunk)
+                    rctx.editBlorb({ type:'delchunk', reactkey:frontischunk.reactkey });
+            }
         }
     
         function evhan_edit_alttext() {
