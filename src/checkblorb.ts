@@ -32,6 +32,10 @@ export function check_blorb_consistency(blorb: Blorb) : Blorb
 
     for (let chunk of blorb.chunks) {
         switch (chunk.type.stype) {
+        case 'PNG ':
+        case 'JPEG':
+            check_chunk_Image(blorb, chunk as CTypes.CTImage, errors);
+            break;
         case 'IFmd':
             check_chunk_IFmd(blorb, chunk as CTypes.CTMetadata, errors);
             break;
@@ -52,6 +56,13 @@ export function check_blorb_consistency(blorb: Blorb) : Blorb
     }
 
     return blorb;
+}
+
+function check_chunk_Image(blorb: Blorb, chunk: CTypes.CTImage, errors: string[])
+{
+    if (!chunk.imgsize) {
+        errors.push('Image data not recognized');
+    }
 }
 
 function check_chunk_IFmd(blorb: Blorb, chunk: CTypes.CTMetadata, errors: string[])
