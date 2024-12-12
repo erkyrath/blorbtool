@@ -35,6 +35,9 @@ export function check_blorb_consistency(blorb: Blorb) : Blorb
         case 'Fspc':
             check_chunk_Fspc(blorb, chunk as CTypes.CTFrontispiece, errors);
             break;
+        case 'Reso':
+            check_chunk_Reso(blorb, chunk as CTypes.CTResolution, errors);
+            break;
         }
     }
 
@@ -53,5 +56,15 @@ function check_chunk_Fspc(blorb: Blorb, chunk: CTypes.CTFrontispiece, errors: st
     let imgchunk = blorb_chunk_for_usage(blorb, 'Pict', chunk.picnum);
     if (!imgchunk) {
         errors.push(`Frontispiece chunk refers to Pict #${chunk.picnum}, but there is no such resource.`);
+    }
+}
+
+function check_chunk_Reso(blorb: Blorb, chunk: CTypes.CTResolution, errors: string[])
+{
+    for (let ent of chunk.entries) {
+        let imgchunk = blorb_chunk_for_usage(blorb, 'Pict', ent.resnum);
+        if (!imgchunk) {
+            errors.push(`Resolution chunk refers to Pict #${ent.resnum}, but there is no such resource.`);
+        }
     }
 }
