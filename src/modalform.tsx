@@ -2,7 +2,7 @@ import React from 'react';
 import { useState, useContext } from 'react';
 
 import { chunk_filename_info } from './chunk';
-import { blorb_get_data, blorb_chunk_for_key } from './blorb';
+import { blorb_get_data, blorb_chunk_for_key, blorb_resentry_for_key } from './blorb';
 import { pretty_size } from './readable';
 
 import { ReactCtx } from './contexts';
@@ -26,6 +26,9 @@ export function ModalFormOverlay()
         break;
     case 'delchunk':
         modalpane = <ModalDeleteChunk reactkey={ modalform.key } />;
+        break;
+    case 'changefrontis':
+        modalpane = <ModalChangeFrontis oldkey={ modalform.oldkey } reactkey={ modalform.key } />;
         break;
     default:
         modalpane = <div>###{ modalform.type }</div>;
@@ -128,8 +131,8 @@ function ModalDeleteChunk({ reactkey }: { reactkey:number })
 
     function evhan_click_delete(ev: React.MouseEvent<HTMLElement, MouseEvent>) {
         ev.stopPropagation();
-        rctx.editBlorb({ type:'delchunk', reactkey:reactkey });
         rctx.setModalForm(null);
+        rctx.editBlorb({ type:'delchunk', reactkey:reactkey });
     }
 
     return (
@@ -146,6 +149,51 @@ function ModalDeleteChunk({ reactkey }: { reactkey:number })
                 </div>
                 <div className="Control">
                     <button onClick={ evhan_click_delete }>Delete</button>
+                </div>
+            </div>
+        </>
+    );
+}
+
+function ModalChangeFrontis({ oldkey, reactkey }: { oldkey:number, reactkey:number })
+{
+    let rctx = useContext(ReactCtx);
+    let blorb = rctx.blorb;
+    
+    let resentry = blorb_resentry_for_key(blorb, reactkey);
+    if (!resentry)
+        return null;
+    let oldresentry = blorb_resentry_for_key(blorb, oldkey);
+    if (!oldresentry)
+        return null;
+
+    function evhan_click_close(ev: React.MouseEvent<HTMLElement, MouseEvent>) {
+        ev.stopPropagation();
+        rctx.setModalForm(null);
+    }
+
+    function evhan_click_change(ev: React.MouseEvent<HTMLElement, MouseEvent>) {
+        ev.stopPropagation();
+        rctx.setModalForm(null);
+        rctx.editBlorb({ type:'setfrontis', reactkey:reactkey });
+    }
+
+    return (
+        <>
+            <div className="ControlRow">
+                <code className="IType">Pict</code> #{ oldresentry.resnum }
+                {' '}is already set as the frontispiece.
+            </div>
+            <div className="ControlRow">
+                Change to{' '}
+                <code className="IType">Pict</code> #{ resentry.resnum }?
+            </div>
+            <div className="ControlRow AlignRight">
+                <div className="Control">
+                    <button onClick={ evhan_click_close }>Cancel</button>
+                </div>
+                <div className="Control">
+                    <button onClick={ evhan_click_change }>Change</button>
                 </div>
             </div>
         </>

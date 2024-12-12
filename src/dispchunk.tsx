@@ -300,7 +300,7 @@ export namespace DispChunks {
         let alttext: string|undefined;
         let rdeschunk = blorb_first_chunk_for_type(blorb, 'RDes') as CTypes.CTResDescs;
         if (rdeschunk && resentry) {
-            //### map lookup
+            //### Reso map lookup
             for (let ent of rdeschunk.entries) {
                 if (ent.usage == 'Pict' && ent.resnum == resentry.resnum)
                     alttext = ent.text;
@@ -315,10 +315,16 @@ export namespace DispChunks {
         }
 
         function evhan_edit_frontis() {
-            let frontischunk = blorb_first_chunk_for_type(blorb, 'Fspc');
+            let frontischunk = blorb_first_chunk_for_type(blorb, 'Fspc') as CTypes.CTFrontispiece;
             if (!frontis) {
-                // If there is no frontispiece chunk, create one.
-                rctx.editBlorb({ type:'setfrontis', reactkey:chunk.reactkey });                
+                if (frontischunk) {
+                    let oldchunk = blorb_chunk_for_usage(blorb, 'Pict', frontischunk.picnum);
+                    if (oldchunk) {
+                        rctx.setModalForm({ type:'changefrontis', oldkey:oldchunk.reactkey, key:chunk.reactkey });
+                        return;
+                    }
+                }
+                rctx.editBlorb({ type:'setfrontis', reactkey:chunk.reactkey });
             }
             else {
                 // Simply delete the frontispiece chunk to clear this flag.

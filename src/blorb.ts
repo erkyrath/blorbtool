@@ -272,6 +272,14 @@ export function blorb_resentry_for_chunk(blorb: Blorb, chunk: Chunk) : CTypes.CT
     return ridx.invusagemap.get(chunk.pos);
 }
 
+export function blorb_resentry_for_key(blorb: Blorb, key: number) : CTypes.CTResIndexEntry|undefined
+{
+    let chunk = blorb.keymap.get(key);
+    if (!chunk)
+        return undefined;
+    return blorb_resentry_for_chunk(blorb, chunk);
+}
+
 export function blorb_chunk_for_usage(blorb: Blorb, usage: string, resnum: number) : Chunk|undefined
 {
     if (blorb.chunks.length == 0 || blorb.chunks[0].type.stype != 'RIdx')

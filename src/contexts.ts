@@ -13,6 +13,7 @@ export type ModalForm = (
     | { type:'delchunk', key:number }
     | { type:'fetchblorb' }
     | { type:'addchunk' }
+    | { type:'changefrontis', oldkey:number, key:number }
 );
 
 export type ContextContent = {
