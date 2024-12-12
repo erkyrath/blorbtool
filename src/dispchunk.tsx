@@ -73,7 +73,7 @@ export namespace DispChunks {
         );
     }
 
-    export function DCResourceDescs({ chunk }: { chunk:CTypes.CTResourceDescs })
+    export function DCResourceDescs({ chunk }: { chunk:CTypes.CTResDescs })
     {
         let counter = 0;
         let entls = chunk.entries.map(ent =>
@@ -89,7 +89,7 @@ export namespace DispChunks {
         );
     }
     
-    function DCResourceDescEntry({ ent }: { ent:CTypes.CTResourceDescEntry })
+    function DCResourceDescEntry({ ent }: { ent:CTypes.CTResDescEntry })
     {
         let blorb = useContext(BlorbCtx);
         let chunk = blorb_chunk_for_usage(blorb, ent.usage, ent.resnum);
@@ -297,7 +297,7 @@ export namespace DispChunks {
         };
 
         let alttext: string|undefined;
-        let rdeschunk = blorb_first_chunk_for_type(blorb, 'RDes') as CTypes.CTResourceDescs;
+        let rdeschunk = blorb_first_chunk_for_type(blorb, 'RDes') as CTypes.CTResDescs;
         if (rdeschunk && resentry) {
             //### map lookup
             for (let ent of rdeschunk.entries) {

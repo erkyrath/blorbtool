@@ -60,14 +60,14 @@ export namespace CTypes {
         picnum: number;
     }
 
-    export type CTResourceDescEntry = {
+    export type CTResDescEntry = {
         usage: ChunkUsage;
         resnum: number;
         text: string;
     };
     
-    export interface CTResourceDescs extends Chunk {
-        entries: ReadonlyArray<CTResourceDescEntry>;
+    export interface CTResDescs extends Chunk {
+        entries: ReadonlyArray<CTResDescEntry>;
     }
 
     export interface CTMetadata extends Chunk {
@@ -226,7 +226,7 @@ function new_chunk_Fspc(chunk: Chunk) : ChunkWithErrors
 function new_chunk_RDes(chunk: Chunk) : ChunkWithErrors
 {
     let errors: string[] = [];
-    let entries: CTypes.CTResourceDescEntry[] = [];
+    let entries: CTypes.CTResDescEntry[] = [];
 
     let count = u8read4(chunk.data, 0);
     let pos = 4;
@@ -248,7 +248,7 @@ function new_chunk_RDes(chunk: Chunk) : ChunkWithErrors
         errors.push(`Fspc: bad chunk size (${chunk.data.length} rather than ${pos})`);
     }
     
-    let reschunk : CTypes.CTResourceDescs = { ...chunk, entries:entries };
+    let reschunk : CTypes.CTResDescs = { ...chunk, entries:entries };
     return [ reschunk, errors ];
 }
 
