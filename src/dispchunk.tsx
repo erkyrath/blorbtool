@@ -95,6 +95,9 @@ export namespace DispChunks {
         let chunk = blorb_chunk_for_usage(blorb, ent.usage, ent.resnum);
     
         //### or error if not found
+
+        function evhan_edit_text() {
+        }
     
         return (
             <li>
@@ -106,7 +109,8 @@ export namespace DispChunks {
                     </>
                     : null) }
                 <div className="SubText">
-                    { ent.text }
+                    <EditButton func={ evhan_edit_text } />
+                    {' '}{ ent.text }
                 </div>
             </li>
         );
