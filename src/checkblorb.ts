@@ -33,6 +33,9 @@ export function check_blorb_consistency(blorb: Blorb) : Blorb
 
     for (let chunk of blorb.chunks) {
         switch (chunk.type.stype) {
+        case 'RDes':
+            check_chunk_RDes(blorb, chunk as CTypes.CTResDescs, errors);
+            break;
         case 'PNG ':
         case 'JPEG':
             check_chunk_Image(blorb, chunk as CTypes.CTImage, errors);
@@ -63,6 +66,16 @@ export function check_blorb_consistency(blorb: Blorb) : Blorb
     }
 
     return blorb;
+}
+
+function check_chunk_RDes(blorb: Blorb, chunk: CTypes.CTResDescs, errors: string[])
+{
+    for (let ent of chunk.entries) {
+        let reschunk = blorb_chunk_for_usage(blorb, ent.usage, ent.resnum);
+        if (!reschunk) {
+            errors.push(`Resource description chunk refers to ${ent.usage} #${ent.resnum}, but there is no such resource.`);
+        }
+    }
 }
 
 function check_chunk_Image(blorb: Blorb, chunk: CTypes.CTImage, errors: string[])
