@@ -218,8 +218,35 @@ export function blorb_delete_chunk(blorb: Blorb, key: number) : Blorb
         return blorb;
     }
 
+    //### RIdx will clean itself up, but we should delete Fspc and any RDes entry
+
     let newchunks = blorb.chunks.filter((chu) => (chu.reactkey != key));
     let newblorb: Blorb = { ...blorb, chunks:newchunks };
+
+    newblorb = blorb_recompute_positions(newblorb, blorb.usagemap);
+    
+    return newblorb;
+}
+
+export function blorb_addreplace_chunk(blorb: Blorb, chunk: Chunk) : Blorb
+{
+    /* Only for singleton chunk types! Which are, by definition, not
+       resources.
+       Also, more subtly, nobody (but the index) caches the reactkey.
+    */
+    let pos = blorb.chunks.findIndex((chu) => (chu.type.stype == chunk.type.stype));
+
+    let newblorb: Blorb;
+    if (pos < 0) {
+        let newchunks = [ ...blorb.chunks, chunk ];
+        newblorb = { ...blorb, chunks:newchunks };
+    }
+    else {
+        let oldchunk = blorb.chunks[pos];
+        let newchunks = [ ...blorb.chunks ];
+        newchunks[pos] = chunk;
+        newblorb = { ...blorb, chunks:newchunks };
+    }
 
     newblorb = blorb_recompute_positions(newblorb, blorb.usagemap);
     
