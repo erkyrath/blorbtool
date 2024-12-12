@@ -8,7 +8,7 @@ export function check_blorb_against_origpos(blorb: Blorb, origlen: number, map: 
     let errors: string[] = []; // new set of errors
     
     for (let chunk of blorb.chunks) {
-        let pos = map.get(chunk.reactkey);
+        let pos = map.get(chunk.refkey);
         if (pos != chunk.pos) {
             errors.push(`Chunk position was wrong (${pos} rather than ${chunk.pos})`);
         }

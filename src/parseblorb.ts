@@ -74,7 +74,7 @@ export function parse_blorb(dat: Uint8Array, filename?: string) : Blorb
         }
 
         chunks.push(chunk);
-        origposmap.set(chunk.reactkey, cpos);
+        origposmap.set(chunk.refkey, cpos);
 
         if (chunkerrors.length) {
             errors = [ ...errors, ...chunkerrors ];

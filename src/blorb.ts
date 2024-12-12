@@ -8,9 +8,9 @@ export type Blorb = {
     totallen: number;
 
     // Maps are recomputed whenever the blorb updates.
-    usagemap: Map<string, number>; // usage ("Pict:1") to reactkey
+    usagemap: Map<string, number>; // usage ("Pict:1") to refkey
     typemap: Map<string, Chunk>; // type ("RIdx") to (first) chunk
-    keymap: Map<number, Chunk>; // chunk.reactkey to chunk
+    keymap: Map<number, Chunk>; // chunk.refkey to chunk
     posmap: Map<number, Chunk>; // chunk.pos to chunk
 
     // Built on load or update.
@@ -87,15 +87,15 @@ export function blorb_recompute_positions(blorb: Blorb, oldusagemap?: Map<string
            data. */
         let keysinuse: Set<number> = new Set();
         for (let origchunk of origchunksmod) {
-            keysinuse.add(origchunk.reactkey);
+            keysinuse.add(origchunk.refkey);
         }
         
         let entcount = 0;
         for (let ent of ridx.entries) {
             let usekey = ent.usage+':'+ent.resnum;
-            let reactkey = oldusagemap.get(usekey);
-            if (reactkey !== undefined) {
-                if (keysinuse.has(reactkey)) {
+            let refkey = oldusagemap.get(usekey);
+            if (refkey !== undefined) {
+                if (keysinuse.has(refkey)) {
                     entcount++;
                 }
             }
@@ -128,7 +128,7 @@ export function blorb_recompute_positions(blorb: Blorb, oldusagemap?: Map<string
 
         if (!newtypemap.has(chunk.type.stype))
             newtypemap.set(chunk.type.stype, chunk);
-        newkeymap.set(chunk.reactkey, chunk);
+        newkeymap.set(chunk.refkey, chunk);
         newposmap.set(chunk.pos, chunk);
         
         if (chunk.formtype)
@@ -149,9 +149,9 @@ export function blorb_recompute_positions(blorb: Blorb, oldusagemap?: Map<string
         let newinvusagemap: Map<number, CTypes.CTResIndexEntry> = new Map();
         for (let ent of ridx.entries) {
             let usekey = ent.usage+':'+ent.resnum;
-            let reactkey = oldusagemap.get(usekey);
-            if (reactkey !== undefined) {
-                let chunk = newkeymap.get(reactkey);
+            let refkey = oldusagemap.get(usekey);
+            if (refkey !== undefined) {
+                let chunk = newkeymap.get(refkey);
                 if (chunk) {
                     let newent = { usage:ent.usage, resnum:ent.resnum, pos:chunk.pos };
                     newents.push(newent);
@@ -191,7 +191,7 @@ export function blorb_recompute_positions(blorb: Blorb, oldusagemap?: Map<string
     for (let [key, pos] of ridx.forusagemap) {
         let chunk = newposmap.get(pos);
         if (chunk)
-            newusagemap.set(key, chunk.reactkey);
+            newusagemap.set(key, chunk.refkey);
     }
     
     return {
@@ -225,7 +225,7 @@ export function blorb_delete_chunk_by_key(blorb: Blorb, key: number) : Blorb
 
     //### RIdx will clean itself up, but we should delete Fspc and any RDes entry
 
-    let newchunks = blorb.chunks.filter((chu) => (chu.reactkey != key));
+    let newchunks = blorb.chunks.filter((chu) => (chu.refkey != key));
     let newblorb: Blorb = { ...blorb, chunks:newchunks };
 
     newblorb = blorb_recompute_positions(newblorb, blorb.usagemap);
@@ -237,7 +237,7 @@ export function blorb_addreplace_chunk(blorb: Blorb, chunk: Chunk) : Blorb
 {
     /* Only for singleton chunk types! Which are, by definition, not
        resources.
-       Also, more subtly, nobody (but the index) caches the reactkey.
+       Also, more subtly, nobody (but the index) caches the refkey.
     */
     let pos = blorb.chunks.findIndex((chu) => (chu.type.stype == chunk.type.stype));
 
@@ -291,9 +291,9 @@ export function blorb_chunk_for_usage(blorb: Blorb, usage: string, resnum: numbe
         return undefined;
 
     let key = usage+':'+resnum;
-    let reactkey = blorb.usagemap.get(key);
-    if (reactkey !== undefined)
-        return blorb.keymap.get(reactkey);
+    let refkey = blorb.usagemap.get(key);
+    if (refkey !== undefined)
+        return blorb.keymap.get(refkey);
     return undefined;
 }
 

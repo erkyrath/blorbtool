@@ -29,7 +29,7 @@ let keycounter = 1;
 
 export interface Chunk {
     // unique identifier for this chunk -- internal use only
-    reactkey: number;
+    refkey: number;
 
     type: ChunkType;
     formtype: ChunkType|undefined, // set if type is 'FORM'
@@ -127,7 +127,7 @@ function new_chunk_noinit(type:string|Uint8Array, data:Uint8Array) : Chunk
     }
     
     let chunk: Chunk = {
-        reactkey: keycounter++,
+        refkey: keycounter++,
         type: ctype,
         formtype: formtype,
         data: data,

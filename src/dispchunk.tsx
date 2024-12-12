@@ -61,7 +61,7 @@ export namespace DispChunks {
                 <td>
                     { ( chunk ?
                         <>
-                            {' '}&nbsp; <ArrowToChunk destkey={ chunk.reactkey } />
+                            {' '}&nbsp; <ArrowToChunk destkey={ chunk.refkey } />
                         </>
                         : null) }
                     {' '}&nbsp;{' '}
@@ -105,7 +105,7 @@ export namespace DispChunks {
                 {' #'}{ ent.resnum }
                 { ( chunk ?
                     <>
-                        {' '}&nbsp; <ArrowToChunk destkey={ chunk.reactkey } />
+                        {' '}&nbsp; <ArrowToChunk destkey={ chunk.refkey } />
                     </>
                     : null) }
                 <div className="SubText">
@@ -130,7 +130,7 @@ export namespace DispChunks {
                 {' #'}{ chunk.picnum }
                 { ( imgchunk ?
                     <>
-                        {' '}&nbsp; <ArrowToChunk destkey={ imgchunk.reactkey } />
+                        {' '}&nbsp; <ArrowToChunk destkey={ imgchunk.refkey } />
                     </>
                     : null) }
             </div>
@@ -324,16 +324,16 @@ export namespace DispChunks {
                 if (frontischunk) {
                     let oldchunk = blorb_chunk_for_usage(blorb, 'Pict', frontischunk.picnum);
                     if (oldchunk) {
-                        rctx.setModalForm({ type:'changefrontis', oldkey:oldchunk.reactkey, key:chunk.reactkey });
+                        rctx.setModalForm({ type:'changefrontis', oldkey:oldchunk.refkey, key:chunk.refkey });
                         return;
                     }
                 }
-                rctx.editBlorb({ type:'setfrontis', reactkey:chunk.reactkey });
+                rctx.editBlorb({ type:'setfrontis', refkey:chunk.refkey });
             }
             else {
                 // Simply delete the frontispiece chunk to clear this flag.
                 if (frontischunk)
-                    rctx.editBlorb({ type:'delchunk', reactkey:frontischunk.reactkey });
+                    rctx.editBlorb({ type:'delchunk', refkey:frontischunk.refkey });
             }
         }
     
@@ -438,7 +438,7 @@ export namespace DispChunks {
                 <td>
                     { ( chunk ?
                         <>
-                            {' '}&nbsp; <ArrowToChunk destkey={ chunk.reactkey } />
+                            {' '}&nbsp; <ArrowToChunk destkey={ chunk.refkey } />
                         </>
                         : null) }
                     {' \xA0 '}

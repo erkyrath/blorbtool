@@ -134,7 +134,7 @@ function IndexColumn()
     }
     
     let chunkls = blorb.chunks.map(chunk =>
-        <ChunkListEntry key={ chunk.reactkey } chunk={ chunk } isselected={ chunk.reactkey == rctx.selection } />
+        <ChunkListEntry key={ chunk.refkey } chunk={ chunk } isselected={ chunk.refkey == rctx.selection } />
     );
     
     return (
@@ -204,7 +204,7 @@ function ChunkListEntry({ chunk, isselected } : { chunk:Chunk, isselected:boolea
     
     function evhan_click(ev: React.MouseEvent<HTMLLIElement, MouseEvent>) {
         ev.stopPropagation();
-        rctx.setSelection(chunk.reactkey);
+        rctx.setSelection(chunk.refkey);
     }
     
     return (

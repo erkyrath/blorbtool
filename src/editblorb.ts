@@ -7,8 +7,8 @@ import { check_blorb_consistency } from './checkblorb';
 export type BlorbEditCmd = (
     null 
     | { type:'loadnew', blorb:Blorb }
-    | { type:'delchunk', reactkey:number }
-    | { type:'setfrontis', reactkey:number }
+    | { type:'delchunk', refkey:number }
+    | { type:'setfrontis', refkey:number }
 );
 
 export function blorb_apply_change(blorb: Blorb, act: BlorbEditCmd) : Blorb
@@ -24,9 +24,9 @@ export function blorb_apply_change(blorb: Blorb, act: BlorbEditCmd) : Blorb
     case 'loadnew':
         return act.blorb;
     case 'delchunk':
-        return blorb_delete_chunk(blorb, act.reactkey);
+        return blorb_delete_chunk(blorb, act.refkey);
     case 'setfrontis':
-        return blorb_set_frontis(blorb, act.reactkey);
+        return blorb_set_frontis(blorb, act.refkey);
     default:
         console.log('### unimplemented command', act);
         return blorb;

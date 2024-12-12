@@ -18,7 +18,7 @@ export function DisplayColumn({ selected }: { selected:number })
     let rctx = useContext(ReactCtx);
     let blorb = rctx.blorb;
 
-    let selchunk = blorb.chunks.find(chunk => (chunk.reactkey == selected));
+    let selchunk = blorb.chunks.find(chunk => (chunk.refkey == selected));
     
     function evhan_change(ev: ChangeEv) {
         setShowHex(!showhex);

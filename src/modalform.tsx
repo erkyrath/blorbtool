@@ -22,13 +22,13 @@ export function ModalFormOverlay()
         modalpane = <ModalFetchBlorb />;
         break;
     case 'fetchchunk':
-        modalpane = <ModalFetchChunk reactkey={ modalform.key } />;
+        modalpane = <ModalFetchChunk refkey={ modalform.key } />;
         break;
     case 'delchunk':
-        modalpane = <ModalDeleteChunk reactkey={ modalform.key } />;
+        modalpane = <ModalDeleteChunk refkey={ modalform.key } />;
         break;
     case 'changefrontis':
-        modalpane = <ModalChangeFrontis oldkey={ modalform.oldkey } reactkey={ modalform.key } />;
+        modalpane = <ModalChangeFrontis oldkey={ modalform.oldkey } refkey={ modalform.key } />;
         break;
     default:
         modalpane = <div>###{ modalform.type }</div>;
@@ -78,11 +78,11 @@ function ModalFetchBlorb()
     );
 }
 
-function ModalFetchChunk({ reactkey }: { reactkey:number })
+function ModalFetchChunk({ refkey }: { refkey:number })
 {
     let rctx = useContext(ReactCtx);
     let blorb = rctx.blorb;
-    let chunk = blorb_chunk_for_key(blorb, reactkey);
+    let chunk = blorb_chunk_for_key(blorb, refkey);
     if (!chunk)
         return null;
     
@@ -106,18 +106,18 @@ function ModalFetchChunk({ reactkey }: { reactkey:number })
     );
 }
 
-function ModalDeleteChunk({ reactkey }: { reactkey:number })
+function ModalDeleteChunk({ refkey }: { refkey:number })
 {
     let rctx = useContext(ReactCtx);
     let blorb = rctx.blorb;
-    let chunk = blorb_chunk_for_key(blorb, reactkey);
+    let chunk = blorb_chunk_for_key(blorb, refkey);
     if (!chunk)
         return null;
     
     function evhan_click_delete(ev: React.MouseEvent<HTMLElement, MouseEvent>) {
         ev.stopPropagation();
         rctx.setModalForm(null);
-        rctx.editBlorb({ type:'delchunk', reactkey:reactkey });
+        rctx.editBlorb({ type:'delchunk', refkey:refkey });
     }
 
     return (
@@ -140,12 +140,12 @@ function ModalDeleteChunk({ reactkey }: { reactkey:number })
     );
 }
 
-function ModalChangeFrontis({ oldkey, reactkey }: { oldkey:number, reactkey:number })
+function ModalChangeFrontis({ oldkey, refkey }: { oldkey:number, refkey:number })
 {
     let rctx = useContext(ReactCtx);
     let blorb = rctx.blorb;
     
-    let resentry = blorb_resentry_for_key(blorb, reactkey);
+    let resentry = blorb_resentry_for_key(blorb, refkey);
     if (!resentry)
         return null;
     let oldresentry = blorb_resentry_for_key(blorb, oldkey);
@@ -155,7 +155,7 @@ function ModalChangeFrontis({ oldkey, reactkey }: { oldkey:number, reactkey:numb
     function evhan_click_change(ev: React.MouseEvent<HTMLElement, MouseEvent>) {
         ev.stopPropagation();
         rctx.setModalForm(null);
-        rctx.editBlorb({ type:'setfrontis', reactkey:reactkey });
+        rctx.editBlorb({ type:'setfrontis', refkey:refkey });
     }
 
     return (
