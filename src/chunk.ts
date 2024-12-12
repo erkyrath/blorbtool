@@ -117,7 +117,7 @@ export namespace CTypes {
 
 type ChunkWithErrors = [ Chunk, string[] ];
 
-export function new_chunk(type:string|Uint8Array, data:Uint8Array) : ChunkWithErrors
+function new_chunk_noinit(type:string|Uint8Array, data:Uint8Array) : Chunk
 {
     let ctype = make_chunk_type(type);
     
@@ -135,7 +135,14 @@ export function new_chunk(type:string|Uint8Array, data:Uint8Array) : ChunkWithEr
         pos: 0,
     }
 
-    switch (ctype.stype) {
+    return chunk;
+}
+
+export function new_chunk(type:string|Uint8Array, data:Uint8Array) : ChunkWithErrors
+{
+    let chunk = new_chunk_noinit(type, data);
+
+    switch (chunk.type.stype) {
     case 'RIdx':
         return new_chunk_RIdx(chunk);
     case 'Fspc':
