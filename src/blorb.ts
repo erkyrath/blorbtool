@@ -218,8 +218,6 @@ export function blorb_delete_chunk(blorb: Blorb, key: number) : Blorb
         return blorb;
     }
 
-    let resentry = blorb_resentry_for_chunk(blorb, chunk);
-
     let newchunks = blorb.chunks.filter((chu) => (chu.reactkey != key));
     let newblorb: Blorb = { ...blorb, chunks:newchunks };
 
