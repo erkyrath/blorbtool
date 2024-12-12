@@ -342,16 +342,20 @@ export namespace DispChunks {
                         { chunk.imgsize.width }&#xD7;
                         { chunk.imgsize.height }
                     </li>
-                    <li>
-                        <span className="InfoLabel">Frontispiece</span>:{' '}
-                        <EditButton func={ evhan_edit_frontis } />{' '}
-                        { frontis ? "yes" : "(no)" }
-                    </li>
-                    <li>
-                        <span className="InfoLabel">Alt text:</span>{' '}
-                        <EditButton func={ evhan_edit_alttext } />{' '}
-                        <span className="AltText">{ alttext }</span>
-                    </li>
+                    { (resentry ?
+                       <>
+                           <li>
+                               <span className="InfoLabel">Frontispiece</span>:{' '}
+                               <EditButton func={ evhan_edit_frontis } />{' '}
+                               { frontis ? "yes" : "(no)" }
+                           </li>
+                           <li>
+                               <span className="InfoLabel">Alt text:</span>{' '}
+                               <EditButton func={ evhan_edit_alttext } />{' '}
+                               <span className="AltText">{ alttext }</span>
+                           </li>
+                       </>
+                       : null) }
                 </ul>
                 <div className="ImageBox">
                     <img src={dataurl} />
