@@ -1,3 +1,4 @@
+import { u8ToString } from './datutil';
 import { Chunk, CTypes } from './chunk';
 import { Blorb } from './blorb';
 import { blorb_chunk_for_usage } from './blorb';
@@ -36,6 +37,12 @@ export function check_blorb_consistency(blorb: Blorb) : Blorb
         case 'JPEG':
             check_chunk_Image(blorb, chunk as CTypes.CTImage, errors);
             break;
+        case 'GLUL':
+            check_chunk_GLUL(blorb, chunk as CTypes.CTGlulx, errors);
+            break;
+        case 'ZCOD':
+            check_chunk_ZCOD(blorb, chunk as CTypes.CTZCode, errors);
+            break;
         case 'IFmd':
             check_chunk_IFmd(blorb, chunk as CTypes.CTMetadata, errors);
             break;
@@ -62,6 +69,20 @@ function check_chunk_Image(blorb: Blorb, chunk: CTypes.CTImage, errors: string[]
 {
     if (!chunk.imgsize) {
         errors.push('Image data not recognized');
+    }
+}
+
+function check_chunk_ZCOD(blorb: Blorb, chunk: CTypes.CTZCode, errors: string[])
+{
+    if (chunk.data[0] > 8) {
+        errors.push(`Z-machine version ${chunk.data[0]} is not valid`);
+    }
+}
+
+function check_chunk_GLUL(blorb: Blorb, chunk: CTypes.CTGlulx, errors: string[])
+{
+    if (u8ToString(chunk.data, 0, 4) != 'Glul') {
+        errors.push('File does not appear to be Glulx');
     }
 }
 
