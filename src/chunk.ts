@@ -337,6 +337,14 @@ function new_chunk_U16Text(chunk: Chunk) : ChunkWithErrors
 
 function new_chunk_RelN(chunk: Chunk) : ChunkWithErrors
 {
+    let errors: string[] = [];
+    
+    if (chunk.data.length != 2) {
+        errors.push(`RelN: bad chunk size (${chunk.data.length} rather than 2)`);
+        let reschunk: CTypes.CTReleaseNumber = { ...chunk, release:0 };
+        return [ reschunk, errors ];
+    }
+    
     let release = 0x100 * chunk.data[0] + chunk.data[1];
     let reschunk: CTypes.CTReleaseNumber = { ...chunk, release:release };
     return [ reschunk, [] ];
