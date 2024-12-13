@@ -9,6 +9,7 @@ export type BlorbEditCmd = (
     | { type:'loadnew', blorb:Blorb }
     | { type:'delchunk', refkey:number }
     | { type:'setfrontis', refkey:number }
+    | { type:'setresdesc', usage:string, resnum:number, text:string }
 );
 
 export function blorb_apply_change(blorb: Blorb, act: BlorbEditCmd) : Blorb

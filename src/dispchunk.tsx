@@ -350,8 +350,8 @@ export namespace DispChunks {
         }
 
         function evhan_click_frontis_save(ev: MouseButtonEv) {
-            if (inputRef.current) {
-                console.log('###', inputRef.current.value);
+            if (inputRef.current && resentry) {
+                rctx.editBlorb({ type:'setresdesc', usage:resentry.usage, resnum:resentry.resnum, text:inputRef.current.value.trim() });
             }
             setEditingKey(-1);
         }
