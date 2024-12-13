@@ -68,6 +68,7 @@ export namespace CTypes {
     
     export interface CTResDescs extends Chunk {
         entries: ReadonlyArray<CTResDescEntry>;
+        usagemap: Map<string, string>; // "Pict:1" to text
     }
 
     export interface CTMetadata extends Chunk {
@@ -244,6 +245,7 @@ function new_chunk_RDes(chunk: Chunk) : ChunkWithErrors
 {
     let errors: string[] = [];
     let entries: CTypes.CTResDescEntry[] = [];
+    let usagemap: Map<string, string> = new Map();
 
     let count = u8read4(chunk.data, 0);
     let pos = 4;
@@ -259,13 +261,14 @@ function new_chunk_RDes(chunk: Chunk) : ChunkWithErrors
             continue;
         }
         entries.push({ usage, resnum, text });
+        usagemap.set(usage+':'+resnum, text);
     }
     
     if (chunk.data.length != pos) {
         errors.push(`RDes: bad chunk size (${chunk.data.length} rather than ${pos})`);
     }
     
-    let reschunk : CTypes.CTResDescs = { ...chunk, entries:entries };
+    let reschunk : CTypes.CTResDescs = { ...chunk, entries:entries, usagemap:usagemap };
     return [ reschunk, errors ];
 }
 

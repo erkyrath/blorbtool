@@ -308,11 +308,7 @@ export namespace DispChunks {
         let alttext: string|undefined;
         let rdeschunk = blorb_first_chunk_for_type(blorb, 'RDes') as CTypes.CTResDescs;
         if (rdeschunk && resentry) {
-            //### Reso map lookup
-            for (let ent of rdeschunk.entries) {
-                if (ent.usage == 'Pict' && ent.resnum == resentry.resnum)
-                    alttext = ent.text;
-            }
+            alttext = rdeschunk.usagemap.get('Pict:'+resentry.resnum);
         }
 
         let frontis = false;
