@@ -1,5 +1,5 @@
 import React from 'react';
-import { useState, useContext } from 'react';
+import { useState, useContext, useRef } from 'react';
 
 import { Chunk, CTypes } from './chunk';
 import { Blorb, blorb_chunk_for_usage, blorb_first_chunk_for_type } from './blorb';
@@ -279,8 +279,12 @@ export namespace DispChunks {
 
     export function DCImage({ chunk, resentry }: { chunk:CTypes.CTImage, resentry:CTypes.CTResIndexEntry|undefined })
     {
+        const [editingKey, setEditingKey] = useState(-1);
+        const inputRef = useRef(null);
+        
         let rctx = useContext(ReactCtx);
         let blorb = rctx.blorb;
+        let editing = (editingKey == chunk.refkey);
 
         let label = '???';
         let mimetype = '???';
@@ -338,8 +342,17 @@ export namespace DispChunks {
         }
     
         function evhan_edit_alttext() {
+            setEditingKey(editing ? -1 : chunk.refkey);
         }
-    
+
+        function evhan_change_alttext(ev: ChangeEv) {
+            console.log('### change', inputRef);
+        }
+
+        function evhan_input_alttext(ev: any) {
+            console.log('### input', inputRef);
+        }
+
         let dataurl = URL.createObjectURL(
             new Blob([ chunk.data ], { type: mimetype })
         );
@@ -362,7 +375,15 @@ export namespace DispChunks {
                            <li>
                                <span className="InfoLabel">Alt text:</span>{' '}
                                <EditButton func={ evhan_edit_alttext } />{' '}
-                               <span className="AltText">{ alttext }</span>
+                               { (!editing ?
+                                  <span className="AltText">{ alttext }</span>
+                                  : null
+                                 ) }
+                           </li>
+                           <li>
+                           { (editing ?
+                              <input type="text" className="TextLine" defaultValue={ alttext } placeholder="Alt text for this image" ref={ inputRef } onChange={ evhan_change_alttext } onInput={ evhan_input_alttext } />
+                              : null) }
                            </li>
                        </>
                        : null) }
@@ -468,3 +489,4 @@ export namespace DispChunks {
 
 }
 
+type ChangeEv = React.ChangeEvent<HTMLInputElement>;

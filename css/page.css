@@ -281,6 +281,15 @@ label.FileInput:active {
     color: white;
 }
 
+input.TextLine {
+    font-family: "Merriweather";
+    font-size: 85%;
+    width: 90%;
+    border: 1px solid grey;
+    border-radius: 6px;
+    padding: 2px 4px;
+}
+
 p {
     line-height: 1.45em;
 }
