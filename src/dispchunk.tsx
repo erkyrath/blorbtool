@@ -141,7 +141,7 @@ export namespace DispChunks {
     {
         const [showraw, setShowRaw] = useState(false);
     
-        function evhan_click(ev: React.MouseEvent<HTMLElement, MouseEvent>) {
+        function evhan_click(ev: MouseEv) {
             ev.preventDefault();
             ev.stopPropagation();
             setShowRaw(!showraw);
@@ -280,7 +280,7 @@ export namespace DispChunks {
     export function DCImage({ chunk, resentry }: { chunk:CTypes.CTImage, resentry:CTypes.CTResIndexEntry|undefined })
     {
         const [editingKey, setEditingKey] = useState(-1);
-        const inputRef = useRef(null);
+        const inputRef = useRef<HTMLInputElement>(null);
         
         let rctx = useContext(ReactCtx);
         let blorb = rctx.blorb;
@@ -345,12 +345,15 @@ export namespace DispChunks {
             setEditingKey(editing ? -1 : chunk.refkey);
         }
 
-        function evhan_change_alttext(ev: ChangeEv) {
-            console.log('### change', inputRef);
+        function evhan_click_frontis_cancel(ev: MouseButtonEv) {
+            setEditingKey(-1);
         }
 
-        function evhan_input_alttext(ev: any) {
-            console.log('### input', inputRef);
+        function evhan_click_frontis_save(ev: MouseButtonEv) {
+            if (inputRef.current) {
+                console.log('###', inputRef.current.value);
+            }
+            setEditingKey(-1);
         }
 
         let dataurl = URL.createObjectURL(
@@ -380,11 +383,21 @@ export namespace DispChunks {
                                   : null
                                  ) }
                            </li>
-                           <li>
                            { (editing ?
-                              <input type="text" className="TextLine" defaultValue={ alttext } placeholder="Alt text for this image" ref={ inputRef } onChange={ evhan_change_alttext } onInput={ evhan_input_alttext } />
+                              <>
+                                  <li className="AlignRight">
+                                      <input type="text" className="TextLine" defaultValue={ alttext } placeholder="Alt text for this image" ref={ inputRef } />
+                                  </li>
+                                  <li className="ControlRow AlignRight">
+                                      <div className="Control">
+                                          <button onClick={ evhan_click_frontis_cancel }>Cancel</button>
+                                      </div>
+                                      <div className="Control">
+                                          <button onClick={ evhan_click_frontis_save }>Save</button>
+                                      </div>
+                                  </li>
+                              </>
                               : null) }
-                           </li>
                        </>
                        : null) }
                 </ul>
@@ -489,4 +502,6 @@ export namespace DispChunks {
 
 }
 
+type MouseEv = React.MouseEvent<HTMLElement, MouseEvent>;
+type MouseButtonEv = React.MouseEvent<HTMLButtonElement, MouseEvent>;
 type ChangeEv = React.ChangeEvent<HTMLInputElement>;
