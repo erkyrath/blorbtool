@@ -94,6 +94,7 @@ function blorb_set_resdesc(blorb: Blorb, usage: CTypes.ChunkUsage, resnum: numbe
     let pos = rdes.entries.findIndex((ent) => (ent.usage == usage && ent.resnum == resnum));
     if (pos < 0) {
         newentries = [ ...rdes.entries, { usage, resnum, text } ];
+        //### sort newentries by (usage, resnum)?
     }
     else {
         newentries = [ ...rdes.entries ];
