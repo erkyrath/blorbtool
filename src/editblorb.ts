@@ -1,5 +1,5 @@
 import { Chunk, CTypes } from './chunk';
-import { new_chunk_Fspc_with } from './chunk';
+import { new_chunk_Fspc_with, new_chunk_RDes_empty } from './chunk';
 import { Blorb } from './blorb';
 import { blorb_clear_errors, blorb_delete_chunk_by_key, blorb_addreplace_chunk, blorb_first_chunk_for_type, blorb_resentry_for_chunk } from './blorb';
 import { check_blorb_consistency } from './checkblorb';
@@ -28,6 +28,8 @@ export function blorb_apply_change(blorb: Blorb, act: BlorbEditCmd) : Blorb
         return blorb_delete_chunk(blorb, act.refkey);
     case 'setfrontis':
         return blorb_set_frontis(blorb, act.refkey);
+    case 'setresdesc':
+        return blorb_set_resdesc(blorb, act.usage, act.resnum, act.text);
     default:
         console.log('### unimplemented command', act);
         return blorb;
@@ -64,6 +66,28 @@ function blorb_set_frontis(blorb: Blorb, key: number) : Blorb
 
     let newfchunk = new_chunk_Fspc_with(resentry.resnum);
     let newblorb = blorb_addreplace_chunk(blorb, newfchunk);
+
+    newblorb = check_blorb_consistency(newblorb);
+    
+    return newblorb;
+}
+
+function blorb_set_resdesc(blorb: Blorb, usage: string, resnum: number, text: string) : Blorb
+{
+    let rdes: CTypes.CTResDescs;
+    let errors: string[];
+    
+    let oldrdes = blorb_first_chunk_for_type(blorb, 'RDes');
+    
+    if (oldrdes) {
+        rdes = oldrdes as CTypes.CTResDescs;
+        errors = [];
+    }
+    else {
+        [ rdes, errors ] = new_chunk_RDes_empty() as [ CTypes.CTResDescs, string[] ];
+    }
+    
+    let newblorb = blorb;
 
     newblorb = check_blorb_consistency(newblorb);
     

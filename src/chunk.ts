@@ -262,11 +262,16 @@ function new_chunk_RDes(chunk: Chunk) : ChunkWithErrors
     }
     
     if (chunk.data.length != pos) {
-        errors.push(`Fspc: bad chunk size (${chunk.data.length} rather than ${pos})`);
+        errors.push(`RDes: bad chunk size (${chunk.data.length} rather than ${pos})`);
     }
     
     let reschunk : CTypes.CTResDescs = { ...chunk, entries:entries };
     return [ reschunk, errors ];
+}
+
+export function new_chunk_RDes_empty() : ChunkWithErrors
+{
+    return new_chunk('RDes', new Uint8Array(4));
 }
 
 function new_chunk_IFmd(chunk: Chunk) : ChunkWithErrors
