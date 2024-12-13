@@ -9,7 +9,7 @@ export type BlorbEditCmd = (
     | { type:'loadnew', blorb:Blorb }
     | { type:'delchunk', refkey:number }
     | { type:'setfrontis', refkey:number }
-    | { type:'setresdesc', usage:string, resnum:number, text:string }
+    | { type:'setresdesc', usage:CTypes.ChunkUsage, resnum:number, text:string }
 );
 
 export function blorb_apply_change(blorb: Blorb, act: BlorbEditCmd) : Blorb
@@ -72,7 +72,7 @@ function blorb_set_frontis(blorb: Blorb, key: number) : Blorb
     return newblorb;
 }
 
-function blorb_set_resdesc(blorb: Blorb, usage: string, resnum: number, text: string) : Blorb
+function blorb_set_resdesc(blorb: Blorb, usage: CTypes.ChunkUsage, resnum: number, text: string) : Blorb
 {
     let rdes: CTypes.CTResDescs;
     let errors: string[];
@@ -86,6 +86,20 @@ function blorb_set_resdesc(blorb: Blorb, usage: string, resnum: number, text: st
     else {
         [ rdes, errors ] = new_chunk_RDes_empty() as [ CTypes.CTResDescs, string[] ];
     }
+
+    let newentries: CTypes.CTResDescEntry[];
+
+    //### empty case!
+    
+    let pos = rdes.entries.findIndex((ent) => (ent.usage == usage && ent.resnum == resnum));
+    if (pos < 0) {
+        newentries = [ ...rdes.entries, { usage, resnum, text } ];
+    }
+    else {
+        newentries = [ ...rdes.entries ];
+        newentries[pos] = { usage, resnum, text };
+    }
+
     
     let newblorb = blorb;
 

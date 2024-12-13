@@ -43,7 +43,7 @@ export interface Chunk {
 
 export namespace CTypes {
     
-    type ChunkUsage = 'Pict' | 'Snd ' | 'Data' | 'Exec';
+    export type ChunkUsage = 'Pict' | 'Snd ' | 'Data' | 'Exec';
     export type CTResIndexEntry = {
         usage: ChunkUsage;
         resnum: number;
