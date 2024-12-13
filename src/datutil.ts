@@ -32,6 +32,12 @@ export function utf8ToString(arr: Uint8Array)
     return td.decode(arr);
 }
 
+export function stringToUtf8(str: string) : Uint8Array
+{
+    let te = new TextEncoder();
+    return te.encode(str);
+}
+
 export function u8read4(arr: Uint8Array, pos: number) : number
 {
     return arr[pos] * 0x1000000 + arr[pos+1] * 0x10000 + arr[pos+2] * 0x100 + arr[pos+3];

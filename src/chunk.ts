@@ -1,5 +1,5 @@
-import { u8ToString, u16ToString, utf8ToString, stringToU8, u8write4 } from './datutil';
-import { u8read4 } from './datutil';
+import { u8ToString, u16ToString, utf8ToString, stringToUtf8, stringToU8 } from './datutil';
+import { u8read4, u8write4 } from './datutil';
 import { ImageSize, ImageRatio, find_dimensions_png, find_dimensions_jpeg } from './imgutil';
 import { Blorb, blorb_resentry_for_chunk } from './blorb';
 
@@ -270,6 +270,43 @@ function new_chunk_RDes(chunk: Chunk) : ChunkWithErrors
     
     let reschunk : CTypes.CTResDescs = { ...chunk, entries:entries, usagemap:usagemap };
     return [ reschunk, errors ];
+}
+
+export function new_chunk_RDes_with(entries: CTypes.CTResDescEntry[]) : Chunk
+{
+    let datals: Uint8Array[] = [];
+
+    let usagemap: Map<string, string> = new Map();
+    let len = 4;
+    for (let ent of entries) {
+        let val = stringToUtf8(ent.text);
+        datals.push(val);
+        len += 12 + val.length;
+        usagemap.set(ent.usage+':'+ent.resnum, ent.text);
+    }
+
+    let data = new Uint8Array(len);
+
+    u8write4(data, 0, entries.length);
+    let counter = 0;
+    let pos = 4;
+    for (let ent of entries) {
+        let val = datals[counter++];
+        data.set(stringToU8(ent.usage), pos);
+        u8write4(data, pos+4, ent.resnum);
+        u8write4(data, pos+8, val.length);
+        pos += 12;
+        data.set(val, pos);
+        pos += val.length;
+    }
+
+    if (pos != len) {
+        console.log('BUG: new_chunk_RDes_with got inconsistent length');
+    }
+    
+    let chunk = new_chunk_noinit('RDes', data);
+    let reschunk : CTypes.CTResDescs = { ...chunk, entries:entries, usagemap:usagemap };
+    return reschunk;
 }
 
 export function new_chunk_RDes_empty() : ChunkWithErrors

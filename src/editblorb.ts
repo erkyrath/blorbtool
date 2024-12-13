@@ -1,5 +1,5 @@
 import { Chunk, CTypes } from './chunk';
-import { new_chunk_Fspc_with, new_chunk_RDes_empty } from './chunk';
+import { new_chunk_Fspc_with, new_chunk_RDes_empty, new_chunk_RDes_with } from './chunk';
 import { Blorb } from './blorb';
 import { blorb_clear_errors, blorb_delete_chunk_by_key, blorb_addreplace_chunk, blorb_first_chunk_for_type, blorb_resentry_for_chunk } from './blorb';
 import { check_blorb_consistency } from './checkblorb';
@@ -100,8 +100,8 @@ function blorb_set_resdesc(blorb: Blorb, usage: CTypes.ChunkUsage, resnum: numbe
         newentries[pos] = { usage, resnum, text };
     }
 
-    
-    let newblorb = blorb;
+    let newrdes = new_chunk_RDes_with(newentries);
+    let newblorb = blorb_addreplace_chunk(blorb, newrdes);
 
     newblorb = check_blorb_consistency(newblorb);
     
