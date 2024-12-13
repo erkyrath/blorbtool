@@ -175,6 +175,11 @@ body {
     margin-left: 8px;
 }
 
+.InlineControls .Control {
+    font-family: "Helvetica", "Arial", sans-serif;
+    font-size: 85%;
+}
+
 .BlorbControls .Control {
     display: inline-block;
     margin-left: 8px;
@@ -203,6 +208,11 @@ body {
 }
 
 .ModalBox .ControlRow {
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+.InlineControls.ControlRow {
     margin-top: 10px;
     margin-bottom: 10px;
 }

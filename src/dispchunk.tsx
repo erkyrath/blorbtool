@@ -381,10 +381,10 @@ export namespace DispChunks {
                            </li>
                            { (editing ?
                               <>
-                                  <li className="AlignRight">
+                                  <li className="ControlRow AlignRight">
                                       <input type="text" className="TextLine" defaultValue={ alttext } placeholder="Alt text for this image" ref={ inputRef } />
                                   </li>
-                                  <li className="ControlRow AlignRight">
+                                  <li className="ControlRow InlineControls AlignRight">
                                       <div className="Control">
                                           <button onClick={ evhan_click_frontis_cancel }>Cancel</button>
                                       </div>
