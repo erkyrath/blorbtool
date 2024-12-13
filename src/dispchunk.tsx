@@ -280,7 +280,7 @@ export namespace DispChunks {
     export function DCImage({ chunk, resentry }: { chunk:CTypes.CTImage, resentry:CTypes.CTResIndexEntry|undefined })
     {
         const [editingKey, setEditingKey] = useState(-1);
-        const inputRef = useRef<HTMLInputElement>(null);
+        const inputRef = useRefInput();
         
         let rctx = useContext(ReactCtx);
         let blorb = rctx.blorb;
@@ -505,3 +505,5 @@ export namespace DispChunks {
 type MouseEv = React.MouseEvent<HTMLElement, MouseEvent>;
 type MouseButtonEv = React.MouseEvent<HTMLButtonElement, MouseEvent>;
 type ChangeEv = React.ChangeEvent<HTMLInputElement>;
+
+const useRefInput = () => useRef<HTMLInputElement>(null);
