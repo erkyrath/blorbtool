@@ -89,21 +89,42 @@ function blorb_set_resdesc(blorb: Blorb, usage: CTypes.ChunkUsage, resnum: numbe
 
     let newentries: CTypes.CTResDescEntry[];
 
-    //### empty case!
-    
     let pos = rdes.entries.findIndex((ent) => (ent.usage == usage && ent.resnum == resnum));
-    if (pos < 0) {
-        newentries = [ ...rdes.entries, { usage, resnum, text } ];
-        //### sort newentries by (usage, resnum)?
+    
+    if (!text.length) {
+        if (pos < 0) {
+            // Nothing to delete
+            return blorb;
+        }
+        newentries = [ ...rdes.entries ];
+        newentries.splice(pos, 1);
     }
     else {
-        newentries = [ ...rdes.entries ];
-        newentries[pos] = { usage, resnum, text };
+        if (pos < 0) {
+            newentries = [ ...rdes.entries, { usage, resnum, text } ];
+            //### sort newentries by (usage, resnum)?
+        }
+        else {
+            newentries = [ ...rdes.entries ];
+            newentries[pos] = { usage, resnum, text };
+        }
     }
 
-    let newrdes = new_chunk_RDes_with(newentries);
-    let newblorb = blorb_addreplace_chunk(blorb, newrdes);
-
+    let newblorb: Blorb;
+    
+    if (!newentries.length) {
+        if (oldrdes) {
+            newblorb = blorb_delete_chunk_by_key(blorb, oldrdes.refkey);
+        }
+        else {
+            newblorb = blorb;
+        }
+    }
+    else {
+        let newrdes = new_chunk_RDes_with(newentries);
+        newblorb = blorb_addreplace_chunk(blorb, newrdes);
+    }
+    
     newblorb = check_blorb_consistency(newblorb);
     
     return newblorb;
