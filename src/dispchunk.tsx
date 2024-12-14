@@ -472,7 +472,10 @@ export namespace DispChunks {
                         <>
                             {' '}&nbsp; <ArrowToChunk destkey={ chunk.refkey } />
                         </>
-                        : null) }
+                        :
+                        <>
+                            {' '}&nbsp; <span className="ErrorText">resource not found</span>
+                        </>) }
                     {' \xA0 '}
                 </td>
                 <td>
