@@ -107,10 +107,12 @@ export namespace DispChunks {
                     <>
                         {' '}&nbsp; <ArrowToChunk destkey={ chunk.refkey } />
                     </>
-                    : null) }
+                    :
+                    <>
+                        {' '}&nbsp; <span className="ErrorText">resource not found</span>
+                    </>) }
                 <div className="SubText">
-                    <EditButton func={ evhan_edit_text } />
-                    {' '}{ ent.text }
+                    { ent.text }
                 </div>
             </li>
         );

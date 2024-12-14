@@ -420,6 +420,11 @@ a.EditButton:hover {
     margin-bottom: 8px;
 }
 
+.ErrorText {
+    color: #900;
+    font-size: 85%;
+}
+
 .ImageBox {
     text-align: center;
 }
