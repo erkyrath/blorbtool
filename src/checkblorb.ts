@@ -70,7 +70,15 @@ export function check_blorb_consistency(blorb: Blorb) : Blorb
 
 function check_chunk_RDes(blorb: Blorb, chunk: CTypes.CTResDescs, errors: string[])
 {
+    let found = new Set();
+    
     for (let ent of chunk.entries) {
+        let key = ent.usage+':'+ent.resnum;
+        if (found.has(key)) {
+            errors.push(`Resource description chunk refers to ${ent.usage} #${ent.resnum} more than once.`);
+        }
+        found.add(key);
+        
         let reschunk = blorb_chunk_for_usage(blorb, ent.usage, ent.resnum);
         if (!reschunk) {
             errors.push(`Resource description chunk refers to ${ent.usage} #${ent.resnum}, but there is no such resource.`);
@@ -126,7 +134,15 @@ function check_chunk_Fspc(blorb: Blorb, chunk: CTypes.CTFrontispiece, errors: st
 
 function check_chunk_Reso(blorb: Blorb, chunk: CTypes.CTResolution, errors: string[])
 {
+    let found = new Set();
+    
     for (let ent of chunk.entries) {
+        let key = 'Pict:'+ent.resnum;
+        if (found.has(key)) {
+            errors.push(`Resolution chunk refers to Pict #${ent.resnum} more than once.`);
+        }
+        found.add(key);
+        
         let imgchunk = blorb_chunk_for_usage(blorb, 'Pict', ent.resnum);
         if (!imgchunk) {
             errors.push(`Resolution chunk refers to Pict #${ent.resnum}, but there is no such resource.`);
