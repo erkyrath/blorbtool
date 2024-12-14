@@ -134,7 +134,10 @@ export namespace DispChunks {
                     <>
                         {' '}&nbsp; <ArrowToChunk destkey={ imgchunk.refkey } />
                     </>
-                    : null) }
+                    :
+                    <>
+                        {' '}&nbsp; <span className="ErrorText">resource not found</span>
+                    </>) }
             </div>
         );
     }
