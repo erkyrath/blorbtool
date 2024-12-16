@@ -237,7 +237,7 @@ export function blorb_addreplace_chunk(blorb: Blorb, chunk: Chunk) : Blorb
 {
     /* Only for singleton chunk types! Which are, by definition, not
        resources.
-       Also, more subtly, nobody (but the index) caches the refkey.
+       (We keep the refkey when replacing a chunk, mind you.)
     */
     let pos = blorb.chunks.findIndex((chu) => (chu.type.stype == chunk.type.stype));
 
@@ -248,8 +248,9 @@ export function blorb_addreplace_chunk(blorb: Blorb, chunk: Chunk) : Blorb
     }
     else {
         let oldchunk = blorb.chunks[pos];
+        let keyedchunk = { ...chunk, refkey:oldchunk.refkey };
         let newchunks = [ ...blorb.chunks ];
-        newchunks[pos] = chunk;
+        newchunks[pos] = keyedchunk;
         newblorb = { ...blorb, chunks:newchunks };
     }
 
