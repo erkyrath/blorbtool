@@ -91,12 +91,12 @@ export namespace DispChunks {
     
     function DCResDescEntry({ ent }: { ent:CTypes.CTResDescEntry })
     {
-        let blorb = useContext(BlorbCtx);
+        let rctx = useContext(ReactCtx);
+        let blorb = rctx.blorb;
         let chunk = blorb_chunk_for_usage(blorb, ent.usage, ent.resnum);
     
-        //### or error if not found
-
-        function evhan_edit_text() {
+        function evhan_del_entry() {
+            rctx.editBlorb({ type:'setresdesc', usage:ent.usage, resnum:ent.resnum, text:'' });
         }
     
         return (
@@ -110,6 +110,7 @@ export namespace DispChunks {
                     :
                     <>
                         {' '}&nbsp; <span className="ErrorText">resource not found</span>
+                        {' '}<DeleteButton func={ evhan_del_entry } />
                     </>) }
                 <div className="SubText">
                     { ent.text }
@@ -122,8 +123,6 @@ export namespace DispChunks {
     {
         let blorb = useContext(BlorbCtx);
         let imgchunk = blorb_chunk_for_usage(blorb, 'Pict', chunk.picnum);
-    
-        //### or error if not found
     
         return (
             <div>
