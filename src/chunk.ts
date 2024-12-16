@@ -100,6 +100,12 @@ export namespace CTypes {
         release: number;
     }
 
+    export type CTResolutionWindow = {
+        winsize: ImageSize;
+        minwinsize: ImageSize;
+        maxwinsize: ImageSize;
+    }
+    
     export type CTResolutionEntry = {
         resnum: number;
         stdratio: ImageRatio;
@@ -108,9 +114,7 @@ export namespace CTypes {
     }
 
     export interface CTResolution extends Chunk {
-        winsize: ImageSize;
-        minwinsize: ImageSize;
-        maxwinsize: ImageSize;
+        window: CTResolutionWindow;
         entries: ReadonlyArray<CTResolutionEntry>;
     }
     
@@ -401,6 +405,12 @@ function new_chunk_Reso(chunk: Chunk) : ChunkWithErrors
     let minwinsize = { width:u8read4(chunk.data, 8), height:u8read4(chunk.data, 12) };
     let maxwinsize = { width:u8read4(chunk.data, 16), height:u8read4(chunk.data, 20) };
 
+    let window: CTypes.CTResolutionWindow = {
+        winsize: winsize,
+        minwinsize: minwinsize,
+        maxwinsize: maxwinsize,
+    };
+    
     let entries: CTypes.CTResolutionEntry[] = [];
 
     let pos = 24;
@@ -415,9 +425,39 @@ function new_chunk_Reso(chunk: Chunk) : ChunkWithErrors
         pos += 28;
     }
     
-    let reschunk: CTypes.CTResolution = { ...chunk, winsize:winsize, minwinsize:minwinsize, maxwinsize:maxwinsize, entries:entries };
+    let reschunk: CTypes.CTResolution = { ...chunk, window:window, entries:entries };
     return [ reschunk, [] ];
 }
+
+export function new_chunk_Reso_with(window: CTypes.CTResolutionWindow, entries: CTypes.CTResolutionEntry[]) : Chunk
+{
+    let len = 24 + 28*entries.length;
+    let data = new Uint8Array(len);
+
+    u8write4(data, 0, window.winsize.width);
+    u8write4(data, 4, window.winsize.height);
+    u8write4(data, 8, window.minwinsize.width);
+    u8write4(data, 12, window.minwinsize.height);
+    u8write4(data, 16, window.maxwinsize.width);
+    u8write4(data, 20, window.maxwinsize.height);
+
+    let pos = 24;
+    for (let ent of entries) {
+        u8write4(data, pos, ent.resnum);
+        u8write4(data, pos+4, ent.stdratio.numerator);
+        u8write4(data, pos+8, ent.stdratio.denominator);
+        u8write4(data, pos+12, ent.minratio.numerator);
+        u8write4(data, pos+16, ent.minratio.denominator);
+        u8write4(data, pos+20, ent.maxratio.numerator);
+        u8write4(data, pos+24, ent.maxratio.denominator);
+        pos += 28;
+    }
+
+    let chunk = new_chunk_noinit('Reso', data);
+    let reschunk : CTypes.CTResolution = { ...chunk, window:window, entries:entries };
+    return reschunk;
+}
+
 
 export function chunk_readable_desc(chunk: Chunk) : string
 {

@@ -408,6 +408,19 @@ a.EditButton:hover {
     background: #F2BBF2;
 }
 
+a.DeleteButton {
+    text-decoration: none;
+    font-size: 90%;
+    padding: 0px 4px;
+    border: 1px solid #888;
+    border-radius: 20px;
+    background: #FCE4F8;
+}
+
+a.DeleteButton:hover {
+    background: #F2BBF2;
+}
+
 .BigArrow {
     text-align: center;
     font-size: 8em;

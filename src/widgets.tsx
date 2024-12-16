@@ -79,6 +79,7 @@ export function ArrowDownload({ data, filename, mimetype }: { data:Uint8Array, f
         </>
     );
 }
+
 export function EditButton({ func }: { func:()=>void })
 {
     function evhan_click(ev: React.MouseEvent<HTMLElement, MouseEvent>) {
@@ -90,6 +91,21 @@ export function EditButton({ func }: { func:()=>void })
     return (
         <>
             <a className="EditButton" href="#" onClick={ evhan_click }>&#x270D;</a>
+        </>
+    );
+}
+
+export function DeleteButton({ func }: { func:()=>void })
+{
+    function evhan_click(ev: React.MouseEvent<HTMLElement, MouseEvent>) {
+        ev.preventDefault();
+        ev.stopPropagation();
+        func();
+    }
+
+    return (
+        <>
+            <a className="DeleteButton" href="#" onClick={ evhan_click }>&#x2715;</a>
         </>
     );
 }

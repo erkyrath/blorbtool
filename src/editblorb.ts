@@ -1,5 +1,5 @@
 import { Chunk, CTypes } from './chunk';
-import { new_chunk_Fspc_with, new_chunk_RDes_empty, new_chunk_RDes_with } from './chunk';
+import { new_chunk_Fspc_with, new_chunk_RDes_empty, new_chunk_RDes_with, new_chunk_Reso_with } from './chunk';
 import { Blorb } from './blorb';
 import { blorb_clear_errors, blorb_delete_chunk_by_key, blorb_addreplace_chunk, blorb_first_chunk_for_type, blorb_resentry_for_chunk } from './blorb';
 import { check_blorb_consistency } from './checkblorb';
@@ -10,6 +10,7 @@ export type BlorbEditCmd = (
     | { type:'delchunk', refkey:number }
     | { type:'setfrontis', refkey:number }
     | { type:'setresdesc', usage:CTypes.ChunkUsage, resnum:number, text:string }
+    | { type:'delresoentry', resnum:number }
 );
 
 export function blorb_apply_change(blorb: Blorb, act: BlorbEditCmd) : Blorb
@@ -30,6 +31,8 @@ export function blorb_apply_change(blorb: Blorb, act: BlorbEditCmd) : Blorb
         return blorb_set_frontis(blorb, act.refkey);
     case 'setresdesc':
         return blorb_set_resdesc(blorb, act.usage, act.resnum, act.text);
+    case 'delresoentry':
+        return blorb_delete_resolution_entry(blorb, act.resnum);
     default:
         console.log('### unimplemented command', act);
         return blorb;
@@ -123,6 +126,33 @@ function blorb_set_resdesc(blorb: Blorb, usage: CTypes.ChunkUsage, resnum: numbe
     else {
         let newrdes = new_chunk_RDes_with(newentries);
         newblorb = blorb_addreplace_chunk(blorb, newrdes);
+    }
+    
+    newblorb = check_blorb_consistency(newblorb);
+    
+    return newblorb;
+}
+
+function blorb_delete_resolution_entry(blorb: Blorb, resnum: number) : Blorb
+{
+    let reso: CTypes.CTResolution;
+    let errors: string[];
+    
+    let oldreso = blorb_first_chunk_for_type(blorb, 'Reso');
+    if (!oldreso)
+        return blorb;
+
+    reso = oldreso as CTypes.CTResolution;
+    let newentries = reso.entries.filter((ent) => (ent.resnum != resnum));
+
+    let newblorb: Blorb;
+    
+    if (!newentries) {
+        newblorb = blorb_delete_chunk_by_key(blorb, reso.refkey);
+    }
+    else {
+        let newreso = new_chunk_Reso_with(reso.window, newentries);
+        newblorb = blorb_addreplace_chunk(blorb, newreso);
     }
     
     newblorb = check_blorb_consistency(newblorb);

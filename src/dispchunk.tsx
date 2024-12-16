@@ -6,7 +6,7 @@ import { Blorb, blorb_chunk_for_usage, blorb_first_chunk_for_type } from './blor
 import { byte_to_hex } from './readable';
 import { ReactCtx, BlorbCtx } from './contexts';
 
-import { ArrowToChunk, EditButton } from './widgets';
+import { ArrowToChunk, EditButton, DeleteButton } from './widgets';
 
 export namespace DispChunks {
 
@@ -429,24 +429,26 @@ export namespace DispChunks {
         let entls = chunk.entries.map(ent =>
             <DCResolutionEntry ent={ ent } key={ counter++ } />
         );
+
+        let win = chunk.window;
     
         return (
             <div>
                 <ul className="InfoList">
                     <li>
                         <span className="InfoLabel">Window size:</span>{' '}
-                        { chunk.winsize.width }&#xD7;
-                        { chunk.winsize.height }
+                        { win.winsize.width }&#xD7;
+                        { win.winsize.height }
                     </li>
                     <li>
                         <span className="InfoLabel">Min window size:</span>{' '}
-                        { chunk.minwinsize.width }&#xD7;
-                        { chunk.minwinsize.height }
+                        { win.minwinsize.width }&#xD7;
+                        { win.minwinsize.height }
                     </li>
                     <li>
                         <span className="InfoLabel">Max window size:</span>{' '}
-                        { chunk.maxwinsize.width }&#xD7;
-                        { chunk.maxwinsize.height }
+                        { win.maxwinsize.width }&#xD7;
+                        { win.maxwinsize.height }
                     </li>
                 </ul>
                 <table className="InfoTable">
@@ -460,9 +462,13 @@ export namespace DispChunks {
 
     function DCResolutionEntry({ ent }: { ent:CTypes.CTResolutionEntry })
     {
+        let rctx = useContext(ReactCtx);
         let blorb = useContext(BlorbCtx);
         let chunk = blorb_chunk_for_usage(blorb, 'Pict', ent.resnum);
-    
+
+        function evhan_del_entry() {
+            rctx.editBlorb({ type:'delresoentry', resnum:ent.resnum });
+        }
     
         return (
             <tr>
@@ -483,8 +489,13 @@ export namespace DispChunks {
                 </td>
                 <td>
                     stdratio { ent.stdratio.numerator }/{ ent.stdratio.numerator },
-                    minratio { ent.minratio.numerator }/{ ent.minratio.numerator },
-                    maxratio { ent.maxratio.numerator }/{ ent.maxratio.numerator }
+                    min { ent.minratio.numerator }/{ ent.minratio.numerator },
+                    max { ent.maxratio.numerator }/{ ent.maxratio.numerator }
+                </td>
+                <td>
+                    { ( !chunk ?
+                        <DeleteButton func={ evhan_del_entry } />
+                        : null) }
                 </td>
             </tr>
         );
