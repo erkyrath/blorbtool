@@ -135,12 +135,7 @@ export function DisplayChunk({ blorb, chunk, showhex }: { blorb:Blorb, chunk:Chu
                 </li>
                 <li><span className="InfoLabel">Usage:</span>{' '}
                     <EditButton func={ evhan_edit_usage } />{' '}
-                    { (resentry ?
-                       <>
-                           <code className="IType">{ resentry.usage }</code>
-                           {' #'}{ resentry.resnum }
-                       </>
-                       : <>&#x2013;</>) }
+                    <ResEntryLine resentry={ resentry } />
                 </li>
                 <li>
                     <span className="InfoLabel">Size:</span>{' '}
@@ -155,6 +150,20 @@ export function DisplayChunk({ blorb, chunk, showhex }: { blorb:Blorb, chunk:Chu
     );
 }
 
+function ResEntryLine({ resentry }: { resentry:CTypes.CTResIndexEntry|undefined })
+{
+    if (resentry) {
+        return (
+            <>
+                <code className="IType">{ resentry.usage }</code>
+                {' #'}{ resentry.resnum }
+            </>
+        );
+    }
+    else {
+        return <>&#x2013;</>;
+    }
+}
 
 type ChangeEv = React.ChangeEvent<HTMLInputElement>;
 type ErrorArray = ReadonlyArray<Error>;
