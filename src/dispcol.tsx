@@ -4,7 +4,7 @@ import { useState, useContext, useRef } from 'react';
 import { u8ToBase64URL } from './datutil';
 import { Chunk, CTypes, StringToUsage } from './chunk';
 import { chunk_readable_desc, chunk_filename_info } from './chunk';
-import { Blorb, blorb_resentry_for_chunk } from './blorb';
+import { Blorb, blorb_resentry_for_chunk, blorb_chunk_for_usage } from './blorb';
 import { Error } from './blorb';
 import { pretty_size, byte_to_hex } from './readable';
 
@@ -124,6 +124,13 @@ export function DisplayChunk({ blorb, chunk, showhex }: { blorb:Blorb, chunk:Chu
     }
 
     function evhan_edit_save(usage: CTypes.ChunkUsageNumber|undefined) {
+        if (usage) {
+            let chu = blorb_chunk_for_usage(blorb, usage.usage, usage.resnum);
+            if (chu && chu.refkey != chunk.refkey) {
+                setEditError(`A chunk already has usage ${usage.usage} #${usage.resnum}.`);
+                return;
+            }
+        }
         rctx.editBlorb({ type:'setchunkusage', refkey:chunk.refkey, usage:usage });
         setEditingKey(-1);
     }
