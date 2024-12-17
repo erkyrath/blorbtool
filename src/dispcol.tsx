@@ -135,7 +135,11 @@ export function DisplayChunk({ blorb, chunk, showhex }: { blorb:Blorb, chunk:Chu
                 </li>
                 <li><span className="InfoLabel">Usage:</span>{' '}
                     <EditButton func={ evhan_edit_usage } />{' '}
-                    <ResEntryLine resentry={ resentry } />
+                    { (editing ?
+                       <ResEntryEdit chunk={ chunk } resentry={ resentry } />
+                       :
+                       <ResEntryLine resentry={ resentry } />
+                      ) }
                 </li>
                 <li>
                     <span className="InfoLabel">Size:</span>{' '}
@@ -163,6 +167,27 @@ function ResEntryLine({ resentry }: { resentry:CTypes.CTResIndexEntry|undefined 
     else {
         return <>&#x2013;</>;
     }
+}
+
+function ResEntryEdit({ chunk, resentry }: { chunk:Chunk, resentry:CTypes.CTResIndexEntry|undefined })
+{
+    let resnum: number = resentry ? resentry.resnum : 0;
+    
+    return (
+        <>
+            <input id="restype-Pict" type="radio" name="restype" value="Pict" />
+            <label htmlFor="restype-Pict">Pict</label>
+            <input id="restype-Snd" type="radio" name="restype" value="Snd " />
+            <label htmlFor="restype-Snd">Snd</label>
+            <input id="restype-Data" type="radio" name="restype" value="Data" />
+            <label htmlFor="restype-Data">Data</label>
+            <input id="restype-Exec" type="radio" name="restype" value="Exec" />
+            <label htmlFor="restype-Exec">Exec</label>
+            <input id="restype-none" type="radio" name="restype" value="none" />
+            <label htmlFor="restype-none">&#x2014;</label>
+            <input id="resnumber" type="text" defaultValue={ resnum } placeholder="Number" />
+        </>
+    );
 }
 
 type ChangeEv = React.ChangeEvent<HTMLInputElement>;
