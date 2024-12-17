@@ -31,7 +31,7 @@ export function ModalFormOverlay()
         modalpane = <ModalChangeFrontis oldkey={ modalform.oldkey } refkey={ modalform.key } />;
         break;
     default:
-        modalpane = <div>###{ modalform.type }</div>;
+        modalpane = <div>BUG: unimplemented modal: { modalform.type }</div>;
         break;
     }
     

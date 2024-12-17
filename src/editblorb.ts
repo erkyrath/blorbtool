@@ -38,7 +38,7 @@ export function blorb_apply_change(blorb: Blorb, act: BlorbEditCmd) : Blorb
     case 'delresoentry':
         return blorb_delete_resolution_entry(blorb, act.resnum);
     default:
-        console.log('### unimplemented command', act);
+        console.log('BUG: Unimplemented command', act);
         return blorb;
     }
 }
