@@ -102,7 +102,6 @@ function blorb_set_chunk_usage(blorb: Blorb, refkey: number, usage: CTypes.Chunk
     let pos = oldridx.entries.findIndex((ent) => (ent.pos == chunk.pos));
     if (pos < 0) {
         if (!usage) {
-            console.log('### already unset');
             return blorb;
         }
         newents = [ ...oldridx.entries, { usage:usage.usage, resnum:usage.resnum, pos:chunk.pos } ];
@@ -113,14 +112,12 @@ function blorb_set_chunk_usage(blorb: Blorb, refkey: number, usage: CTypes.Chunk
             newents.splice(pos, 1);
         }
         else if (newents[pos].usage == usage.usage && newents[pos].resnum == usage.resnum) {
-            console.log('### already at', usage);
             return blorb;
         }
         else {
             newents[pos] = { usage:usage.usage, resnum:usage.resnum, pos:chunk.pos };
         }
     }
-    console.log('### newents', newents);
 
     let newblorb = blorb_update_index_entries(blorb, newents);
     
