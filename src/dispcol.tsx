@@ -1,8 +1,8 @@
 import React from 'react';
-import { useState, useContext } from 'react';
+import { useState, useContext, useRef } from 'react';
 
 import { u8ToBase64URL } from './datutil';
-import { Chunk, CTypes } from './chunk';
+import { Chunk, CTypes, StringToUsage } from './chunk';
 import { chunk_readable_desc, chunk_filename_info } from './chunk';
 import { Blorb, blorb_resentry_for_chunk } from './blorb';
 import { Error } from './blorb';
@@ -119,6 +119,11 @@ export function DisplayChunk({ blorb, chunk, showhex }: { blorb:Blorb, chunk:Chu
         else
             setEditingKey(-1);
     }
+
+    function evhan_edit_save(usage: CTypes.ChunkUsageNumber|undefined) {
+        console.log('###', usage);
+        setEditingKey(-1);
+    }
     
     return (
         <div className="DisplayChunk">
@@ -136,7 +141,7 @@ export function DisplayChunk({ blorb, chunk, showhex }: { blorb:Blorb, chunk:Chu
                 <li><span className="InfoLabel">Usage:</span>{' '}
                     <EditButton func={ evhan_edit_usage } />{' '}
                     { (editing ?
-                       <ResEntryEdit chunk={ chunk } resentry={ resentry } />
+                       <ResEntryEdit chunk={ chunk } resentry={ resentry } onsave={ evhan_edit_save } oncancel={ evhan_edit_usage } />
                        :
                        <ResEntryLine resentry={ resentry } />
                       ) }
@@ -169,8 +174,11 @@ function ResEntryLine({ resentry }: { resentry:CTypes.CTResIndexEntry|undefined 
     }
 }
 
-function ResEntryEdit({ chunk, resentry }: { chunk:Chunk, resentry:CTypes.CTResIndexEntry|undefined })
+function ResEntryEdit({ chunk, resentry, onsave, oncancel }: { chunk:Chunk, resentry:CTypes.CTResIndexEntry|undefined, onsave:(arg:CTypes.ChunkUsageNumber|undefined) => void, oncancel:() => void })
 {
+    const inputRef = useRefInput();
+    const selectRef = useRefSelect();
+    
     let resnum: number = resentry ? resentry.resnum : 0;
     let defaultusage: CTypes.ChunkUsage;
 
@@ -202,21 +210,31 @@ function ResEntryEdit({ chunk, resentry }: { chunk:Chunk, resentry:CTypes.CTResI
     }
 
     function evhan_edit_cancel(ev: MouseButtonEv) {
+        oncancel();
     }
     function evhan_edit_save(ev: MouseButtonEv) {
+        if (inputRef.current && selectRef.current) {
+            let resnum: number = parseInt(inputRef.current.value.trim());
+            let usage = StringToUsage(selectRef.current.value);
+            if (usage && !Number.isNaN(resnum) && resnum >= 0) {
+                onsave({ usage, resnum });
+                return;
+            }
+        }
+        onsave(undefined);
     }
 
     return (
         <>
-            <select name="usage" defaultValue={ defaultusage.trim() }>
+            <select name="usage" defaultValue={ defaultusage.trim() } ref={ selectRef }>
                 <option value="none">(none)</option>
                 <option value="Pict">Pict</option>
-                <option value="Snd">Snd</option>
+                <option value="Snd ">Snd </option>
                 <option value="Exec">Exec</option>
                 <option value="Data">Data</option>
             </select>
             {' '}
-            <input id="resnumber" className="ShortTextLine" type="number" min="0" defaultValue={ resnum } placeholder="Number" />
+            <input id="resnumber" className="ShortTextLine" type="number" min="0" defaultValue={ resnum } placeholder="Number" ref={ inputRef } />
             <div className="ControlRow InlineControls AlignRight">
                 <div className="Control">
                     <button onClick={ evhan_edit_cancel }>Cancel</button>
@@ -232,3 +250,6 @@ function ResEntryEdit({ chunk, resentry }: { chunk:Chunk, resentry:CTypes.CTResI
 type MouseButtonEv = React.MouseEvent<HTMLButtonElement, MouseEvent>;
 type ChangeEv = React.ChangeEvent<HTMLInputElement>;
 type ErrorArray = ReadonlyArray<Error>;
+
+const useRefInput = () => useRef<HTMLInputElement>(null);
+const useRefSelect = () => useRef<HTMLSelectElement>(null);

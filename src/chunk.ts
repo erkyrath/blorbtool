@@ -124,7 +124,7 @@ export namespace CTypes {
     
 }
 
-function StringToUsage(val: string) : CTypes.ChunkUsage|undefined
+export function StringToUsage(val: string) : CTypes.ChunkUsage|undefined
 {
     switch (val) {
     case 'Pict':
