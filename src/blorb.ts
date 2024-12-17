@@ -213,6 +213,27 @@ export function blorb_clear_errors(blorb: Blorb) : Blorb
     return { ...blorb, errors: [] };
 }
 
+export function blorb_update_index_entries(blorb: Blorb, entries: CTypes.CTResIndexEntry[]) : Blorb
+{
+    if (blorb.chunks.length == 0)
+        return blorb;
+
+    if (blorb.chunks[0].type.stype != 'RIdx') {
+        let errors: Error[] = [ ...blorb.errors ];
+        errors.push('First chunk is not a resource index');
+        return { ...blorb, errors:errors };
+    }
+    let ridx = blorb.chunks[0] as CTypes.CTResIndex;
+
+    let newridx: CTypes.CTResIndex = { ...ridx, entries:entries };
+    let newchunks = [ newridx, ...blorb.chunks.slice(1) ];
+    let newblorb: Blorb = { ...blorb, chunks:newchunks };
+
+    newblorb = blorb_recompute_positions(newblorb, blorb.usagemap);
+    
+    return newblorb;
+}
+
 export function blorb_delete_chunk_by_key(blorb: Blorb, key: number) : Blorb
 {
     let chunk = blorb.keymap.get(key);

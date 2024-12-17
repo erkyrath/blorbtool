@@ -100,6 +100,7 @@ export function DisplayErrors({ errors }: { errors:ErrorArray })
 export function DisplayChunk({ blorb, chunk, showhex }: { blorb:Blorb, chunk:Chunk, showhex:boolean })
 {
     const [editingKey, setEditingKey] = useState(-1);
+    let rctx = useContext(ReactCtx);
     
     let editing = (editingKey == chunk.refkey);
     let resentry = blorb_resentry_for_chunk(blorb, chunk);
@@ -121,7 +122,7 @@ export function DisplayChunk({ blorb, chunk, showhex }: { blorb:Blorb, chunk:Chu
     }
 
     function evhan_edit_save(usage: CTypes.ChunkUsageNumber|undefined) {
-        console.log('###', usage);
+        rctx.editBlorb({ type:'setchunkusage', refkey:chunk.refkey, usage:usage });
         setEditingKey(-1);
     }
     
