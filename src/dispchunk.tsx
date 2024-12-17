@@ -39,29 +39,29 @@ export function DisplayChunkFormatted({ blorb, chunk }: { blorb:Blorb, chunk:Chu
     case 'SNam':
         return <DispChunks.DCText chunk={ chunk as CTypes.CTText } />
     default:
-        return <DispChunks.DCRaw chunk={ chunk } />;
+        return <DisplayChunkRaw chunk={ chunk } />;
     }
 }
 
-export namespace DispChunks {
+export function DisplayChunkRaw({ chunk }: { chunk:Chunk })
+{
+    let subdata = chunk.data.slice(0, 512);
+    let ls = [ ...subdata ].map(byte_to_hex);
+    let hexdump = ls.join(' ');
+    
+    let extra = chunk.data.length - subdata.length;
+    
+    return (
+        <div>
+            <code className="HexData">{ hexdump }</code>
+            { ( extra ?
+                <span className="InfoLabel"> &nbsp; (...{ extra } more)</span>
+                : null) }
+        </div>
+    );
+}
 
-    export function DCRaw({ chunk }: { chunk:Chunk })
-    {
-        let subdata = chunk.data.slice(0, 512);
-        let ls = [ ...subdata ].map(byte_to_hex);
-        let hexdump = ls.join(' ');
-    
-        let extra = chunk.data.length - subdata.length;
-    
-        return (
-            <div>
-                <code className="HexData">{ hexdump }</code>
-                { ( extra ?
-                    <span className="InfoLabel"> &nbsp; (...{ extra } more)</span>
-                    : null) }
-            </div>
-        );
-    }
+export namespace DispChunks {
 
     export function DCResIndex({ chunk }: { chunk:CTypes.CTResIndex })
     {

@@ -10,7 +10,7 @@ import { pretty_size, byte_to_hex } from './readable';
 
 import { ReactCtx } from './contexts';
 import { ShortArrowToChunk, ArrowToChunk, ArrowDownload, EditButton } from './widgets';
-import { DispChunks, DisplayChunkFormatted } from './dispchunk';
+import { DisplayChunkRaw, DisplayChunkFormatted } from './dispchunk';
 
 export function DisplayColumn({ selected }: { selected:number })
 {
@@ -104,7 +104,7 @@ export function DisplayChunk({ blorb, chunk, showhex }: { blorb:Blorb, chunk:Chu
     let display;
 
     if (showhex) {
-        display = <DispChunks.DCRaw chunk={ chunk } />;
+        display = <DisplayChunkRaw chunk={ chunk } />;
     }
     else {
         display = <DisplayChunkFormatted blorb={ blorb} chunk={ chunk } />;
