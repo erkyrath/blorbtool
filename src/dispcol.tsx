@@ -172,7 +172,7 @@ function ResEntryLine({ resentry }: { resentry:CTypes.CTResIndexEntry|undefined 
 function ResEntryEdit({ chunk, resentry }: { chunk:Chunk, resentry:CTypes.CTResIndexEntry|undefined })
 {
     let resnum: number = resentry ? resentry.resnum : 0;
-    let defaultusage: CTypes.ChunkUsage | undefined;
+    let defaultusage: CTypes.ChunkUsage;
 
     if (resentry) {
         defaultusage = resentry.usage;
@@ -200,21 +200,35 @@ function ResEntryEdit({ chunk, resentry }: { chunk:Chunk, resentry:CTypes.CTResI
             break;
         }
     }
-    
+
+    function evhan_edit_cancel(ev: MouseButtonEv) {
+    }
+    function evhan_edit_save(ev: MouseButtonEv) {
+    }
+
     return (
         <>
-            <select name="usage">
-                <option value="none" selected={ !defaultusage }>(none)</option>
-                <option value="Pict" selected={ defaultusage=='Pict' }>Pict</option>
-                <option value="Snd" selected={ defaultusage=='Snd ' }>Snd</option>
-                <option value="Exec" selected={ defaultusage=='Exec' }>Exec</option>
-                <option value="Data" selected={ defaultusage=='Data' }>Data</option>
+            <select name="usage" defaultValue={ defaultusage.trim() }>
+                <option value="none">(none)</option>
+                <option value="Pict">Pict</option>
+                <option value="Snd">Snd</option>
+                <option value="Exec">Exec</option>
+                <option value="Data">Data</option>
             </select>
             {' '}
             <input id="resnumber" className="ShortTextLine" type="number" min="0" defaultValue={ resnum } placeholder="Number" />
+            <div className="ControlRow InlineControls AlignRight">
+                <div className="Control">
+                    <button onClick={ evhan_edit_cancel }>Cancel</button>
+                </div>
+                <div className="Control">
+                    <button onClick={ evhan_edit_save }>Save</button>
+                </div>
+            </div>
         </>
     );
 }
 
+type MouseButtonEv = React.MouseEvent<HTMLButtonElement, MouseEvent>;
 type ChangeEv = React.ChangeEvent<HTMLInputElement>;
 type ErrorArray = ReadonlyArray<Error>;
