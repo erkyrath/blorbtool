@@ -4,6 +4,11 @@ import { Blorb } from './blorb';
 import { Error } from './blorb';
 import { blorb_chunk_for_usage } from './blorb';
 
+function chunkerr(text: string, chunk: Chunk) : Error
+{
+    return { text:text, refkey:chunk.refkey };
+}
+
 export function check_blorb_against_origpos(blorb: Blorb, origlen: number, map: Map<number, number>) : Blorb
 {
     let errors: Error[] = []; // new set of errors
@@ -76,13 +81,13 @@ function check_chunk_RDes(blorb: Blorb, chunk: CTypes.CTResDescs, errors: Error[
     for (let ent of chunk.entries) {
         let key = ent.usage+':'+ent.resnum;
         if (found.has(key)) {
-            errors.push({ text:`Resource description chunk refers to ${ent.usage} #${ent.resnum} more than once.`, refkey:chunk.refkey });
+            errors.push(chunkerr(`Resource description chunk refers to ${ent.usage} #${ent.resnum} more than once.`, chunk));
         }
         found.add(key);
         
         let reschunk = blorb_chunk_for_usage(blorb, ent.usage, ent.resnum);
         if (!reschunk) {
-            errors.push({ text:`Resource description chunk refers to ${ent.usage} #${ent.resnum}, but there is no such resource.`, refkey:chunk.refkey });
+            errors.push(chunkerr(`Resource description chunk refers to ${ent.usage} #${ent.resnum}, but there is no such resource.`, chunk));
         }
     }
 }
@@ -90,21 +95,21 @@ function check_chunk_RDes(blorb: Blorb, chunk: CTypes.CTResDescs, errors: Error[
 function check_chunk_Image(blorb: Blorb, chunk: CTypes.CTImage, errors: Error[])
 {
     if (!chunk.imgsize) {
-        errors.push({ text:'Image data not recognized', refkey:chunk.refkey });
+        errors.push(chunkerr('Image data not recognized', chunk));
     }
 }
 
 function check_chunk_ZCOD(blorb: Blorb, chunk: CTypes.CTZCode, errors: Error[])
 {
     if (chunk.data[0] > 8) {
-        errors.push({ text:`Z-machine version ${chunk.data[0]} is not valid`, refkey:chunk.refkey });
+        errors.push(chunkerr(`Z-machine version ${chunk.data[0]} is not valid`, chunk));
     }
 }
 
 function check_chunk_GLUL(blorb: Blorb, chunk: CTypes.CTGlulx, errors: Error[])
 {
     if (u8ToString(chunk.data, 0, 4) != 'Glul') {
-        errors.push({ text:'File does not appear to be Glulx', refkey:chunk.refkey });
+        errors.push(chunkerr('File does not appear to be Glulx', chunk));
     }
 }
 
@@ -114,12 +119,12 @@ function check_chunk_IFmd(blorb: Blorb, chunk: CTypes.CTMetadata, errors: Error[
     let xmldoc = xmlparser.parseFromString(chunk.metadata, 'text/xml');
 
     if (!xmldoc.childNodes.length) {
-        errors.push({ text:'Metadata chunk has no XML content', refkey:chunk.refkey });
+        errors.push(chunkerr('Metadata chunk has no XML content', chunk));
     }
     else {
         let xmlnod = xmldoc.childNodes[0];
         if (xmlnod.nodeName != 'ifindex') {
-            errors.push({ text:`Metadata chunk has XML node "${xmlnod.nodeName}", not "ifindex"`, refkey:chunk.refkey });
+            errors.push(chunkerr(`Metadata chunk has XML node "${xmlnod.nodeName}", not "ifindex"`, chunk));
         }
     }
     
@@ -129,7 +134,7 @@ function check_chunk_Fspc(blorb: Blorb, chunk: CTypes.CTFrontispiece, errors: Er
 {
     let imgchunk = blorb_chunk_for_usage(blorb, 'Pict', chunk.picnum);
     if (!imgchunk) {
-        errors.push({ text:`Frontispiece chunk refers to Pict #${chunk.picnum}, but there is no such resource.`, refkey:chunk.refkey });
+        errors.push(chunkerr(`Frontispiece chunk refers to Pict #${chunk.picnum}, but there is no such resource.`, chunk));
     }
 }
 
@@ -140,13 +145,13 @@ function check_chunk_Reso(blorb: Blorb, chunk: CTypes.CTResolution, errors: Erro
     for (let ent of chunk.entries) {
         let key = 'Pict:'+ent.resnum;
         if (found.has(key)) {
-            errors.push({ text:`Resolution chunk refers to Pict #${ent.resnum} more than once.`, refkey:chunk.refkey });
+            errors.push(chunkerr(`Resolution chunk refers to Pict #${ent.resnum} more than once.`, chunk));
         }
         found.add(key);
         
         let imgchunk = blorb_chunk_for_usage(blorb, 'Pict', ent.resnum);
         if (!imgchunk) {
-            errors.push({ text:`Resolution chunk refers to Pict #${ent.resnum}, but there is no such resource.`, refkey:chunk.refkey });
+            errors.push(chunkerr(`Resolution chunk refers to Pict #${ent.resnum}, but there is no such resource.`, chunk));
         }
     }
 }
