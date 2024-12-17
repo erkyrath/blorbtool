@@ -373,7 +373,7 @@ export namespace DispChunks {
                            <li>
                                <span className="InfoLabel">Frontispiece</span>:{' '}
                                <EditButton func={ evhan_edit_frontis } />{' '}
-                               { frontis ? "yes" : "(no)" }
+                               { frontis ? "yes" : "\u2013" }
                            </li>
                            <li>
                                <span className="InfoLabel">Alt text:</span>{' '}

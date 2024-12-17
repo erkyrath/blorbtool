@@ -9,7 +9,7 @@ import { Error } from './blorb';
 import { pretty_size, byte_to_hex } from './readable';
 
 import { ReactCtx } from './contexts';
-import { ShortArrowToChunk, ArrowToChunk, ArrowDownload } from './widgets';
+import { ShortArrowToChunk, ArrowToChunk, ArrowDownload, EditButton } from './widgets';
 import { DispChunks } from './dispchunk';
 
 export function DisplayColumn({ selected }: { selected:number })
@@ -149,6 +149,9 @@ export function DisplayChunk({ blorb, chunk, showhex }: { blorb:Blorb, chunk:Chu
             break;
         }
     }
+
+    function evhan_edit_usage() {
+    }
     
     return (
         <div className="DisplayChunk">
@@ -163,12 +166,15 @@ export function DisplayChunk({ blorb, chunk, showhex }: { blorb:Blorb, chunk:Chu
                         { chunk.formtype ? ('/'+chunk.formtype.stype) : '' }
                     </code>
                 </li>
-                { (resentry ?
-                   <li><span className="InfoLabel">Usage:</span>{' '}
-                       <code className="IType">{ resentry.usage }</code>
-                       {' #'}{ resentry.resnum }
-                   </li>
-                   : null) }
+                <li><span className="InfoLabel">Usage:</span>{' '}
+                    <EditButton func={ evhan_edit_usage } />{' '}
+                    { (resentry ?
+                       <>
+                           <code className="IType">{ resentry.usage }</code>
+                           {' #'}{ resentry.resnum }
+                       </>
+                       : <>&#x2013;</>) }
+                </li>
                 <li>
                     <span className="InfoLabel">Size:</span>{' '}
                     { pretty_size(chunk.data.length) }
