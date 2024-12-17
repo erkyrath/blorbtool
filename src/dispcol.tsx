@@ -100,6 +100,7 @@ export function DisplayErrors({ errors }: { errors:ErrorArray })
 export function DisplayChunk({ blorb, chunk, showhex }: { blorb:Blorb, chunk:Chunk, showhex:boolean })
 {
     const [editingKey, setEditingKey] = useState(-1);
+    const [editError, setEditError] = useState('');
     let rctx = useContext(ReactCtx);
     
     let editing = (editingKey == chunk.refkey);
@@ -115,6 +116,7 @@ export function DisplayChunk({ blorb, chunk, showhex }: { blorb:Blorb, chunk:Chu
     }
 
     function evhan_edit_usage() {
+        setEditError('');
         if (!editing)
             setEditingKey(chunk.refkey);
         else
@@ -142,7 +144,7 @@ export function DisplayChunk({ blorb, chunk, showhex }: { blorb:Blorb, chunk:Chu
                 <li><span className="InfoLabel">Usage:</span>{' '}
                     <EditButton func={ evhan_edit_usage } />{' '}
                     { (editing ?
-                       <ResEntryEdit chunk={ chunk } resentry={ resentry } onsave={ evhan_edit_save } oncancel={ evhan_edit_usage } />
+                       <ResEntryEdit chunk={ chunk } resentry={ resentry } error={ editError } onsave={ evhan_edit_save } oncancel={ evhan_edit_usage } />
                        :
                        <ResEntryLine resentry={ resentry } />
                       ) }
@@ -175,7 +177,7 @@ function ResEntryLine({ resentry }: { resentry:CTypes.CTResIndexEntry|undefined 
     }
 }
 
-function ResEntryEdit({ chunk, resentry, onsave, oncancel }: { chunk:Chunk, resentry:CTypes.CTResIndexEntry|undefined, onsave:(arg:CTypes.ChunkUsageNumber|undefined) => void, oncancel:() => void })
+function ResEntryEdit({ chunk, resentry, error, onsave, oncancel }: { chunk:Chunk, resentry:CTypes.CTResIndexEntry|undefined, error:string, onsave:(arg:CTypes.ChunkUsageNumber|undefined) => void, oncancel:() => void })
 {
     const inputRef = useRefInput();
     const selectRef = useRefSelect();
@@ -244,6 +246,11 @@ function ResEntryEdit({ chunk, resentry, onsave, oncancel }: { chunk:Chunk, rese
                     <button onClick={ evhan_edit_save }>Save</button>
                 </div>
             </div>
+            { (error ?
+               <div className="ControlRow ErrorText AlignRight">
+                   { error }
+               </div>
+               : null) }
         </>
     );
 }
