@@ -225,11 +225,20 @@ export function blorb_update_index_entries(blorb: Blorb, entries: CTypes.CTResIn
     }
     let ridx = blorb.chunks[0] as CTypes.CTResIndex;
 
+    let newusagemap: Map<string, number> = new Map();
+    for (let ent of entries) {
+        let key = ent.usage+':'+ent.resnum;
+        let chu = blorb.posmap.get(ent.pos);
+        if (chu)
+            newusagemap.set(key, chu.refkey);
+    }
+    
     let newridx: CTypes.CTResIndex = { ...ridx, entries:entries };
+    
     let newchunks = [ newridx, ...blorb.chunks.slice(1) ];
     let newblorb: Blorb = { ...blorb, chunks:newchunks };
 
-    newblorb = blorb_recompute_positions(newblorb, blorb.usagemap);
+    newblorb = blorb_recompute_positions(newblorb, newusagemap);
     
     return newblorb;
 }
