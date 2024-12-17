@@ -73,7 +73,7 @@ export function DisplayColumn({ selected }: { selected:number })
     );
 }
 
-export function DisplayErrors({ errors }: { errors:ReadonlyArray<Error> })
+export function DisplayErrors({ errors }: { errors:ErrorArray })
 {
     let counter = 0;
     let errls = errors.map((obj) =>
@@ -99,6 +99,9 @@ export function DisplayErrors({ errors }: { errors:ReadonlyArray<Error> })
 
 export function DisplayChunk({ blorb, chunk, showhex }: { blorb:Blorb, chunk:Chunk, showhex:boolean })
 {
+    const [editingKey, setEditingKey] = useState(-1);
+    
+    let editing = (editingKey == chunk.refkey);
     let resentry = blorb_resentry_for_chunk(blorb, chunk);
 
     let display;
@@ -111,6 +114,10 @@ export function DisplayChunk({ blorb, chunk, showhex }: { blorb:Blorb, chunk:Chu
     }
 
     function evhan_edit_usage() {
+        if (!editing)
+            setEditingKey(chunk.refkey);
+        else
+            setEditingKey(-1);
     }
     
     return (
@@ -148,4 +155,6 @@ export function DisplayChunk({ blorb, chunk, showhex }: { blorb:Blorb, chunk:Chu
     );
 }
 
+
 type ChangeEv = React.ChangeEvent<HTMLInputElement>;
+type ErrorArray = ReadonlyArray<Error>;
