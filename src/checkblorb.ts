@@ -33,6 +33,34 @@ export function check_blorb_against_origpos(blorb: Blorb, origlen: number, map: 
     return blorb;
 }
 
+export function check_blorb_ridx_positions(blorb: Blorb) : Blorb
+{
+    if (!blorb.chunks.length)
+        return blorb;
+    if (blorb.chunks[0].type.stype != 'RIdx')
+        return blorb;
+    
+    let ridx = blorb.chunks[0] as CTypes.CTResIndex;
+
+    let posset = new Set();
+    for (let chunk of blorb.chunks) {
+        posset.add(chunk.pos);
+    }
+    
+    let errors: string[] = [];
+    for (let ent of ridx.entries) {
+        if (!posset.has(ent.pos)) {
+            errors.push(`Resource index refers to ${ent.usage} #${ent.resnum}, but there is no chunk at ${ent.pos}.`);
+        }
+    }
+
+    if (errors.length) {
+        blorb = { ...blorb, errors: [ ...blorb.errors, ...errors ] };
+    }
+
+    return blorb;
+}
+
 export function check_blorb_consistency(blorb: Blorb) : Blorb
 {
     let errors: Error[] = []; // new set of errors

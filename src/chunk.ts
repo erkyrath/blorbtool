@@ -139,7 +139,7 @@ export function StringToUsage(val: string) : CTypes.ChunkUsage|undefined
 
 type ChunkWithErrors = [ Chunk, string[] ];
 
-function new_chunk_noinit(type:string|Uint8Array, data:Uint8Array) : Chunk
+function new_chunk_noinit(type:string|Uint8Array, data:Uint8Array, origpos?:number) : Chunk
 {
     let ctype = make_chunk_type(type);
     
@@ -154,15 +154,15 @@ function new_chunk_noinit(type:string|Uint8Array, data:Uint8Array) : Chunk
         formtype: formtype,
         data: data,
         index: -1,
-        pos: 0,
+        pos: origpos || 0,
     }
 
     return chunk;
 }
 
-export function new_chunk(type:string|Uint8Array, data:Uint8Array) : ChunkWithErrors
+export function new_chunk(type:string|Uint8Array, data:Uint8Array, origpos?:number) : ChunkWithErrors
 {
-    let chunk = new_chunk_noinit(type, data);
+    let chunk = new_chunk_noinit(type, data, origpos);
 
     switch (chunk.type.stype) {
     case 'RIdx':

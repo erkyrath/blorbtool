@@ -2,7 +2,7 @@ import { u8ToString, u8read4 } from './datutil';
 import { Chunk, new_chunk, new_chunk_RIdx_empty } from './chunk';
 import { Blorb, new_blorb } from './blorb';
 import { blorb_recompute_positions } from './blorb';
-import { check_blorb_against_origpos, check_blorb_consistency } from './checkblorb';
+import { check_blorb_against_origpos, check_blorb_consistency, check_blorb_ridx_positions } from './checkblorb';
 
 export function new_blorb_with_index() : Blorb
 {
@@ -66,11 +66,11 @@ export function parse_blorb(dat: Uint8Array, filename?: string) : Blorb
         if (ctype == 'FORM') {
             let formtype = u8ToString(dat, pos, 4);
             let cdat = dat.slice(cpos, pos+clen);
-            [ chunk, chunkerrors ] = new_chunk(uctype, cdat);
+            [ chunk, chunkerrors ] = new_chunk(uctype, cdat, cpos);
         }
         else {
             let cdat = dat.slice(pos, pos+clen);
-            [ chunk, chunkerrors ] = new_chunk(uctype, cdat);
+            [ chunk, chunkerrors ] = new_chunk(uctype, cdat, cpos);
         }
 
         chunks.push(chunk);
@@ -93,8 +93,11 @@ export function parse_blorb(dat: Uint8Array, filename?: string) : Blorb
         errors: errors,
     };
 
-    //### check for consistency errors before we recompute? RIdx matching real chunks, etc
-    
+    // Check for consistency errors in the RIdx as loaded. (If we don't,
+    // the blorb_recompute_positions() call will silently drop them.)
+    blorb = check_blorb_ridx_positions(blorb);
+
+    // Fix up the RIdx chunk.
     blorb = blorb_recompute_positions(blorb);
 
     // Check for inconsistency with the original layout during loading. Nothing should have changed.
