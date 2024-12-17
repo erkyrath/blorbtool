@@ -218,10 +218,10 @@ function new_chunk_RIdx(chunk: Chunk) : ChunkWithErrors
     }
 
     for (let ix=0; ix<count; ix++) {
-        let usage = u8ToString(chunk.data, 4 + ix*12, 4);
+        let usage = StringToUsage(u8ToString(chunk.data, 4 + ix*12, 4));
         let resnum = u8read4(chunk.data, 4 + ix*12 + 4);
         let pos = u8read4(chunk.data, 4 + ix*12 + 8);
-        if (usage != 'Pict' && usage != 'Snd ' && usage != 'Data' && usage != 'Exec') {
+        if (!usage) {
             console.log('### bad index entry usage');
             continue;
         }
@@ -272,12 +272,12 @@ function new_chunk_RDes(chunk: Chunk) : ChunkWithErrors
     let pos = 4;
 
     for (let ix=0; ix<count; ix++) {
-        let usage = u8ToString(chunk.data, pos, 4);
+        let usage = StringToUsage(u8ToString(chunk.data, pos, 4));
         let resnum = u8read4(chunk.data, pos+4);
         let textlen = u8read4(chunk.data, pos+8);
         let text = utf8ToString(chunk.data.slice(pos+12, pos+12+textlen));
         pos += (12+textlen);
-        if (usage != 'Pict' && usage != 'Snd ' && usage != 'Data' && usage != 'Exec') {
+        if (!usage) {
             console.log('### bad rdes entry usage');
             continue;
         }
