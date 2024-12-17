@@ -5,10 +5,11 @@ import { u8ToBase64URL } from './datutil';
 import { Chunk, CTypes } from './chunk';
 import { chunk_readable_desc, chunk_filename_info } from './chunk';
 import { Blorb, blorb_resentry_for_chunk } from './blorb';
+import { Error } from './blorb';
 import { pretty_size, byte_to_hex } from './readable';
 
 import { ReactCtx } from './contexts';
-import { ArrowDownload } from './widgets';
+import { ArrowToChunk, ArrowDownload } from './widgets';
 import { DispChunks } from './dispchunk';
 
 export function DisplayColumn({ selected }: { selected:number })
@@ -72,13 +73,20 @@ export function DisplayColumn({ selected }: { selected:number })
     );
 }
 
-export function DisplayErrors({ errors }: { errors:ReadonlyArray<string> })
+export function DisplayErrors({ errors }: { errors:ReadonlyArray<Error> })
 {
     let counter = 0;
-    let errls = errors.map((msg) =>
-        <div className="ErrorLine" key={ counter++ }>
-            { msg }
-        </div>
+    let errls = errors.map((obj) =>
+        ( (typeof obj === 'string') ?
+          <div className="ErrorLine" key={ counter++ }>
+              { obj }
+          </div>
+          :
+          <div className="ErrorLine" key={ counter++ }>
+              <ArrowToChunk destkey={ obj.refkey } />
+              { obj.text }
+          </div>
+        )
     );
     
     return (

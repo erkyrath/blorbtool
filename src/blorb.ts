@@ -2,6 +2,8 @@ import { u8ToString, stringToU8 } from './datutil';
 import { u8read4, u8write4 } from './datutil';
 import { Chunk, CTypes } from './chunk';
 
+export type Error = { text:string, refkey:number} | string;
+
 export type Blorb = {
     filename: string|undefined;
     chunks: ReadonlyArray<Chunk>;
@@ -14,7 +16,7 @@ export type Blorb = {
     posmap: Map<number, Chunk>; // chunk.pos to chunk
 
     // Built on load or update.
-    errors: ReadonlyArray<string>;
+    errors: ReadonlyArray<Error>;
 };
 
 export function new_blorb() : Blorb
@@ -70,7 +72,7 @@ export function blorb_recompute_positions(blorb: Blorb, oldusagemap?: Map<string
     if (blorb.chunks.length == 0)
         return blorb;
 
-    let errors: string[] = [ ...blorb.errors ];
+    let errors: Error[] = [ ...blorb.errors ];
     
     if (blorb.chunks[0].type.stype != 'RIdx') {
         errors.push('First chunk is not a resource index');
