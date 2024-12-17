@@ -39,6 +39,9 @@ export function check_blorb_consistency(blorb: Blorb) : Blorb
 
     for (let chunk of blorb.chunks) {
         switch (chunk.type.stype) {
+        case 'RIdx':
+            check_chunk_RIdx(blorb, chunk as CTypes.CTResIndex, errors);
+            break;
         case 'RDes':
             check_chunk_RDes(blorb, chunk as CTypes.CTResDescs, errors);
             break;
@@ -72,6 +75,28 @@ export function check_blorb_consistency(blorb: Blorb) : Blorb
     }
 
     return blorb;
+}
+
+function check_chunk_RIdx(blorb: Blorb, chunk: CTypes.CTResIndex, errors: Error[])
+{
+    for (let ent of chunk.entries) {
+        let chu = blorb.posmap.get(ent.pos);
+        if (!chu) {
+            errors.push(chunkerr(`Resource index refers to ${ent.usage} #${ent.resnum}, but there is no chunk at ${ent.pos}.`, chunk));
+            continue;
+        }
+        
+        if (ent.usage == 'Pict') {
+            if (chu.type.stype != 'JPEG' && chu.type.stype != 'PNG ') {
+                errors.push(chunkerr(`Resource index refers to ${ent.usage} #${ent.resnum}, but the chunk does not appear to be an image.`, chu));
+            }
+        }
+        if (ent.usage == 'Snd ') {
+            if (!(chu.type.stype == 'FORM' && chu.formtype && chu.formtype.stype == 'AIFF')) {
+                errors.push(chunkerr(`Resource index refers to ${ent.usage} #${ent.resnum}, but the chunk does not appear to be audio.`, chu));
+            }
+        }
+    }
 }
 
 function check_chunk_RDes(blorb: Blorb, chunk: CTypes.CTResDescs, errors: Error[])
