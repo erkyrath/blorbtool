@@ -255,8 +255,6 @@ export function blorb_delete_chunk_by_key(blorb: Blorb, key: number) : Blorb
         return blorb;
     }
 
-    //### RIdx will clean itself up, but we should delete Fspc and any RDes entry
-
     let newchunks = blorb.chunks.filter((chu) => (chu.refkey != key));
     let newblorb: Blorb = { ...blorb, chunks:newchunks };
 

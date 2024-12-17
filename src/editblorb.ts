@@ -47,6 +47,8 @@ function blorb_delete_chunk(blorb: Blorb, key: number) : Blorb
 {
     let newblorb = blorb_delete_chunk_by_key(blorb, key);
 
+    //### delete Fspc and any RDes, Reso entry?
+
     newblorb = check_blorb_consistency(newblorb);
 
     return newblorb;
@@ -120,6 +122,8 @@ function blorb_set_chunk_usage(blorb: Blorb, refkey: number, usage: CTypes.Chunk
     }
 
     let newblorb = blorb_update_index_entries(blorb, newents);
+
+    //### update Reso, Fspc, RDes refs?
     
     newblorb = check_blorb_consistency(newblorb);
     
