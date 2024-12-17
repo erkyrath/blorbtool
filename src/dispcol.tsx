@@ -10,7 +10,7 @@ import { pretty_size, byte_to_hex } from './readable';
 
 import { ReactCtx } from './contexts';
 import { ShortArrowToChunk, ArrowToChunk, ArrowDownload, EditButton } from './widgets';
-import { DispChunks } from './dispchunk';
+import { DispChunks, DisplayChunkFormatted } from './dispchunk';
 
 export function DisplayColumn({ selected }: { selected:number })
 {
@@ -104,50 +104,10 @@ export function DisplayChunk({ blorb, chunk, showhex }: { blorb:Blorb, chunk:Chu
     let display;
 
     if (showhex) {
-        display = <DispChunks.DCRaw chunk={ chunk } />
+        display = <DispChunks.DCRaw chunk={ chunk } />;
     }
     else {
-        switch (chunk.type.stype) {
-        case 'RIdx':
-            display = <DispChunks.DCResIndex chunk={ chunk as CTypes.CTResIndex } />;
-            break;
-        case 'Fspc':
-            display = <DispChunks.DCFrontispiece chunk={ chunk as CTypes.CTFrontispiece } />;
-            break;
-        case 'RDes':
-            display = <DispChunks.DCResDescs chunk={ chunk as CTypes.CTResDescs } />;
-            break;
-        case 'IFmd':
-            display = <DispChunks.DCMetadata chunk={ chunk as CTypes.CTMetadata } />;
-            break;
-        case 'ZCOD':
-            display = <DispChunks.DCZCode chunk={ chunk as CTypes.CTZCode } />
-            break;
-        case 'GLUL':
-            display = <DispChunks.DCGlulx chunk={ chunk as CTypes.CTGlulx } />
-            break;
-        case 'PNG ':
-            display = <DispChunks.DCImage chunk={ chunk as CTypes.CTImage } resentry={ resentry } />
-            break;
-        case 'JPEG':
-            display = <DispChunks.DCImage chunk={ chunk as CTypes.CTImage } resentry={ resentry } />
-            break;
-        case 'RelN':
-            display = <DispChunks.DCReleaseNumber chunk={ chunk as CTypes.CTReleaseNumber } />
-            break;
-        case 'Reso':
-            display = <DispChunks.DCResolution chunk={ chunk as CTypes.CTResolution } />
-            break;
-        case 'AUTH':
-        case 'ANNO':
-        case '(c) ':
-        case 'SNam':
-            display = <DispChunks.DCText chunk={ chunk as CTypes.CTText } />
-            break;
-        default:
-            display = <DispChunks.DCRaw chunk={ chunk } />;
-            break;
-        }
+        display = <DisplayChunkFormatted blorb={ blorb} chunk={ chunk } />;
     }
 
     function evhan_edit_usage() {

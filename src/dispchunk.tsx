@@ -2,11 +2,46 @@ import React from 'react';
 import { useState, useContext, useRef } from 'react';
 
 import { Chunk, CTypes } from './chunk';
-import { Blorb, blorb_chunk_for_usage, blorb_first_chunk_for_type } from './blorb';
+import { Blorb, blorb_resentry_for_chunk, blorb_chunk_for_usage, blorb_first_chunk_for_type } from './blorb';
 import { byte_to_hex } from './readable';
 import { ReactCtx, BlorbCtx } from './contexts';
 
 import { ArrowToChunk, EditButton, DeleteButton } from './widgets';
+
+export function DisplayChunkFormatted({ blorb, chunk }: { blorb:Blorb, chunk:Chunk })
+{
+    let resentry = blorb_resentry_for_chunk(blorb, chunk);
+
+    switch (chunk.type.stype) {
+    case 'RIdx':
+        return <DispChunks.DCResIndex chunk={ chunk as CTypes.CTResIndex } />;
+    case 'Fspc':
+        return <DispChunks.DCFrontispiece chunk={ chunk as CTypes.CTFrontispiece } />;
+    case 'RDes':
+        return <DispChunks.DCResDescs chunk={ chunk as CTypes.CTResDescs } />;
+    case 'IFmd':
+        return <DispChunks.DCMetadata chunk={ chunk as CTypes.CTMetadata } />;
+    case 'ZCOD':
+        return <DispChunks.DCZCode chunk={ chunk as CTypes.CTZCode } />
+    case 'GLUL':
+        return <DispChunks.DCGlulx chunk={ chunk as CTypes.CTGlulx } />
+    case 'PNG ':
+        return <DispChunks.DCImage chunk={ chunk as CTypes.CTImage } resentry={ resentry } />
+    case 'JPEG':
+        return <DispChunks.DCImage chunk={ chunk as CTypes.CTImage } resentry={ resentry } />
+    case 'RelN':
+        return <DispChunks.DCReleaseNumber chunk={ chunk as CTypes.CTReleaseNumber } />
+    case 'Reso':
+        return <DispChunks.DCResolution chunk={ chunk as CTypes.CTResolution } />
+    case 'AUTH':
+    case 'ANNO':
+    case '(c) ':
+    case 'SNam':
+        return <DispChunks.DCText chunk={ chunk as CTypes.CTText } />
+    default:
+        return <DispChunks.DCRaw chunk={ chunk } />;
+    }
+}
 
 export namespace DispChunks {
 
