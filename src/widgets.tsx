@@ -67,6 +67,23 @@ export function ArrowToChunk({ destkey }: { destkey:number })
     );
 }
 
+export function ShortArrowToChunk({ destkey }: { destkey:number })
+{
+    let rctx = useContext(ReactCtx);
+    
+    function evhan_click(ev: React.MouseEvent<HTMLElement, MouseEvent>) {
+        ev.preventDefault();
+        ev.stopPropagation();
+        rctx.setSelection(destkey);
+    }
+
+    return (
+        <>
+            <a className="JumpArrow" href="#" onClick={ evhan_click }>&#x279A;</a>
+        </>
+    );
+}
+
 export function ArrowDownload({ data, filename, mimetype }: { data:Uint8Array, filename:string, mimetype:string })
 {
     let dataurl = URL.createObjectURL(

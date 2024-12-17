@@ -9,7 +9,7 @@ import { Error } from './blorb';
 import { pretty_size, byte_to_hex } from './readable';
 
 import { ReactCtx } from './contexts';
-import { ArrowToChunk, ArrowDownload } from './widgets';
+import { ShortArrowToChunk, ArrowToChunk, ArrowDownload } from './widgets';
 import { DispChunks } from './dispchunk';
 
 export function DisplayColumn({ selected }: { selected:number })
@@ -83,8 +83,8 @@ export function DisplayErrors({ errors }: { errors:ReadonlyArray<Error> })
           </div>
           :
           <div className="ErrorLine" key={ counter++ }>
-              <ArrowToChunk destkey={ obj.refkey } />
-              { obj.text }
+              <ShortArrowToChunk destkey={ obj.refkey } />
+              {' '}{ obj.text }
           </div>
         )
     );
