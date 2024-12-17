@@ -44,6 +44,10 @@ export interface Chunk {
 export namespace CTypes {
     
     export type ChunkUsage = 'Pict' | 'Snd ' | 'Data' | 'Exec';
+    export type ChunkUsageNumber = {
+        usage: ChunkUsage;
+        resnum: number;
+    };
     export type CTResIndexEntry = {
         usage: ChunkUsage;
         resnum: number;
@@ -118,6 +122,19 @@ export namespace CTypes {
         entries: ReadonlyArray<CTResolutionEntry>;
     }
     
+}
+
+function StringToUsage(val: string) : CTypes.ChunkUsage|undefined
+{
+    switch (val) {
+    case 'Pict':
+    case 'Snd ':
+    case 'Data':
+    case 'Exec':
+        return val;
+    default:
+        return undefined;
+    }
 }
 
 type ChunkWithErrors = [ Chunk, string[] ];
