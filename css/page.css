@@ -291,10 +291,27 @@ label.FileInput:active {
     color: white;
 }
 
+select {
+    font-family: "Merriweather";
+    font-size: 85%;
+    border: 1px solid grey;
+    border-radius: 6px;
+    padding: 2px 4px;
+}
+
 input.TextLine {
     font-family: "Merriweather";
     font-size: 85%;
     width: 90%;
+    border: 1px solid grey;
+    border-radius: 6px;
+    padding: 2px 4px;
+}
+
+input.ShortTextLine {
+    font-family: "Merriweather";
+    font-size: 100%;
+    max-width: 100px;
     border: 1px solid grey;
     border-radius: 6px;
     padding: 2px 4px;

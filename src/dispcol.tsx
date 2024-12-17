@@ -172,20 +172,46 @@ function ResEntryLine({ resentry }: { resentry:CTypes.CTResIndexEntry|undefined 
 function ResEntryEdit({ chunk, resentry }: { chunk:Chunk, resentry:CTypes.CTResIndexEntry|undefined })
 {
     let resnum: number = resentry ? resentry.resnum : 0;
+    let defaultusage: CTypes.ChunkUsage | undefined;
+
+    if (resentry) {
+        defaultusage = resentry.usage;
+    }
+    else {
+        switch (chunk.type.stype) {
+        case 'JPEG':
+        case 'PNG ':
+            defaultusage = 'Pict';
+            break;
+        case 'FORM':
+            if (chunk.formtype && chunk.formtype.stype == 'AIFF') {
+                defaultusage = 'Snd ';
+            }
+            else {
+                defaultusage = 'Data';
+            }
+            break;
+        case 'ZCOD':
+        case 'GLUL':
+            defaultusage = 'Exec';
+            break;
+        default:
+            defaultusage = 'Data';
+            break;
+        }
+    }
     
     return (
         <>
-            <input id="restype-Pict" type="radio" name="restype" value="Pict" />
-            <label htmlFor="restype-Pict">Pict</label>
-            <input id="restype-Snd" type="radio" name="restype" value="Snd " />
-            <label htmlFor="restype-Snd">Snd</label>
-            <input id="restype-Data" type="radio" name="restype" value="Data" />
-            <label htmlFor="restype-Data">Data</label>
-            <input id="restype-Exec" type="radio" name="restype" value="Exec" />
-            <label htmlFor="restype-Exec">Exec</label>
-            <input id="restype-none" type="radio" name="restype" value="none" />
-            <label htmlFor="restype-none">&#x2014;</label>
-            <input id="resnumber" type="text" defaultValue={ resnum } placeholder="Number" />
+            <select name="usage">
+                <option value="none" selected={ !defaultusage }>(none)</option>
+                <option value="Pict" selected={ defaultusage=='Pict' }>Pict</option>
+                <option value="Snd" selected={ defaultusage=='Snd ' }>Snd</option>
+                <option value="Exec" selected={ defaultusage=='Exec' }>Exec</option>
+                <option value="Data" selected={ defaultusage=='Data' }>Data</option>
+            </select>
+            {' '}
+            <input id="resnumber" className="ShortTextLine" type="number" min="0" defaultValue={ resnum } placeholder="Number" />
         </>
     );
 }
