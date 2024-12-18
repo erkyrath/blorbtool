@@ -222,8 +222,23 @@ function blorb_delete_resolution_entry(blorb: Blorb, resnum: number) : Blorb
     return newblorb;
 }
 
-function blorb_update_usage_refs(blorb: Blorb, olduse: CTypes.ChunkUsageNumber, newuse: CTypes.ChunkUsageNumber|undefined) : Blorb
+function blorb_update_usage_refs(blorb: Blorb, oldresid: CTypes.ChunkUsageNumber, newresid: CTypes.ChunkUsageNumber|undefined) : Blorb
 {
-    console.log('### updating', olduse, 'to', newuse);
+    console.log('### updating', oldresid, 'to', newresid);
+
+    if (oldresid.usage == 'Pict') {
+        let frontischunk = blorb_first_chunk_for_type(blorb, 'Fspc') as CTypes.CTFrontispiece;
+        if (frontischunk && frontischunk.picnum == oldresid.resnum) {
+            console.log('### ...frontis...');
+            if (newresid) {
+                let newfchunk = new_chunk_Fspc_with(newresid.resnum);
+                blorb = blorb_addreplace_chunk(blorb, newfchunk);
+            }
+            else {
+                blorb = blorb_delete_chunk_by_key(blorb, frontischunk.refkey);
+            }
+        }
+    }
+    
     return blorb;
 }
