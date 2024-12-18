@@ -255,7 +255,7 @@ function blorb_update_usage_refs(blorb: Blorb, oldresid: CTypes.ChunkUsageNumber
         let frontischunk = blorb_first_chunk_for_type(blorb, 'Fspc') as CTypes.CTFrontispiece;
         if (frontischunk && frontischunk.picnum == oldresid.resnum) {
             console.log('### ...frontis');
-            if (newresid) {
+            if (newresid && newresid.usage == 'Pict') {
                 let newfchunk = new_chunk_Fspc_with(newresid.resnum);
                 blorb = blorb_addreplace_chunk(blorb, newfchunk);
             }
@@ -270,7 +270,7 @@ function blorb_update_usage_refs(blorb: Blorb, oldresid: CTypes.ChunkUsageNumber
             if (pos >= 0) {
                 console.log('### ...reso entry', pos);
                 let newentries: CTypes.CTResolutionEntry[];
-                if (newresid) {
+                if (newresid && newresid.usage == 'Pict') {
                     newentries = [ ...reso.entries ];
                     newentries[pos] = { ...reso.entries[pos], resnum:newresid.resnum };
                 }
