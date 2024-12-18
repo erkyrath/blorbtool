@@ -263,6 +263,32 @@ function blorb_update_usage_refs(blorb: Blorb, oldresid: CTypes.ChunkUsageNumber
                 blorb = blorb_delete_chunk_by_key(blorb, frontischunk.refkey);
             }
         }
+
+        let reso = blorb_first_chunk_for_type(blorb, 'Reso') as CTypes.CTResolution;
+        if (reso) {
+            let pos = reso.entries.findIndex((ent) => (ent.resnum == oldresid.resnum));
+            if (pos >= 0) {
+                console.log('### ...reso entry', pos);
+                let newentries: CTypes.CTResolutionEntry[];
+                if (newresid) {
+                    newentries = [ ...reso.entries ];
+                    newentries[pos] = { ...reso.entries[pos], resnum:newresid.resnum };
+                }
+                else {
+                    newentries = [ ...reso.entries ];
+                    newentries.splice(pos, 1);
+                }
+
+                if (!newentries.length) {
+                    blorb = blorb_delete_chunk_by_key(blorb, reso.refkey);
+                }
+                else {
+                    let newreso = new_chunk_Reso_with(reso.window, newentries);
+                    blorb = blorb_addreplace_chunk(blorb, newreso);
+                }
+            }
+        }
+
     }
     
     return blorb;
