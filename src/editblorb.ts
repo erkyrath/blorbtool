@@ -160,7 +160,6 @@ function blorb_set_resdesc(blorb: Blorb, usage: CTypes.ChunkUsage, resnum: numbe
     else {
         if (pos < 0) {
             newentries = [ ...rdes.entries, { usage, resnum, text } ];
-            //### sort newentries by (usage, resnum)?
         }
         else {
             newentries = [ ...rdes.entries ];
