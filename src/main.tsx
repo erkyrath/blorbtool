@@ -79,7 +79,7 @@ function MyApp()
        configuration replaces "process.env.NODE_ENV" with a static string,
        so we can pretend to check it. */
     if (process.env.NODE_ENV == 'development') {
-	(window as any).curblorb = blorb;
+        (window as any).curblorb = blorb;
     }
     
     let loadBlorbFile = function(act: LoadBlorbAction) {
