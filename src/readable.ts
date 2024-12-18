@@ -1,3 +1,5 @@
+/* Utility functions to turn various types into human-readable
+   strings. */
 
 export function byte_to_hex(val: number) : string
 {
