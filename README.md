@@ -19,7 +19,7 @@ To see BlorbTool in action, visit [this demo page][btsensory].
 To use BlorbTool on your own file, [go to this page][btloader] and select "Choose File".
 
 [btsensory]: https://eblong.com/zarf/blorb/blorbtool/run-sensory.html
-[blloader]: https://eblong.com/zarf/blorb/blorbtool/run.html
+[btloader]: https://eblong.com/zarf/blorb/blorbtool/run.html
 
 Note BlorbTool runs entirely in your browser. The file you select is *not* uploaded to any server. If you close or reload your browser window, the displayed file will be lost.
 
