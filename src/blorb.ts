@@ -163,7 +163,7 @@ export function blorb_recompute_positions(blorb: Blorb, oldusagemap?: Map<string
             }
         }
 
-        //### sort newents by pos?
+        newents.sort((ent1, ent2) => (ent1.pos - ent2.pos));
         
         // Rebuild the data (bytes) of ridx so we can save
         let tempridxdata = new Uint8Array(4 + 12 * newents.length);
