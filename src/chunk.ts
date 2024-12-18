@@ -318,6 +318,9 @@ function new_chunk_Fspc(chunk: Chunk) : ChunkWithErrors
     return [ reschunk, errors ];
 }
 
+/* Create a frontispiece chunk with a given number. Create the data
+   to match.
+*/
 export function new_chunk_Fspc_with(picnum: number) : Chunk
 {
     let data = new Uint8Array(4);
@@ -362,6 +365,9 @@ function new_chunk_RDes(chunk: Chunk) : ChunkWithErrors
     return [ reschunk, errors ];
 }
 
+/* Create a resource description chunk with given entries. Create the data
+   to match.
+*/
 export function new_chunk_RDes_with(entries: CTypes.CTResDescEntry[]) : Chunk
 {
     let datals: Uint8Array[] = [];
@@ -535,6 +541,8 @@ function new_chunk_Reso(chunk: Chunk) : ChunkWithErrors
     return [ reschunk, [] ];
 }
 
+/* Create a resolution chunk with given entries. Create the data to match.
+*/
 export function new_chunk_Reso_with(window: CTypes.CTResolutionWindow, entries: CTypes.CTResolutionEntry[]) : Chunk
 {
     let len = 24 + 28*entries.length;
