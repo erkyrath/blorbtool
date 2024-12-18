@@ -44,7 +44,9 @@ function MyApp()
     const [altdisplay, setAltDisplay ] = useState(null as AltDisplay);
     const [modalform, setModalForm] = useState(null as ModalForm);
 
-    (window as any).curblorb = blorb; //###
+    if (process.env.NODE_ENV == 'development') {
+	(window as any).curblorb = blorb;
+    }
     
     let loadBlorbFile = function(act: LoadBlorbAction) {
         let newblorb: Blorb;
