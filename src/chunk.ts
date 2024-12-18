@@ -14,7 +14,7 @@ export type ChunkType = {
     utype: Uint8Array; // four bytes
 }
 
-/* Polymorphour utility: convert a four-character string *or* a four-byte
+/* Polymorphous utility: convert a four-character string *or* a four-byte
    array into a ChunkType.
 */
 function make_chunk_type(type:string|Uint8Array) : ChunkType
@@ -39,6 +39,8 @@ let keycounter = 1;
 
 /* The Chunk type is a base type. All the chunk types in the CTypes
    namespace (CTResIndex, etc) extend it.
+
+   As with Blorb, all Chunk types are considered immutable.
 
    We assume that the chunk.type field is correct. That is, we'll cast
    Chunk to CTResIndex if chunk.type is 'RIdx', and so on. There's no
@@ -405,6 +407,8 @@ export function new_chunk_RDes_with(entries: CTypes.CTResDescEntry[]) : Chunk
     return reschunk;
 }
 
+/* Create a new empty resource description chunk.
+ */
 export function new_chunk_RDes_empty() : ChunkWithErrors
 {
     return new_chunk('RDes', new Uint8Array(4));
@@ -573,6 +577,8 @@ export function new_chunk_Reso_with(window: CTypes.CTResolutionWindow, entries: 
 }
 
 
+/* Return a human-readable description of a chunk.
+ */
 export function chunk_readable_desc(chunk: Chunk) : string
 {
     if (chunk.formtype) {
@@ -627,6 +633,9 @@ export function chunk_readable_desc(chunk: Chunk) : string
     return 'Unrecognized chunk';
 }
 
+/* Return an appropriate filename and mime type for a chunk.
+   This is used when downloading the chunk.
+*/
 export function chunk_filename_info(chunk: Chunk, blorb: Blorb)
 {
     let mimetype;
