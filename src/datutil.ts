@@ -1,9 +1,13 @@
 
+/* Utility functions for dealing with byte arrays. */
+
+/* ASCII (or Latin-1) string to byte array. */
 export function stringToU8(str: string) : Uint8Array
 {
     return new Uint8Array([ ...str ].map(ch => ch.charCodeAt(0)));
 }
 
+/* Byte array to ASCII string. */
 export function u8ToString(arr: Uint8Array,
     pos?: number, len?: number) : string
 {
@@ -17,6 +21,8 @@ export function u8ToString(arr: Uint8Array,
     return String.fromCharCode.apply(null, [ ...arr ]);
 }
 
+/* Byte array to string. We assume the byte array encodes pairs of
+   bytes, each pair being a 16-bit character. */
 export function u16ToString(arr: Uint8Array)
 {
     let chars: number[] = [];
@@ -26,23 +32,27 @@ export function u16ToString(arr: Uint8Array)
     return String.fromCharCode.apply(null, chars);
 }
 
+/* Byte array to string. We assume the byte array is UTF-8. */
 export function utf8ToString(arr: Uint8Array)
 {
     let td = new TextDecoder();
     return td.decode(arr);
 }
 
+/* String to byte array, UTF-8. */
 export function stringToUtf8(str: string) : Uint8Array
 {
     let te = new TextEncoder();
     return te.encode(str);
 }
 
+/* Read a 32-bit integer from a given location in a byte array. */
 export function u8read4(arr: Uint8Array, pos: number) : number
 {
     return arr[pos] * 0x1000000 + arr[pos+1] * 0x10000 + arr[pos+2] * 0x100 + arr[pos+3];
 }
 
+/* Write a 32-bit integer to a given location in a byte array. */
 export function u8write4(arr: Uint8Array, pos: number, val: number)
 {
     arr[pos] = (val >>> 24) & 0xFF;
@@ -51,6 +61,11 @@ export function u8write4(arr: Uint8Array, pos: number, val: number)
     arr[pos+3] = (val) & 0xFF;
 }
 
+/* Create a data: URL containing a byte array. This is an async function.
+   
+   We don't actually use this one, but it's so neat that I want to
+   keep a copy around!
+*/
 export function u8ToBase64URL(arr: Uint8Array) : Promise<string|ArrayBuffer|null>
 {
     let mimetype = "application/octet-stream";

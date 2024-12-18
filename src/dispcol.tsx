@@ -1,7 +1,6 @@
 import React from 'react';
 import { useState, useContext, useRef } from 'react';
 
-import { u8ToBase64URL } from './datutil';
 import { Chunk, CTypes, StringToUsage } from './chunk';
 import { chunk_readable_desc, chunk_filename_info } from './chunk';
 import { Blorb, blorb_resentry_for_chunk, blorb_chunk_for_usage } from './blorb';

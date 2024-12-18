@@ -1,5 +1,7 @@
 import React from 'react';
 
+/* The display pane for "About BlorbTool".
+ */
 export function AboutPane()
 {
     return (

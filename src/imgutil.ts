@@ -1,6 +1,8 @@
 
 import { u8ToString } from './datutil';
 
+/* Utility functions for parsing image data. */
+
 export type ImageSize = { width:number, height:number };
 
 export type ImageRatio = { numerator:number, denominator:number };
@@ -37,7 +39,10 @@ export function find_dimensions_png(arr: Uint8Array) : ImageSize|undefined
 }
 
 /* Given a JPEG file, extract its dimensions. Return a {width,height}
-   object, or undefined on error. 
+   object, or undefined on error.
+
+   (This does not account for EXIF orientation tags. I may need to fix
+   that eventually.)
 */
 export function find_dimensions_jpeg(arr: Uint8Array) : ImageSize|undefined
 {
