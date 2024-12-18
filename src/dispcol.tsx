@@ -11,6 +11,18 @@ import { ReactCtx } from './contexts';
 import { ShortArrowToChunk, ArrowToChunk, ArrowDownload, EditButton } from './widgets';
 import { DisplayChunkRaw, DisplayChunkFormatted } from './dispchunk';
 
+/* React components for the right-hand pane. */
+
+/* Display the right-hand pane with a specific chunk selected. Or
+   some other display, like the errors list or the about text.
+
+   If no chunk is selected but we have errors, we display the errors
+   (rather than nothing).
+   
+   Note that the selection is part of rctx, so I don't really have to
+   pass that in as a prop. That's left over from earlier versions
+   of the app.
+*/
 export function DisplayColumn({ selected }: { selected:number })
 {
     const [showhex, setShowHex] = useState(false);
@@ -39,7 +51,7 @@ export function DisplayColumn({ selected }: { selected:number })
         break;
     default:
         if (selchunk) {
-            contentpane = <DisplayChunk blorb={ blorb } chunk={ selchunk } showhex={ showhex } />
+            contentpane = <DisplayChunk chunk={ selchunk } showhex={ showhex } />
         }
         else if (blorb.errors.length) {
             contentpane = <DisplayErrors errors={ blorb.errors } />
@@ -72,6 +84,7 @@ export function DisplayColumn({ selected }: { selected:number })
     );
 }
 
+/* The errors list in the right-hand pane. */
 export function DisplayErrors({ errors }: { errors:ErrorArray })
 {
     let counter = 0;
@@ -96,11 +109,17 @@ export function DisplayErrors({ errors }: { errors:ErrorArray })
     );
 }
 
-export function DisplayChunk({ blorb, chunk, showhex }: { blorb:Blorb, chunk:Chunk, showhex:boolean })
+/* Display the right-hand pane with a specific chunk selected. If the
+   showhex flag is set (or if we have no explicit display component
+   for the chunk type), we display it as raw hex.
+*/
+export function DisplayChunk({ chunk, showhex }: { chunk:Chunk, showhex:boolean })
 {
     const [editingKey, setEditingKey] = useState(-1);
     const [editError, setEditError] = useState('');
+    
     let rctx = useContext(ReactCtx);
+    let blorb = rctx.blorb;
     
     let editing = (editingKey == chunk.refkey);
     let resentry = blorb_resentry_for_chunk(blorb, chunk);
@@ -168,6 +187,9 @@ export function DisplayChunk({ blorb, chunk, showhex }: { blorb:Blorb, chunk:Chu
     );
 }
 
+/* The bit of the "Usage:" line that shows the usage and resource number.
+   (Or a dash, if this is not a resource.)
+*/
 function ResEntryLine({ resentry }: { resentry:CTypes.CTResIndexEntry|undefined })
 {
     if (resentry) {
@@ -183,6 +205,9 @@ function ResEntryLine({ resentry }: { resentry:CTypes.CTResIndexEntry|undefined 
     }
 }
 
+/* The bit of the "Usage:" line that lets you edit the usage and resource
+   number.
+*/
 function ResEntryEdit({ chunk, resentry, error, onsave, oncancel }: { chunk:Chunk, resentry:CTypes.CTResIndexEntry|undefined, error:string, onsave:(arg:CTypes.ChunkUsageNumber|undefined) => void, oncancel:() => void })
 {
     const inputRef = useRefInput();

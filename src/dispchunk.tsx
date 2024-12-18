@@ -8,6 +8,11 @@ import { ReactCtx, BlorbCtx } from './contexts';
 
 import { ArrowToChunk, EditButton, DeleteButton } from './widgets';
 
+/* React components to display a chunk. */
+
+/* Display a chunk of any type. This invokes the appropriate chunk-type
+   component, or DisplayChunkRaw.
+*/
 export function DisplayChunkFormatted({ blorb, chunk }: { blorb:Blorb, chunk:Chunk })
 {
     let resentry = blorb_resentry_for_chunk(blorb, chunk);
@@ -43,6 +48,7 @@ export function DisplayChunkFormatted({ blorb, chunk }: { blorb:Blorb, chunk:Chu
     }
 }
 
+/* Display a chunk as raw hex. */
 export function DisplayChunkRaw({ chunk }: { chunk:Chunk })
 {
     let subdata = chunk.data.slice(0, 512);
@@ -63,6 +69,7 @@ export function DisplayChunkRaw({ chunk }: { chunk:Chunk })
 
 export namespace DispChunks {
 
+    /* Chunk display for 'RIdx'. */
     export function DCResIndex({ chunk }: { chunk:CTypes.CTResIndex })
     {
         let entls = chunk.entries.map(ent =>
@@ -80,6 +87,7 @@ export namespace DispChunks {
         );
     }
 
+    /* One resource entry for 'RIdx'. */
     function DCResIndexEntry({ ent }: { ent:CTypes.CTResIndexEntry })
     {
         let blorb = useContext(BlorbCtx);
@@ -109,6 +117,7 @@ export namespace DispChunks {
         );
     }
 
+    /* Chunk display for 'RDes'. */
     export function DCResDescs({ chunk }: { chunk:CTypes.CTResDescs })
     {
         let counter = 0;
@@ -125,6 +134,7 @@ export namespace DispChunks {
         );
     }
     
+    /* One resource entry for 'RDes'. */
     function DCResDescEntry({ ent }: { ent:CTypes.CTResDescEntry })
     {
         let rctx = useContext(ReactCtx);
@@ -155,6 +165,7 @@ export namespace DispChunks {
         );
     }
 
+    /* Chunk display for 'Fspc'. */
     export function DCFrontispiece({ chunk }: { chunk:CTypes.CTFrontispiece })
     {
         let blorb = useContext(BlorbCtx);
@@ -177,6 +188,7 @@ export namespace DispChunks {
         );
     }
 
+    /* Chunk display for 'IFmd'. */
     export function DCMetadata({ chunk }: { chunk:CTypes.CTMetadata })
     {
         const [showraw, setShowRaw] = useState(false);
@@ -227,6 +239,7 @@ export namespace DispChunks {
         );
     }
 
+    /* One node of the XML display for 'IFmd'. */
     function ShowXMLNode({ nod } : { nod:Node }) : React.ReactNode
     {
         if (nod.nodeType == nod.TEXT_NODE) {
@@ -263,6 +276,7 @@ export namespace DispChunks {
         );
     }
 
+    /* Chunk display for 'ZCOD'. */
     export function DCZCode({ chunk }: { chunk:CTypes.CTZCode })
     {
         return (
@@ -287,6 +301,7 @@ export namespace DispChunks {
         );
     }
 
+    /* Chunk display for 'GLUL'. */
     export function DCGlulx({ chunk }: { chunk:CTypes.CTGlulx })
     {
         return (
@@ -317,6 +332,8 @@ export namespace DispChunks {
         );
     }
 
+    /* Chunk display for 'JPEG' or 'PNG '. Includes editing for the
+       frontispiece flag and the alt-text line. */
     export function DCImage({ chunk, resentry }: { chunk:CTypes.CTImage, resentry:CTypes.CTResIndexEntry|undefined })
     {
         const [editingKey, setEditingKey] = useState(-1);
@@ -444,6 +461,7 @@ export namespace DispChunks {
         );
     }
 
+    /* Chunk display for 'RelN'. */
     export function DCReleaseNumber({ chunk }: { chunk:CTypes.CTReleaseNumber })
     {
         return (
@@ -458,6 +476,7 @@ export namespace DispChunks {
         );
     }
 
+    /* Chunk display for 'Reso'. */
     export function DCResolution({ chunk }: { chunk:CTypes.CTResolution })
     {
         let counter = 0;
@@ -495,6 +514,7 @@ export namespace DispChunks {
         );
     }
 
+    /* One entry line for 'Reso'. */
     function DCResolutionEntry({ ent }: { ent:CTypes.CTResolutionEntry })
     {
         let rctx = useContext(ReactCtx);
@@ -536,6 +556,7 @@ export namespace DispChunks {
         );
     }
 
+    /* Chunk display for text lines (various). */
     export function DCText({ chunk }: { chunk:CTypes.CTText })
     {
         return (
