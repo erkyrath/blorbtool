@@ -168,6 +168,9 @@ export namespace CTypes {
     
 }
 
+/* Given a string, constrain it to a valid usage type or else return
+   undefined.
+*/
 export function StringToUsage(val: string) : CTypes.ChunkUsage|undefined
 {
     switch (val) {
@@ -181,8 +184,15 @@ export function StringToUsage(val: string) : CTypes.ChunkUsage|undefined
     }
 }
 
+/* A lot of these chunk constructors can raise errors, so we have a return
+   type for both.
+*/
 type ChunkWithErrors = [ Chunk, string[] ];
 
+/* Create a chunk of the base class. We only have the type and data (bytes)
+   at this point. Also the initial position, if we are loading from a
+   file.
+*/
 function new_chunk_noinit(type:string|Uint8Array, data:Uint8Array, origpos?:number) : Chunk
 {
     let ctype = make_chunk_type(type);
@@ -204,6 +214,9 @@ function new_chunk_noinit(type:string|Uint8Array, data:Uint8Array, origpos?:numb
     return chunk;
 }
 
+/* Create a chunk from data (bytes). Load up the type-specific contents
+   by parsing that data.
+*/
 export function new_chunk(type:string|Uint8Array, data:Uint8Array, origpos?:number) : ChunkWithErrors
 {
     let chunk = new_chunk_noinit(type, data, origpos);
@@ -242,11 +255,17 @@ export function new_chunk(type:string|Uint8Array, data:Uint8Array, origpos?:numb
     return [ chunk, [] ];
 }
 
+/* Create an empty index chunk. It so happens that an empty index chunk
+   has the byte data [0, 0, 0, 0], so it's easiest to do this by
+   creating that byte array and then parsing it.
+*/
 export function new_chunk_RIdx_empty() : ChunkWithErrors
 {
     return new_chunk('RIdx', new Uint8Array(4));
 }
 
+/* Create an index chunk from data (bytes).
+ */
 function new_chunk_RIdx(chunk: Chunk) : ChunkWithErrors
 {
     let errors: string[] = [];
@@ -282,6 +301,8 @@ function new_chunk_RIdx(chunk: Chunk) : ChunkWithErrors
     return [ reschunk, errors ];
 }
 
+/* Create a frontispiece chunk from data (bytes).
+ */
 function new_chunk_Fspc(chunk: Chunk) : ChunkWithErrors
 {
     let errors: string[] = [];
@@ -307,6 +328,8 @@ export function new_chunk_Fspc_with(picnum: number) : Chunk
     return reschunk;
 }
 
+/* Create a resource description chunk from data (bytes).
+ */
 function new_chunk_RDes(chunk: Chunk) : ChunkWithErrors
 {
     let errors: string[] = [];
@@ -381,6 +404,8 @@ export function new_chunk_RDes_empty() : ChunkWithErrors
     return new_chunk('RDes', new Uint8Array(4));
 }
 
+/* Create a metadata chunk from data (bytes).
+ */
 function new_chunk_IFmd(chunk: Chunk) : ChunkWithErrors
 {
     let metadata = utf8ToString(chunk.data);
@@ -388,6 +413,8 @@ function new_chunk_IFmd(chunk: Chunk) : ChunkWithErrors
     return [ reschunk, [] ];
 }
 
+/* Create a Z-code chunk from data (bytes).
+ */
 function new_chunk_ZCOD(chunk: Chunk) : ChunkWithErrors
 {
     let zversion = chunk.data[0];
@@ -397,6 +424,8 @@ function new_chunk_ZCOD(chunk: Chunk) : ChunkWithErrors
     return [ reschunk, [] ];
 }
 
+/* Create a Glulx chunk from data (bytes).
+ */
 function new_chunk_GLUL(chunk: Chunk) : ChunkWithErrors
 {
     let majversion = 0x100 * chunk.data[4] + chunk.data[5];
@@ -419,6 +448,8 @@ function new_chunk_GLUL(chunk: Chunk) : ChunkWithErrors
     return [ reschunk, [] ];
 }
 
+/* Create a PNG image chunk from data (bytes).
+ */
 function new_chunk_PNG(chunk: Chunk) : ChunkWithErrors
 {
     let imgsize = find_dimensions_png(chunk.data);
@@ -426,6 +457,8 @@ function new_chunk_PNG(chunk: Chunk) : ChunkWithErrors
     return [ reschunk, [] ];
 }
 
+/* Create a JPEG image chunk from data (bytes).
+ */
 function new_chunk_JPEG(chunk: Chunk) : ChunkWithErrors
 {
     let imgsize = find_dimensions_jpeg(chunk.data);
@@ -433,6 +466,8 @@ function new_chunk_JPEG(chunk: Chunk) : ChunkWithErrors
     return [ reschunk, [] ];
 }
 
+/* Create a text chunk from data (bytes).
+ */
 function new_chunk_ASCIIText(chunk: Chunk) : ChunkWithErrors
 {
     let text = u8ToString(chunk.data);
@@ -440,6 +475,10 @@ function new_chunk_ASCIIText(chunk: Chunk) : ChunkWithErrors
     return [ reschunk, [] ];
 }
 
+/* Create a text chunk from data (bytes).
+   The encoding is two-byte characters. This is only used for the
+   (deprecated) 'SNam' chunk type.
+ */
 function new_chunk_U16Text(chunk: Chunk) : ChunkWithErrors
 {
     let text = u16ToString(chunk.data);
@@ -447,6 +486,8 @@ function new_chunk_U16Text(chunk: Chunk) : ChunkWithErrors
     return [ reschunk, [] ];
 }
 
+/* Create a release number chunk from data (bytes).
+ */
 function new_chunk_RelN(chunk: Chunk) : ChunkWithErrors
 {
     let errors: string[] = [];
@@ -462,6 +503,8 @@ function new_chunk_RelN(chunk: Chunk) : ChunkWithErrors
     return [ reschunk, [] ];
 }
 
+/* Create a resolution chunk from data (bytes).
+ */
 function new_chunk_Reso(chunk: Chunk) : ChunkWithErrors
 {
     let winsize = { width:u8read4(chunk.data, 0), height:u8read4(chunk.data, 4) };
