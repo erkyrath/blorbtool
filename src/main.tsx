@@ -16,8 +16,20 @@ import { LoaderIndex, LoaderDisplay } from './loader';
 import { ModalFormOverlay } from './modalform';
 import { ArrowDownload, ArrowGeneric } from './widgets';
 
+/* BlorbTool: a browser-based Blorb file editor.
+ */
+
+/* The initial Blorb data. This can be set when init() is called. If not,
+   we'll display a form which allows the user to "upload" a Blorb
+   file.
+*/
 let initialBlorb: Blorb|undefined;
 
+/* The page setup function. This should be called when the page loads.
+
+   If blorbdata is provided, we parse it into a Blorb object and stash
+   it as the initial Blorb to display. (With optional filename attached.)
+ */
 export function init(blorbdata: Uint8Array|undefined, filename: string|undefined)
 {
     //### maybe fix up filename? Remove .js, add .blb
@@ -30,8 +42,22 @@ export function init(blorbdata: Uint8Array|undefined, filename: string|undefined
         root.render( <MyApp /> );
 }
 
+/* The top-level React component.
+
+   This maintains a bunch of top-level state:
+
+   - The Blorb (updated with a reducer)
+   - Flag for whether to display the upload form
+   - Which chunk is selected
+   - What to display if no chunk is selected
+   - A "modal dialog box" (for certain operations)
+ */
 function MyApp()
 {
+    /* This is not really correct React style. This stanza runs on
+       the first render; after that initialBlorb is defined. There's
+       probably a better way to pass in React useState() defaults.
+    */
     let initialLoader = false;
     if (!initialBlorb) {
         initialBlorb = new_blorb();
@@ -83,6 +109,18 @@ function MyApp()
         }
     }
 
+    /* The whole app is wrapped in two React contexts. One provides the
+       current Blorb; the other provides a whole mess of state and state-
+       setters, *including* the current Blorb.
+
+       This is redundant, of course. I originally had a whole bunch of
+       separate contexts, but that became silly. I then wrapped most of
+       them up in the agglutinative ContextContent context, but I
+       left the BlorbCtx separate because it was used in a bunch of places
+       that only care about the current Blorb. I should just knock it out
+       and use ContextContent.blorb everywhere.
+    */
+    
     let rctx: ContextContent = {
         selection: selected,
         setSelection: setSelectedWrap,
@@ -108,6 +146,7 @@ function MyApp()
     );
 }
 
+/* The app in its upload-a-Blorb-please state. */
 function AppLoading()
 {
     return (
@@ -119,6 +158,7 @@ function AppLoading()
     );
 }
 
+/* The app in its normal edit-a-Blorb state. */
 function AppRunning()
 {
     let rctx = useContext(ReactCtx);
@@ -133,6 +173,7 @@ function AppRunning()
     );
 }
 
+/* The left column. */
 function IndexColumn()
 {
     let rctx = useContext(ReactCtx);
@@ -157,6 +198,7 @@ function IndexColumn()
     );
 }
 
+/* Blorb info, top of the left column. */
 function BlorbInfoHeader()
 {
     let rctx = useContext(ReactCtx);
@@ -205,6 +247,7 @@ function BlorbInfoHeader()
     );
 }
 
+/* One entry in the chunk list, left column. */
 function ChunkListEntry({ chunk, isselected } : { chunk:Chunk, isselected:boolean })
 {
     let rctx = useContext(ReactCtx);
@@ -238,6 +281,7 @@ function ChunkListEntry({ chunk, isselected } : { chunk:Chunk, isselected:boolea
     );
 }
 
+/* Decorative background for the left column. */
 function IndexColumnBack()
 {
     return (

@@ -262,6 +262,9 @@ function ResEntryEdit({ chunk, resentry, error, onsave, oncancel }: { chunk:Chun
     );
 }
 
+
+// Late typedefs (because my editor gets confused)
+
 type MouseButtonEv = React.MouseEvent<HTMLButtonElement, MouseEvent>;
 type ChangeEv = React.ChangeEvent<HTMLInputElement>;
 type ErrorArray = ReadonlyArray<Error>;

@@ -552,6 +552,9 @@ export namespace DispChunks {
 
 }
 
+
+// Late typedefs (because my editor gets confused)
+
 type MouseEv = React.MouseEvent<HTMLElement, MouseEvent>;
 type MouseButtonEv = React.MouseEvent<HTMLButtonElement, MouseEvent>;
 type ChangeEv = React.ChangeEvent<HTMLInputElement>;

@@ -5,6 +5,7 @@ import { ReactCtx } from './contexts';
 
 import { AboutPane } from './about';
 
+/* Left column when displaying the upload form. */
 export function LoaderIndex()
 {
     let rctx = useContext(ReactCtx);
@@ -97,6 +98,7 @@ export function LoaderIndex()
     );
 }
 
+/* Right pane when displaying the upload form. */
 export function LoaderDisplay()
 {
     return (
@@ -112,6 +114,8 @@ export function LoaderDisplay()
         </div>
     );
 }
+
+// Late typedefs (because my editor gets confused)
 
 type ChangeEv = React.ChangeEvent<HTMLInputElement>;
 type DragEv = React.DragEvent<HTMLDivElement>;
