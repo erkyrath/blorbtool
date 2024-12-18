@@ -37,9 +37,13 @@ BlorbTool comes with its Javascript library built and ready to go. But if you wa
 
 BlorbTool uses three tools from the Javascript ecosystem:
 
-- React, a library for making single-page web apps
-- Typescript, a strongly-typed variant of Javascript
-- Rollup, a tool for packaging Javascript (and Typescript) in an easily-loadable (and minified) form
+- [React][], a library for making single-page web apps
+- [Typescript][], a strongly-typed variant of Javascript
+- [Rollup][], a tool for packaging Javascript (and Typescript) in an easily-loadable (and minified) form
+
+[React]: https://react.dev
+[Typescript]: https://www.typescriptlang.org
+[Rollup]: https://rollupjs.org
 
 Only React is part of the final runnable app. Typescript and Rollup are used only in the build process.
 
