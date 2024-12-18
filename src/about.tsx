@@ -2,12 +2,15 @@ import React from 'react';
 import { useContext } from 'react';
 
 import { ReactCtx } from './contexts';
+import { EditButton } from './widgets';
 
 /* The display pane for "About BlorbTool".
  */
 export function AboutPane()
 {
     let rctx = useContext(ReactCtx);
+
+    let evhan_noop = function() {};
     
     return (
         <>
@@ -35,6 +38,15 @@ export function AboutPane()
             <p>A blorb file is a series of &#x201C;chunks&#x201D;, which
                 will be listed on the left. Select one to display it
                 on the right.</p>
+            { (!rctx.showloader ?
+               <p>You can add or delete chunks using the buttons.
+                   You can edit some (not all) elements of chunks;
+                   look for the{' '}
+                   <EditButton func={ evhan_noop } />
+                   {' '}button. When you are finished editing, hit
+                   the "Download" button (on the left) to download the 
+                   updated blorb file.</p>
+               : null) }
             <p>Note BlorbTool runs entirely in your browser. The file
                 you select is <em>not</em> uploaded to any server.
                 If you close or reload your browser window, the displayed
