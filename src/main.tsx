@@ -44,6 +44,14 @@ function MyApp()
     const [altdisplay, setAltDisplay ] = useState(null as AltDisplay);
     const [modalform, setModalForm] = useState(null as ModalForm);
 
+    /* In dev mode, store the current Blorb in the global JS environment
+       so we can peek at it.
+       (Note that this happens every render, not just at startup. So
+       it's always the *current* Blorb. 
+
+       Hack alert: we're not running in Node.js here! But the rollup
+       configuration replaces "process.env.NODE_ENV" with a static string,
+       so we can pretend to check it. */
     if (process.env.NODE_ENV == 'development') {
 	(window as any).curblorb = blorb;
     }
