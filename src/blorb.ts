@@ -27,7 +27,12 @@ import { Chunk, CTypes } from './chunk';
    I thought of this, so I went with this "|" type. */
 export type Error = { text:string, refkey:number} | string;
 
-/* The mighty Blorb. */
+/* The mighty Blorb.
+
+   Remember that a chunk has a unique refkey (an integer) which can
+   be used to refer to it. Chunk refkeys are only used in fast
+   lookup tables; they are not saved as part of the Blorb.
+*/
 export type Blorb = {
     filename: string|undefined;
     chunks: ReadonlyArray<Chunk>;

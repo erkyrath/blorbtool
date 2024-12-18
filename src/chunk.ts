@@ -3,11 +3,20 @@ import { u8read4, u8write4 } from './datutil';
 import { ImageSize, ImageRatio, find_dimensions_png, find_dimensions_jpeg } from './imgutil';
 import { Blorb, blorb_resentry_for_chunk } from './blorb';
 
+/* Declarations for the top-level Chunk type and its many derived types.
+ */
+
+/* This stores the same four-character type field twice: as a string (for
+   printing and comparing), and as a four-byte array (for saving out).
+*/
 export type ChunkType = {
     stype: string; // four characters
     utype: Uint8Array; // four bytes
 }
 
+/* Polymorphour utility: convert a four-character string *or* a four-byte
+   array into a ChunkType.
+*/
 function make_chunk_type(type:string|Uint8Array) : ChunkType
 {
     let stype: string;
@@ -25,7 +34,19 @@ function make_chunk_type(type:string|Uint8Array) : ChunkType
     return { stype:stype, utype:utype };
 }
 
+// Used to generate the unique refkey values. (We just increment it.)
 let keycounter = 1;
+
+/* The Chunk type is a base type. All the chunk types in the CTypes
+   namespace (CTResIndex, etc) extend it.
+
+   We assume that the chunk.type field is correct. That is, we'll cast
+   Chunk to CTResIndex if chunk.type is 'RIdx', and so on. There's no
+   type-safety here; we have to keep the types straight ourselves.
+
+   (A "tagged struct" idiom would be nicer and allow some compile-time
+   checking. But that's not what I did.)
+*/
 
 export interface Chunk {
     // unique identifier for this chunk -- internal use only
