@@ -85,8 +85,6 @@ export namespace DispChunks {
         let blorb = useContext(BlorbCtx);
         let chunk = blorb_chunk_for_usage(blorb, ent.usage, ent.resnum);
     
-        //### or error if not found
-    
         return (
             <tr>
                 <td>
@@ -98,7 +96,10 @@ export namespace DispChunks {
                         <>
                             {' '}&nbsp; <ArrowToChunk destkey={ chunk.refkey } />
                         </>
-                        : null) }
+                        :
+                        <>
+                            {' '}&nbsp; <span className="ErrorText">chunk not found</span>
+                        </>) }
                     {' '}&nbsp;{' '}
                 </td>
                 <td>
