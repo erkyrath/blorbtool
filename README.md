@@ -31,6 +31,13 @@ There are many command-line Blorb editors out there. (I recommend my own [blorbt
 
 Also, I figured this would make a good React test project. Turns out React looks great on your resume.
 
+### Why purple ribbons?
+
+Gosh, I've built so many web pages out of [blue][blog] and [beige][photos] rectangles. I wanted to bling this one out... just a tiny bit.
+
+[blog]: https://blog.zarfhome.com
+[photos]: https://eblong.com/zarf/photo/
+
 ## Building BlorbTool
 
 BlorbTool comes with its Javascript library built and ready to go. But if you want to mess with the source code, you can.
