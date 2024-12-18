@@ -124,6 +124,7 @@ function MyApp()
     let rctx: ContextContent = {
         selection: selected,
         setSelection: setSelectedWrap,
+        showloader: showloader,
         altdisplay: altdisplay,
         setAltDisplay: setAltDisplayWrap,
         modalform: modalform,

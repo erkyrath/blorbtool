@@ -1,9 +1,14 @@
 import React from 'react';
+import { useContext } from 'react';
+
+import { ReactCtx } from './contexts';
 
 /* The display pane for "About BlorbTool".
  */
 export function AboutPane()
 {
+    let rctx = useContext(ReactCtx);
+    
     return (
         <>
             <h3>What is this?</h3>
@@ -22,9 +27,11 @@ export function AboutPane()
                 <a target="_blank" href="https://eblong.com/zarf/blorb/">Blorb web site</a>
             .</p>
             <h3>What do I do?</h3>
-            <p>Hit &#x201C;Choose File&#x201D; and select a blorb file
-                (<code>.blb</code>, <code>.zblorb</code>,{' '}
-                <code>.gblorb</code>, etc).</p>
+            { (rctx.showloader ?
+               <p>Hit &#x201C;Choose File&#x201D; and select a blorb file
+                   (<code>.blb</code>, <code>.zblorb</code>,{' '}
+               <code>.gblorb</code>, etc).</p>
+               : null) }
             <p>A blorb file is a series of &#x201C;chunks&#x201D;, which
                 will be listed on the left. Select one to display it
                 on the right.</p>

@@ -28,7 +28,8 @@ export type ModalForm = (
 export type ContextContent = {
     selection: number;
     setSelection: (val:number) => void;
-    
+
+    showloader: boolean,
     altdisplay: AltDisplay;
     setAltDisplay: (val:AltDisplay) => void;
     
@@ -43,6 +44,7 @@ export type ContextContent = {
 export const ReactCtx = createContext({
     selection: -1,
     setSelection: (val:number) => {},
+    showloader: false,
     altdisplay: null,
     setAltDisplay: (val:AltDisplay) => {},
     modalform: null,
