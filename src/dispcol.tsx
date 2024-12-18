@@ -10,6 +10,7 @@ import { pretty_size, byte_to_hex } from './readable';
 import { ReactCtx } from './contexts';
 import { ShortArrowToChunk, ArrowToChunk, ArrowDownload, EditButton } from './widgets';
 import { DisplayChunkRaw, DisplayChunkFormatted } from './dispchunk';
+import { AboutPane } from './about';
 
 /* React components for the right-hand pane. */
 
@@ -41,9 +42,15 @@ export function DisplayColumn({ selected }: { selected:number })
     function evhan_click_delete(ev: React.MouseEvent<HTMLElement, MouseEvent>) {
         rctx.setModalForm({ type:'delchunk', key:selected });
     }
-
+    function evhan_click_help(ev: React.MouseEvent<HTMLElement, MouseEvent>) {
+        rctx.setAltDisplay('about');
+    }
+    
     let contentpane = null;
     switch (rctx.altdisplay) {
+    case 'about':
+        contentpane = <AboutPane />;
+        break;
     case 'errors':
         if (blorb.errors.length) {
             contentpane = <DisplayErrors errors={ blorb.errors } />
@@ -74,6 +81,9 @@ export function DisplayColumn({ selected }: { selected:number })
                     </div>
                     <div className="Control">
                         <button disabled={ !selchunk || selchunk.type.stype=='RIdx' } onClick={ evhan_click_delete }>Delete</button>
+                    </div>
+                    <div className="Control">
+                        <button className="HelpButton" onClick={ evhan_click_help }>?</button>
                     </div>
                 </div>
             </div>

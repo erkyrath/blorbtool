@@ -445,6 +445,14 @@ a.DeleteButton:hover {
     color: #88A;
 }
 
+button.HelpButton {
+    font-weight: bold;
+    font-size: 120%;
+    color: #A3E;
+    border-radius: 20px;
+    padding: 1px 6px;
+}
+
 .ErrorLine {
     margin-top: 8px;
     margin-bottom: 8px;
