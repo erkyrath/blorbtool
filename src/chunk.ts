@@ -63,74 +63,96 @@ export interface Chunk {
 };
 
 export namespace CTypes {
-    
+
+    /* A few low-level types first. */
+
+    // The valid usage fields.
     export type ChunkUsage = 'Pict' | 'Snd ' | 'Data' | 'Exec';
+
+    // A usage plus resource number.
     export type ChunkUsageNumber = {
         usage: ChunkUsage;
         resnum: number;
     };
+
+    // Usage, resource number, and position -- one entry in the index chunk.
     export type CTResIndexEntry = {
         usage: ChunkUsage;
         resnum: number;
         pos: number;
     };
+
+    /* The chunks, extending the basic Chunk interface. */
     
+    // Chunk type 'RIdx'.
     export interface CTResIndex extends Chunk {
         entries: ReadonlyArray<CTResIndexEntry>;
         forusagemap: Map<string, number>; // "Pict:1" to pos
         invusagemap: Map<number, CTypes.CTResIndexEntry>; // the inverse
     };
     
+    // Chunk type 'Fspc'.
     export interface CTFrontispiece extends Chunk {
         picnum: number;
     }
 
+    // One entry in the resource description chunk.
     export type CTResDescEntry = {
         usage: ChunkUsage;
         resnum: number;
         text: string;
     };
     
+    // Chunk type 'RDes'.
     export interface CTResDescs extends Chunk {
         entries: ReadonlyArray<CTResDescEntry>;
         usagemap: Map<string, string>; // "Pict:1" to text
     }
 
+    // Chunk type 'IFmd'.
     export interface CTMetadata extends Chunk {
         metadata: string;
     }
     
+    // Chunk type 'ZCOD'.
     export interface CTZCode extends Chunk {
         zversion: number;
         release: number;
         serial: string;
     }
-    
+
+    // Chunk type 'GLUL'.
     export interface CTGlulx extends Chunk {
         gversion: string;
         infversion: string;
         release: number;
         serial: string;
     }
-    
+
+    // Chunk types 'PNG ', 'JPEG'.
     export interface CTImage extends Chunk {
         imgsize: ImageSize|undefined;
     }
     
+    // Chunk types 'AUTH', 'ANNO', '(c) '.
     export interface CTText extends Chunk {
         text: string;
     }
     
+    // Chunk type 'RelN'.
     export interface CTReleaseNumber extends Chunk {
         release: number;
     }
 
+    // The window info in the resolution chunk. (There's only one of these,
+    // but it's easier to define it as a type.)
     export type CTResolutionWindow = {
         winsize: ImageSize;
         minwinsize: ImageSize;
         maxwinsize: ImageSize;
     }
     
+    // One entry in the resolution chunk.
     export type CTResolutionEntry = {
         resnum: number;
         stdratio: ImageRatio;
@@ -138,6 +160,7 @@ export namespace CTypes {
         maxratio: ImageRatio;
     }
 
+    // Chunk type 'Reso'.
     export interface CTResolution extends Chunk {
         window: CTResolutionWindow;
         entries: ReadonlyArray<CTResolutionEntry>;
