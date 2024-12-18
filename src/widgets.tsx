@@ -6,6 +6,11 @@ import { blorb_chunk_for_key, blorb_resentry_for_chunk } from './blorb';
 
 import { ReactCtx } from './contexts';
 
+/* Various React components that get reused a lot. */
+
+/* A one-line chunk description: human-readable label, followed
+   by the resource info (if present).
+*/
 export function ChunkReadableDesc({ chunk }: { chunk:Chunk})
 {
     let rctx = useContext(ReactCtx);
@@ -29,6 +34,7 @@ export function ChunkReadableDesc({ chunk }: { chunk:Chunk})
     );
 }
 
+/* A clickable arrow that does something. */
 export function ArrowGeneric({ func }: { func:()=>void })
 {
     function evhan_click(ev: React.MouseEvent<HTMLElement, MouseEvent>) {
@@ -44,6 +50,9 @@ export function ArrowGeneric({ func }: { func:()=>void })
     );
 }
 
+/* A clickable arrow that jumps to a chunk. Includes the human-readable
+   label. 
+*/   
 export function ArrowToChunk({ destkey }: { destkey:number })
 {
     let rctx = useContext(ReactCtx);
@@ -67,6 +76,8 @@ export function ArrowToChunk({ destkey }: { destkey:number })
     );
 }
 
+/* A clickable arrow that jumps to a chunk. No label. 
+*/   
 export function ShortArrowToChunk({ destkey }: { destkey:number })
 {
     let rctx = useContext(ReactCtx);
@@ -84,6 +95,8 @@ export function ShortArrowToChunk({ destkey }: { destkey:number })
     );
 }
 
+/* A clickable arrow for downloading data.
+ */
 export function ArrowDownload({ data, filename, mimetype }: { data:Uint8Array, filename:string, mimetype:string })
 {
     let dataurl = URL.createObjectURL(
@@ -97,6 +110,8 @@ export function ArrowDownload({ data, filename, mimetype }: { data:Uint8Array, f
     );
 }
 
+/* A clickable button for editing some chunk element.
+ */
 export function EditButton({ func }: { func:()=>void })
 {
     function evhan_click(ev: React.MouseEvent<HTMLElement, MouseEvent>) {
@@ -112,6 +127,9 @@ export function EditButton({ func }: { func:()=>void })
     );
 }
 
+/* A clickable button for deleting some chunk element.
+   (Small inline button, not a full "Delete" button.)
+*/
 export function DeleteButton({ func }: { func:()=>void })
 {
     function evhan_click(ev: React.MouseEvent<HTMLElement, MouseEvent>) {
