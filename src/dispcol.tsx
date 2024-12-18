@@ -123,15 +123,15 @@ export function DisplayChunk({ blorb, chunk, showhex }: { blorb:Blorb, chunk:Chu
             setEditingKey(-1);
     }
 
-    function evhan_edit_save(usage: CTypes.ChunkUsageNumber|undefined) {
-        if (usage) {
-            let chu = blorb_chunk_for_usage(blorb, usage.usage, usage.resnum);
+    function evhan_edit_save(resid: CTypes.ChunkUsageNumber|undefined) {
+        if (resid) {
+            let chu = blorb_chunk_for_usage(blorb, resid.usage, resid.resnum);
             if (chu && chu.refkey != chunk.refkey) {
-                setEditError(`A chunk already has usage ${usage.usage} #${usage.resnum}.`);
+                setEditError(`A chunk already has usage ${resid.usage} #${resid.resnum}.`);
                 return;
             }
         }
-        rctx.editBlorb({ type:'setchunkusage', refkey:chunk.refkey, usage:usage });
+        rctx.editBlorb({ type:'setchunkusage', refkey:chunk.refkey, resid:resid });
         setEditingKey(-1);
     }
     

@@ -1,7 +1,7 @@
 import { Chunk, CTypes } from './chunk';
 import { new_chunk_Fspc_with, new_chunk_RDes_empty, new_chunk_RDes_with, new_chunk_Reso_with } from './chunk';
 import { Blorb } from './blorb';
-import { blorb_chunk_for_key, blorb_first_chunk_for_type, blorb_resentry_for_chunk } from './blorb';
+import { blorb_chunk_for_key, blorb_first_chunk_for_type, blorb_resentry_for_chunk, blorb_resentry_for_key } from './blorb';
 import { blorb_clear_errors, blorb_update_index_entries, blorb_delete_chunk_by_key, blorb_addreplace_chunk } from './blorb';
 import { check_blorb_consistency } from './checkblorb';
 
@@ -9,7 +9,7 @@ export type BlorbEditCmd = (
     null 
     | { type:'loadnew', blorb:Blorb }
     | { type:'delchunk', refkey:number }
-    | { type:'setchunkusage', refkey:number, usage:CTypes.ChunkUsageNumber|undefined }
+    | { type:'setchunkusage', refkey:number, resid:CTypes.ChunkUsageNumber|undefined }
     | { type:'setfrontis', refkey:number }
     | { type:'setresdesc', usage:CTypes.ChunkUsage, resnum:number, text:string }
     | { type:'delresoentry', resnum:number }
@@ -30,7 +30,7 @@ export function blorb_apply_change(blorb: Blorb, act: BlorbEditCmd) : Blorb
     case 'delchunk':
         return blorb_delete_chunk(blorb, act.refkey);
     case 'setchunkusage':
-        return blorb_set_chunk_usage(blorb, act.refkey, act.usage);
+        return blorb_set_chunk_usage(blorb, act.refkey, act.resid);
     case 'setfrontis':
         return blorb_set_frontis(blorb, act.refkey);
     case 'setresdesc':
@@ -45,9 +45,13 @@ export function blorb_apply_change(blorb: Blorb, act: BlorbEditCmd) : Blorb
 
 function blorb_delete_chunk(blorb: Blorb, key: number) : Blorb
 {
+    let resentry = blorb_resentry_for_key(blorb, key);
+    
     let newblorb = blorb_delete_chunk_by_key(blorb, key);
 
-    //### delete Fspc and any RDes, Reso entry?
+    if (resentry) {
+        newblorb = blorb_update_usage_refs(newblorb, resentry, undefined);
+    }
 
     newblorb = check_blorb_consistency(newblorb);
 
@@ -81,7 +85,7 @@ function blorb_set_frontis(blorb: Blorb, key: number) : Blorb
     return newblorb;
 }
 
-function blorb_set_chunk_usage(blorb: Blorb, refkey: number, usage: CTypes.ChunkUsageNumber|undefined) : Blorb
+function blorb_set_chunk_usage(blorb: Blorb, refkey: number, resid: CTypes.ChunkUsageNumber|undefined) : Blorb
 {
     if (!blorb.chunks.length) {
         return blorb;
@@ -99,31 +103,35 @@ function blorb_set_chunk_usage(blorb: Blorb, refkey: number, usage: CTypes.Chunk
         return blorb;
     }
 
+    let resentry = blorb_resentry_for_key(blorb, refkey);
+
     let newents: CTypes.CTResIndexEntry[];
     
     let pos = oldridx.entries.findIndex((ent) => (ent.pos == chunk.pos));
     if (pos < 0) {
-        if (!usage) {
+        if (!resid) {
             return blorb;
         }
-        newents = [ ...oldridx.entries, { usage:usage.usage, resnum:usage.resnum, pos:chunk.pos } ];
+        newents = [ ...oldridx.entries, { usage:resid.usage, resnum:resid.resnum, pos:chunk.pos } ];
     }
     else {
         newents = [ ...oldridx.entries ];
-        if (!usage) {
+        if (!resid) {
             newents.splice(pos, 1);
         }
-        else if (newents[pos].usage == usage.usage && newents[pos].resnum == usage.resnum) {
+        else if (newents[pos].usage == resid.usage && newents[pos].resnum == resid.resnum) {
             return blorb;
         }
         else {
-            newents[pos] = { usage:usage.usage, resnum:usage.resnum, pos:chunk.pos };
+            newents[pos] = { usage:resid.usage, resnum:resid.resnum, pos:chunk.pos };
         }
     }
 
     let newblorb = blorb_update_index_entries(blorb, newents);
 
-    //### update Reso, Fspc, RDes refs?
+    if (resentry) {
+        newblorb = blorb_update_usage_refs(newblorb, resentry, resid);
+    }
     
     newblorb = check_blorb_consistency(newblorb);
     
@@ -212,4 +220,10 @@ function blorb_delete_resolution_entry(blorb: Blorb, resnum: number) : Blorb
     newblorb = check_blorb_consistency(newblorb);
     
     return newblorb;
+}
+
+function blorb_update_usage_refs(blorb: Blorb, olduse: CTypes.ChunkUsageNumber, newuse: CTypes.ChunkUsageNumber|undefined) : Blorb
+{
+    console.log('### updating', olduse, 'to', newuse);
+    return blorb;
 }
