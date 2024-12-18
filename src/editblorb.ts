@@ -224,13 +224,10 @@ function blorb_delete_resolution_entry(blorb: Blorb, resnum: number) : Blorb
 
 function blorb_update_usage_refs(blorb: Blorb, oldresid: CTypes.ChunkUsageNumber, newresid: CTypes.ChunkUsageNumber|undefined) : Blorb
 {
-    console.log('### updating', oldresid, 'to', newresid);
-
     let rdes = blorb_first_chunk_for_type(blorb, 'RDes') as CTypes.CTResDescs;
     if (rdes) {
         let pos = rdes.entries.findIndex((ent) => (ent.usage == oldresid.usage && ent.resnum == oldresid.resnum));
         if (pos >= 0) {
-            console.log('### ...rdes entry', pos);
             let newentries: CTypes.CTResDescEntry[];
             if (newresid) {
                 newentries = [ ...rdes.entries ];
@@ -254,7 +251,6 @@ function blorb_update_usage_refs(blorb: Blorb, oldresid: CTypes.ChunkUsageNumber
     if (oldresid.usage == 'Pict') {
         let frontischunk = blorb_first_chunk_for_type(blorb, 'Fspc') as CTypes.CTFrontispiece;
         if (frontischunk && frontischunk.picnum == oldresid.resnum) {
-            console.log('### ...frontis');
             if (newresid && newresid.usage == 'Pict') {
                 let newfchunk = new_chunk_Fspc_with(newresid.resnum);
                 blorb = blorb_addreplace_chunk(blorb, newfchunk);
@@ -268,7 +264,6 @@ function blorb_update_usage_refs(blorb: Blorb, oldresid: CTypes.ChunkUsageNumber
         if (reso) {
             let pos = reso.entries.findIndex((ent) => (ent.resnum == oldresid.resnum));
             if (pos >= 0) {
-                console.log('### ...reso entry', pos);
                 let newentries: CTypes.CTResolutionEntry[];
                 if (newresid && newresid.usage == 'Pict') {
                     newentries = [ ...reso.entries ];
