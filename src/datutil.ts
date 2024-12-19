@@ -77,3 +77,13 @@ export function u8ToBase64URL(arr: Uint8Array) : Promise<string|ArrayBuffer|null
         reader.readAsDataURL(new File([ arr ], "", { type:mimetype }));
     });
 }
+
+/* Quick and dirty check for whether a byte array is probably
+   ASCII text. */
+export function looksLikeAscii(data: Uint8Array) : boolean
+{
+    let arr = [ ...data.slice(0, 16) ];
+    return arr.every((ch) => {
+        return (ch == 10 || ch == 13 || (ch >= 0x20 && ch <= 0x7E));
+    });
+}

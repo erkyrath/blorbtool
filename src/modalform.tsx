@@ -1,9 +1,10 @@
 import React from 'react';
-import { useState, useContext, useRef } from 'react';
+import { useState, useContext, useRef, useMemo } from 'react';
 
 import { chunk_filename_info } from './chunk';
 import { blorb_get_data, blorb_chunk_for_key, blorb_resentry_for_key } from './blorb';
 import { pretty_size } from './readable';
+import { determine_file_type } from './fileutil';
 
 import { ReactCtx, ContextContent } from './contexts';
 import { ArrowDownload, ChunkReadableDesc } from './widgets';
@@ -278,6 +279,8 @@ function ModalAddChunk()
 
 function ModalAddChunkThen({ filename, data }: { filename:string, data:Uint8Array })
 {
+    let filetype = useMemo(() => determine_file_type(filename, data), [ filename, data ]);
+    
     return (
         <>
         </>
@@ -296,3 +299,4 @@ type ChangeEv = React.ChangeEvent<HTMLInputElement>;
 type DragEv = React.DragEvent<HTMLDivElement>;
 
 const useRefInput = () => useRef<HTMLInputElement>(null);
+
