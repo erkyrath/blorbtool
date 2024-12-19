@@ -43,7 +43,12 @@ const suffix_to_type_map: Map<string, string> = new Map([
     [ 'ablorb', 'IFRS' ],
 ]);
 
-export function determine_file_type(filename: string, data: Uint8Array) : string
+export type FileTypeGuess = {
+    filetype: string;
+    alttype: string|undefined;
+};
+
+export function determine_file_type(filename: string, data: Uint8Array) : FileTypeGuess
 {
     let fnguess: string|undefined;
     let datguess: string|undefined;
@@ -80,5 +85,14 @@ export function determine_file_type(filename: string, data: Uint8Array) : string
     }
 
     console.log('### guesses:', fnguess, datguess);
-    return '###';
+    
+    if (fnguess && datguess && fnguess == datguess) 
+        return { filetype:fnguess, alttype:undefined };
+    if (fnguess && !datguess) 
+        return { filetype:fnguess, alttype:undefined };
+    if (datguess && !fnguess) 
+        return { filetype:datguess, alttype:undefined };
+    if (!datguess && !fnguess)
+        return { filetype:'BINA', alttype: undefined };
+    return { filetype:(fnguess || 'BINA'), alttype:datguess };
 }

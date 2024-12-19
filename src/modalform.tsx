@@ -4,7 +4,7 @@ import { useState, useContext, useRef, useMemo } from 'react';
 import { chunk_filename_info } from './chunk';
 import { blorb_get_data, blorb_chunk_for_key, blorb_resentry_for_key } from './blorb';
 import { pretty_size } from './readable';
-import { determine_file_type } from './fileutil';
+import { determine_file_type, filetype_readable_desc } from './fileutil';
 
 import { ReactCtx, ContextContent } from './contexts';
 import { ArrowDownload, ChunkReadableDesc } from './widgets';
@@ -282,16 +282,25 @@ function ModalAddChunkThen({ filename, data }: { filename:string, data:Uint8Arra
     /* Get fancy and use useMemo() to build-and-cache the file type info.
        Really, the filename/data props are not going to change, so
        we don't have to do this. But this is a practice project, right? */
-    let filetype = useMemo(() => determine_file_type(filename, data), [ filename, data ]);
+    let guess = useMemo(() => determine_file_type(filename, data), [ filename, data ]);
     
     return (
         <>
             <div className="ControlRow">
-                This file seems to be:
+                This file seems to be:{' '}
+                { filetype_readable_desc(guess.filetype) }
             </div>
-            <div className="ControlRow">
-                { filetype }
-            </div>
+            { (guess.alttype ?
+               <div className="ControlRow">
+                   Or maybe:{' '}
+                   { filetype_readable_desc(guess.alttype) }
+               </div>
+               : null) }
+            { (guess.filetype == 'IFRS' ?
+               <div className="ControlRow ErrorText">
+                   (Putting a blorb chunk in a blorb file is probably a mistake.)
+               </div>
+               : null) }
         </>
     );
 }
