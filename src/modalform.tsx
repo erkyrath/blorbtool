@@ -279,10 +279,19 @@ function ModalAddChunk()
 
 function ModalAddChunkThen({ filename, data }: { filename:string, data:Uint8Array })
 {
+    /* Get fancy and use useMemo() to build-and-cache the file type info.
+       Really, the filename/data props are not going to change, so
+       we don't have to do this. But this is a practice project, right? */
     let filetype = useMemo(() => determine_file_type(filename, data), [ filename, data ]);
     
     return (
         <>
+            <div className="ControlRow">
+                This file seems to be:
+            </div>
+            <div className="ControlRow">
+                { filetype }
+            </div>
         </>
     );
 }
