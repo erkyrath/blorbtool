@@ -207,6 +207,10 @@ body {
     text-align: center;
 }
 
+#modalbox.Selected {
+    background: #CCD0FF;
+}
+
 .ModalBox .ControlRow {
     margin-top: 10px;
     margin-bottom: 10px;

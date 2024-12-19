@@ -17,6 +17,8 @@ export function ModalFormOverlay()
         return null;
 
     let modalpane = null;
+    let draggable = false;
+    
     switch (modalform.type) {
     case 'fetchblorb':
         modalpane = <ModalFetchBlorb />;
@@ -31,6 +33,7 @@ export function ModalFormOverlay()
         modalpane = <ModalChangeFrontis oldkey={ modalform.oldkey } refkey={ modalform.key } />;
         break;
     case 'addchunk':
+        draggable = true;
         modalpane = <ModalAddChunk />;
         break;
     default:
@@ -46,12 +49,61 @@ export function ModalFormOverlay()
     function evhan_click_foreground(ev: React.MouseEvent<HTMLDivElement, MouseEvent>) {
         ev.stopPropagation();
     }
+
+
+    function evhan_drop(ev: DragEv) {
+        ev.preventDefault();
+
+        let infile: File|null = null;
+        if (ev.dataTransfer.items && ev.dataTransfer.items.length) {
+            infile = ev.dataTransfer.items[0].getAsFile();
+        }
+        else if (ev.dataTransfer.files && ev.dataTransfer.files.length) {
+            infile = ev.dataTransfer.files[0];
+        }
+
+        if (infile) {
+            infile.arrayBuffer().then((arr) => {
+                console.log('###', {
+                    filename: infile.name,
+                    data: new Uint8Array(arr),
+                });
+            });
+        }
+    };
     
+    function evhan_dragover(ev: DragEv) {
+        ev.stopPropagation();
+        ev.preventDefault();
+        let el = document.getElementById('modalbox');
+        if (el) {
+            el.classList.add('Selected');
+        }
+    };
+    
+    function evhan_dragenter(ev: DragEv) {
+        ev.stopPropagation();
+    };
+    
+    function evhan_dragleave(ev: DragEv) {
+        ev.stopPropagation();
+        let el = document.getElementById('modalbox');
+        if (el) {
+            el.classList.remove('Selected');
+        }
+    };
+        
     return (
         <div className="ModalBack" onClick={ evhan_click_background }>
-            <div className="ModalBox" onClick={ evhan_click_foreground }>
-                { modalpane }
-            </div>
+            { (!draggable ?
+               <div className="ModalBox" onClick={ evhan_click_foreground }>
+                   { modalpane }
+               </div>
+               :
+               <div id="modalbox" className="ModalBox" onClick={ evhan_click_foreground } onDrop={ evhan_drop } onDragOver={ evhan_dragover } onDragEnter={ evhan_dragenter } onDragLeave={ evhan_dragleave }>
+                   { modalpane }
+               </div>
+              )}
         </div>
     );
 }
@@ -201,6 +253,9 @@ function ModalAddChunk()
     
     return (
         <>
+            <div className="ControlRow">
+                Select a file to add as a new chunk...
+            </div>
             <div className="ControlRow">
                 <label className="FileInput" htmlFor="fileinput">Choose File</label>
                 <input id="fileinput" type="file" onChange= { evhan_change } ref={ inputRef } />
