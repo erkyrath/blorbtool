@@ -1,6 +1,23 @@
 import { u8ToString, looksLikeAscii } from './datutil';
 import { find_dimensions_png, find_dimensions_jpeg } from './imgutil';
 
+export function filetype_readable_desc(filetype: string) : string
+{
+    switch (filetype) {
+    case 'TEXT': return 'text';
+    case 'BINA': return 'binary data';
+    case 'IFmd': return 'iFiction (XML)';
+    case 'PNG ': return 'PNG (image)';
+    case 'JPEG': return 'JPEG (image)';
+    case 'AIFF': return 'AIFF (audio)';
+    case 'OGGV': return 'Ogg (audio)';
+    case 'ZCOD': return 'Z-code (game)';
+    case 'GLUL': return 'Glulx (game)';
+    case 'IFRS': return 'blorb';
+    default: return 'unknown data';
+    }
+}
+
 const suffix_to_type_map: Map<string, string> = new Map([
     [ 'txt',  'TEXT' ],
     [ 'text', 'TEXT' ],
