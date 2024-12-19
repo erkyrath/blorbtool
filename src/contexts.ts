@@ -19,6 +19,7 @@ export type ModalForm = (
     | { type:'delchunk', key:number }
     | { type:'fetchblorb' }
     | { type:'addchunk' }
+    | { type:'addchunkthen', filename:string, data:Uint8Array }
     | { type:'changefrontis', oldkey:number, key:number }
 );
 

@@ -64,7 +64,8 @@ export function ModalFormOverlay()
 
         if (infile) {
             infile.arrayBuffer().then((arr) => {
-                console.log('###', {
+                rctx.setModalForm({
+                    type: 'addchunkthen',
                     filename: infile.name,
                     data: new Uint8Array(arr),
                 });
@@ -242,12 +243,19 @@ function ModalChangeFrontis({ oldkey, refkey }: { oldkey:number, refkey:number }
 function ModalAddChunk()
 {
     const inputRef = useRefInput();
+    let rctx = useContext(ReactCtx);
     
     function evhan_change(ev: ChangeEv) {
         let inputel = inputRef.current;
         if (inputel && inputel.files && inputel.files.length) {
             let infile = inputel.files[0];
-            console.log('### file', infile);
+            infile.arrayBuffer().then((arr) => {
+                rctx.setModalForm({
+                    type: 'addchunkthen',
+                    filename: infile.name,
+                    data: new Uint8Array(arr),
+                });
+            });
         }
     };
     
