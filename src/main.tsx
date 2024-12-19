@@ -24,6 +24,7 @@ import { ArrowDownload, ArrowGeneric } from './widgets';
    file.
 */
 let initialBlorb: Blorb|undefined;
+let initialLoader = false;
 
 /* The page setup function. This should be called when the page loads.
 
@@ -33,8 +34,14 @@ let initialBlorb: Blorb|undefined;
 export function init(blorbdata: Uint8Array|undefined, filename: string|undefined)
 {
     //### maybe fix up filename? Remove .js, add .blb
-    if (blorbdata)
+    
+    if (blorbdata) {
         initialBlorb = parse_blorb(blorbdata, filename);
+        initialLoader = false;
+    }
+    else {
+        initialLoader = true;
+    }
     
     const appel = document.getElementById('appbody') as HTMLElement;
     let root = createRoot(appel);
@@ -54,16 +61,6 @@ export function init(blorbdata: Uint8Array|undefined, filename: string|undefined
  */
 function MyApp()
 {
-    /* This is not really correct React style. This stanza runs on
-       the first render; after that initialBlorb is defined. There's
-       probably a better way to pass in React useState() defaults.
-    */
-    let initialLoader = false;
-    if (!initialBlorb) {
-        initialBlorb = new_blorb();
-        initialLoader = true;
-    }
-    
     const [blorb, editBlorb] = useReducer(blorb_apply_change, initialBlorb!);
     const [showloader, setShowLoader] = useState(initialLoader);
     const [selected, setSelected] = useState(-1);
