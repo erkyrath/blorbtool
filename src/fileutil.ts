@@ -10,6 +10,20 @@ const suffix_to_type_map: Map<string, string> = new Map([
     [ 'jpeg', 'JPEG' ],
     [ 'aiff', 'AIFF' ],
     [ 'ifiction', 'IFmd' ],
+    [ 'ulx', 'GLUL' ],
+    [ 'z1', 'ZCOD' ],
+    [ 'z2', 'ZCOD' ],
+    [ 'z3', 'ZCOD' ],
+    [ 'z4', 'ZCOD' ],
+    [ 'z5', 'ZCOD' ],
+    [ 'z6', 'ZCOD' ],
+    [ 'z7', 'ZCOD' ],
+    [ 'z8', 'ZCOD' ],
+    [ 'blb', 'IFRS' ],
+    [ 'blorb', 'IFRS' ],
+    [ 'zblorb', 'IFRS' ],
+    [ 'gblorb', 'IFRS' ],
+    [ 'ablorb', 'IFRS' ],
 ]);
 
 export function determine_file_type(filename: string, data: Uint8Array) : string
@@ -29,8 +43,17 @@ export function determine_file_type(filename: string, data: Uint8Array) : string
     else if (find_dimensions_jpeg(data)) {
         datguess = 'JPEG ';
     }
+    else if (u8ToString(data.slice(0,4)) == 'FORM' && u8ToString(data.slice(8,12)) == 'AIFF') {
+        datguess = 'AIFF';
+    }
+    else if (u8ToString(data.slice(0,4)) == 'FORM' && u8ToString(data.slice(8,12)) == 'IFRS') {
+        datguess = 'IFRS';
+    }
     else if (u8ToString(data.slice(0,4)) == 'Glul') {
         datguess = 'GLUL';
+    }
+    else if (u8ToString(data.slice(0,5)).toLowerCase() == '<?xml') {
+        datguess = 'IFmd';
     }
     else if (looksLikeAscii(data)) {
         datguess = 'TEXT';
