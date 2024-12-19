@@ -13,6 +13,7 @@ export type BlorbEditCmd = (
     | { type:'setfrontis', refkey:number }
     | { type:'setresdesc', usage:CTypes.ChunkUsage, resnum:number, text:string }
     | { type:'delresoentry', resnum:number }
+    | { type:'addchunk', chunktype:string, data:Uint8Array }
 );
 
 export function blorb_apply_change(blorb: Blorb, act: BlorbEditCmd) : Blorb

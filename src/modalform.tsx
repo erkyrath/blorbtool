@@ -279,10 +279,23 @@ function ModalAddChunk()
 
 function ModalAddChunkThen({ filename, data }: { filename:string, data:Uint8Array })
 {
+    const selectRef = useRefSelect();
+    
+    let rctx = useContext(ReactCtx);
+    
     /* Get fancy and use useMemo() to build-and-cache the file type info.
        Really, the filename/data props are not going to change, so
        we don't have to do this. But this is a practice project, right? */
     let guess = useMemo(() => determine_file_type(filename, data), [ filename, data ]);
+    
+    function evhan_click_add(ev: React.MouseEvent<HTMLElement, MouseEvent>) {
+        ev.stopPropagation();
+        if (selectRef.current) {
+            let chunktype = selectRef.current.value;
+            rctx.setModalForm(null);
+            rctx.editBlorb({ type:'addchunk', chunktype:chunktype, data:data });
+        }
+    }
     
     return (
         <>
@@ -301,6 +314,21 @@ function ModalAddChunkThen({ filename, data }: { filename:string, data:Uint8Arra
                    (Putting a blorb chunk in a blorb file is probably a mistake.)
                </div>
                : null) }
+            <div className="ControlRow">
+                Chunk type:{' '}
+                <select name="chunktype" ref={ selectRef }>
+                    <option value="JPEG">JPEG</option>
+                    <option value="PNG ">PNG </option>
+                </select>
+            </div>
+            <div className="ControlRow AlignRight">
+                <div className="Control">
+                    <button onClick={ (ev)=>evhan_click_close_modal(ev, rctx) }>Cancel</button>
+                </div>
+                <div className="Control">
+                    <button onClick={ evhan_click_add }>Add</button>
+                </div>
+            </div>
         </>
     );
 }
@@ -317,4 +345,5 @@ type ChangeEv = React.ChangeEvent<HTMLInputElement>;
 type DragEv = React.DragEvent<HTMLDivElement>;
 
 const useRefInput = () => useRef<HTMLInputElement>(null);
+const useRefSelect = () => useRef<HTMLSelectElement>(null);
 
