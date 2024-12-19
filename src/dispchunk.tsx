@@ -90,7 +90,8 @@ export namespace DispChunks {
     /* One resource entry for 'RIdx'. */
     function DCResIndexEntry({ ent }: { ent:CTypes.CTResIndexEntry })
     {
-        let blorb = useContext(BlorbCtx);
+        let rctx = useContext(ReactCtx);
+        let blorb = rctx.blorb;
         let chunk = blorb_chunk_for_usage(blorb, ent.usage, ent.resnum);
     
         return (
@@ -168,7 +169,8 @@ export namespace DispChunks {
     /* Chunk display for 'Fspc'. */
     export function DCFrontispiece({ chunk }: { chunk:CTypes.CTFrontispiece })
     {
-        let blorb = useContext(BlorbCtx);
+        let rctx = useContext(ReactCtx);
+        let blorb = rctx.blorb;
         let imgchunk = blorb_chunk_for_usage(blorb, 'Pict', chunk.picnum);
     
         return (
@@ -518,7 +520,7 @@ export namespace DispChunks {
     function DCResolutionEntry({ ent }: { ent:CTypes.CTResolutionEntry })
     {
         let rctx = useContext(ReactCtx);
-        let blorb = useContext(BlorbCtx);
+        let blorb = rctx.blorb;
         let chunk = blorb_chunk_for_usage(blorb, 'Pict', ent.resnum);
 
         function evhan_del_entry() {
