@@ -4,7 +4,7 @@ import { useState, useContext, useRef } from 'react';
 import { Chunk, CTypes } from './chunk';
 import { Blorb, blorb_resentry_for_chunk, blorb_chunk_for_usage, blorb_first_chunk_for_type } from './blorb';
 import { byte_to_hex } from './readable';
-import { ReactCtx, BlorbCtx } from './contexts';
+import { ReactCtx } from './contexts';
 
 import { ArrowToChunk, EditButton, DeleteButton } from './widgets';
 

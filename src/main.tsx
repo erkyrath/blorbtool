@@ -10,7 +10,7 @@ import { blorb_apply_change } from './editblorb';
 import { pretty_size } from './readable';
 
 import { AltDisplay, ModalForm, LoadBlorbAction, ContextContent } from './contexts';
-import { ReactCtx, BlorbCtx } from './contexts';
+import { ReactCtx } from './contexts';
 import { DisplayColumn } from './dispcol';
 import { LoaderIndex, LoaderDisplay } from './loader';
 import { ModalFormOverlay } from './modalform';
@@ -109,17 +109,8 @@ function MyApp()
         }
     }
 
-    /* The whole app is wrapped in two React contexts. One provides the
-       current Blorb; the other provides a whole mess of state and state-
-       setters, *including* the current Blorb.
-
-       This is redundant, of course. I originally had a whole bunch of
-       separate contexts, but that became silly. I then wrapped most of
-       them up in the agglutinative ContextContent context, but I
-       left the BlorbCtx separate because it was used in a bunch of places
-       that only care about the current Blorb. I should just knock it out
-       and use ContextContent.blorb everywhere.
-    */
+    /* The whole app is wrapped in a React context. This provides all
+       the state and setters used by various components. */
     
     let rctx: ContextContent = {
         selection: selected,
@@ -136,13 +127,11 @@ function MyApp()
     
     return (
         <ReactCtx.Provider value={ rctx }>
-        <BlorbCtx.Provider value={ blorb }>
             { showloader ?
               <AppLoading />
               :
               <AppRunning />
             }
-        </BlorbCtx.Provider>
         </ReactCtx.Provider>
     );
 }

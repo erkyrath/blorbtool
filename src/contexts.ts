@@ -55,7 +55,6 @@ export const ReactCtx = createContext({
     editBlorb: (act:BlorbEditCmd) => {},
 } as ContextContent);
 
-export const BlorbCtx = createContext(new_blorb());
 
 
 
