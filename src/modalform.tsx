@@ -1,5 +1,5 @@
 import React from 'react';
-import { useState, useContext } from 'react';
+import { useState, useContext, useRef } from 'react';
 
 import { chunk_filename_info } from './chunk';
 import { blorb_get_data, blorb_chunk_for_key, blorb_resentry_for_key } from './blorb';
@@ -30,8 +30,11 @@ export function ModalFormOverlay()
     case 'changefrontis':
         modalpane = <ModalChangeFrontis oldkey={ modalform.oldkey } refkey={ modalform.key } />;
         break;
+    case 'addchunk':
+        modalpane = <ModalAddChunk />;
+        break;
     default:
-        modalpane = <div>BUG: unimplemented modal: { modalform.type }</div>;
+        modalpane = <div>BUG: unimplemented modal: { (modalform as any).type }</div>;
         break;
     }
     
@@ -184,8 +187,37 @@ function ModalChangeFrontis({ oldkey, refkey }: { oldkey:number, refkey:number }
     );
 }
 
+function ModalAddChunk()
+{
+    const inputRef = useRefInput();
+    
+    function evhan_change(ev: ChangeEv) {
+        let inputel = inputRef.current;
+        if (inputel && inputel.files && inputel.files.length) {
+            let infile = inputel.files[0];
+            console.log('### file', infile);
+        }
+    };
+    
+    return (
+        <>
+            <div className="ControlRow">
+                <label className="FileInput" htmlFor="fileinput">Choose File</label>
+                <input id="fileinput" type="file" onChange= { evhan_change } ref={ inputRef } />
+            </div>
+        </>
+    );
+}
+
+/* Utility function to close the modal. */
 function evhan_click_close_modal(ev: React.MouseEvent<HTMLElement, MouseEvent>, rctx: ContextContent) {
     ev.stopPropagation();
     rctx.setModalForm(null);
 }
 
+// Late typedefs (because my editor gets confused)
+
+type ChangeEv = React.ChangeEvent<HTMLInputElement>;
+type DragEv = React.DragEvent<HTMLDivElement>;
+
+const useRefInput = () => useRef<HTMLInputElement>(null);

@@ -218,6 +218,11 @@ function BlorbInfoHeader()
         rctx.setModalForm({ type:'fetchblorb' });
     }
 
+    function evhan_click_addchunk(ev: React.MouseEvent<HTMLElement, MouseEvent>) {
+        ev.stopPropagation();
+        rctx.setModalForm({ type:'addchunk' });
+    }
+
     function evhan_click_errors() {
         rctx.setAltDisplay('errors');
     }
@@ -241,7 +246,7 @@ function BlorbInfoHeader()
                     <button onClick={ evhan_click_download }>Download</button>
                 </div>
                 <div className="Control">
-                    <button>Add Chunk</button>
+                    <button onClick={ evhan_click_addchunk }>Add Chunk</button>
                 </div>
             </div>
         </div>
