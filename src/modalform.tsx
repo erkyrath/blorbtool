@@ -36,6 +36,10 @@ export function ModalFormOverlay()
         draggable = true;
         modalpane = <ModalAddChunk />;
         break;
+    case 'addchunkthen':
+        console.log('### adding file', modalform.filename, 'len', modalform.data.length); //###
+        modalpane = <ModalAddChunkThen filename={ modalform.filename } data={ modalform.data } />;
+        break;
     default:
         modalpane = <div>BUG: unimplemented modal: { (modalform as any).type }</div>;
         break;
@@ -268,6 +272,14 @@ function ModalAddChunk()
                 <label className="FileInput" htmlFor="fileinput">Choose File</label>
                 <input id="fileinput" type="file" onChange= { evhan_change } ref={ inputRef } />
             </div>
+        </>
+    );
+}
+
+function ModalAddChunkThen({ filename, data }: { filename:string, data:Uint8Array })
+{
+    return (
+        <>
         </>
     );
 }
