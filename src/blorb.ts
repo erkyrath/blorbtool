@@ -174,6 +174,9 @@ export function blorb_recompute_positions(blorb: Blorb, oldusagemap?: Map<string
        While we're at it, we fill in all the cached tables. */
     for (let origchunk of origchunksmod) {
         let chunk: Chunk;
+        /* Update the position and index of the chunk. Because of
+           immutability, "update" means "create a new object with
+           updated fields" (but only if we have to!) */
         if (origchunk.pos == pos && origchunk.index == index) {
             chunk = origchunk;
         }
