@@ -164,6 +164,7 @@ function AppLoading()
         <>
             <IndexColumnBack />
             <LoaderIndex />
+            <IndexColFooter />
             <LoaderDisplay />
         </>
     );
@@ -178,6 +179,7 @@ function AppRunning()
         <>
             <IndexColumnBack />
             <IndexColumn />
+            <IndexColFooter />
             <DisplayColumn selected={ rctx.selection } />
             { (rctx.modalform ? <ModalFormOverlay /> : null) }
         </>
@@ -205,6 +207,22 @@ function IndexColumn()
             <ul className="ChunkList">
                 { chunkls }
             </ul>
+        </div>
+    );
+}
+
+function IndexColFooter()
+{
+    let rctx = useContext(ReactCtx);
+    
+    function evhan_click_help(ev: React.MouseEvent<HTMLElement, MouseEvent>) {
+        rctx.setAltDisplay('about');
+    }
+    
+    return (
+        <div className="IndexColFooter">
+            BlorbTool
+            <button className="HelpButton" onClick={ evhan_click_help }>?</button>
         </div>
     );
 }

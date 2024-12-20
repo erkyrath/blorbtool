@@ -37,9 +37,6 @@ export function DisplayColumn({ selected }: { selected:number })
     function evhan_click_delete(ev: React.MouseEvent<HTMLElement, MouseEvent>) {
         rctx.setModalForm({ type:'delchunk', key:selected });
     }
-    function evhan_click_help(ev: React.MouseEvent<HTMLElement, MouseEvent>) {
-        rctx.setAltDisplay('about');
-    }
     
     let contentpane = null;
     switch (rctx.altdisplay) {
@@ -78,9 +75,6 @@ export function DisplayColumn({ selected }: { selected:number })
                     </div>
                     <div className="Control">
                         <button disabled={ !selchunk || selchunk.type.stype=='RIdx' } onClick={ evhan_click_delete }>Delete</button>
-                    </div>
-                    <div className="Control">
-                        <button className="HelpButton" onClick={ evhan_click_help }>?</button>
                     </div>
                 </div>
             </div>
