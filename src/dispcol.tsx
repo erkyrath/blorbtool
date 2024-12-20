@@ -71,7 +71,7 @@ export function DisplayColumn({ selected }: { selected:number })
                        : null
                      )}
                     <div className="Control">
-                        <button disabled={ !selchunk } onClick={ evhan_click_download }>Download</button>
+                        <button disabled={ !selchunk } onClick={ evhan_click_download }>Export</button>
                     </div>
                     <div className="Control">
                         <button disabled={ !selchunk || selchunk.type.stype=='RIdx' } onClick={ evhan_click_delete }>Delete</button>

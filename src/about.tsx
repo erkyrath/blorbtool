@@ -44,8 +44,8 @@ export function AboutPane()
                    look for the{' '}
                    <EditButton func={ evhan_noop } />
                    {' '}button. When you are finished editing, hit
-                   the "Download" button (on the left) to download the 
-                   updated blorb file.</p>
+                   the "Export Blorb" button (on the left) to save the 
+                   updated blorb as a file.</p>
                : null) }
             <p>Note BlorbTool runs entirely in your browser. The file
                 you select is <em>not</em> uploaded to any server.

@@ -280,7 +280,7 @@ function BlorbInfoHeader()
             </div>
             <div className="BlorbControls">
                 <div className="Control">
-                    <button onClick={ evhan_click_download }>Download Blorb</button>
+                    <button onClick={ evhan_click_download }>Export Blorb</button>
                 </div>
             </div>
         </div>
