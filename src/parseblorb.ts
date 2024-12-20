@@ -64,10 +64,12 @@ export function parse_blorb(dat: Uint8Array, filename?: string) : Blorb
         let chunk: Chunk;
         let chunkerrors: string[];
         if (ctype == 'FORM') {
+            // Data starts with the 'FORM'/length bytes
             let cdat = dat.slice(cpos, pos+clen);
             [ chunk, chunkerrors ] = new_chunk(uctype, cdat, cpos);
         }
         else {
+            // Data starts after the 'FORM'/length bytes
             let cdat = dat.slice(pos, pos+clen);
             [ chunk, chunkerrors ] = new_chunk(uctype, cdat, cpos);
         }
