@@ -248,6 +248,9 @@ export function new_chunk(type:string|Uint8Array, data:Uint8Array, origpos?:numb
     case 'Reso':
         return new_chunk_Reso(chunk);
     case 'TEXT':
+        /* Note that the encoding of a text chunk is not required to be
+           UTF-8. We're assuming it is, but the result might look wrong.
+           Should we try to guess encoding based on the data? */
         return new_chunk_UTF8Text(chunk);
     case 'AUTH':
         return new_chunk_ASCIIText(chunk);
