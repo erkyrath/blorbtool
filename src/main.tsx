@@ -221,8 +221,12 @@ function IndexColFooter()
     
     return (
         <div className="IndexColFooter">
-            BlorbTool
-            <button className="HelpButton" onClick={ evhan_click_help }>?</button>
+            <div className="HelpControl">
+                <button className="HelpButton" onClick={ evhan_click_help }>?</button>
+            </div>
+            <div className="BlorbGloss">
+                BlorbTool
+            </div>
         </div>
     );
 }

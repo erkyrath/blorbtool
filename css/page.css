@@ -17,7 +17,7 @@ body {
     left: 0px;
     width: 33%;
     top: 0px;
-    bottom: 50px;
+    bottom: 44px;
     margin: 0px;
     box-sizing: border-box;
     background-color: #F2E5FE;
@@ -42,7 +42,7 @@ body {
     left: 0px;
     width: 33%;
     top: 0px;
-    bottom: 50px;
+    bottom: 44px;
     padding: 10px 20px;
     box-sizing: border-box;
     overflow-y: scroll;
@@ -52,13 +52,23 @@ body {
     position: absolute;
     left: 0px;
     width: 33%;
-    height: 50px;
+    height: 44px;
     bottom: 0px;
     padding: 10px 20px;
     box-sizing: border-box;
     overflow: clip;
     background-color: #E8D8FC;
     border-top: 1px solid #CAC;
+}
+
+.IndexColFooter .HelpControl {
+    float: right;
+}
+
+.IndexColFooter .BlorbGloss {
+    margin-top: 6px;
+    font-size: 85%;
+    font-style: italic;
 }
 
 .ChunkList {
@@ -467,7 +477,7 @@ a.DeleteButton:hover {
 
 button.HelpButton {
     font-weight: bold;
-    font-size: 120%;
+    font-size: 100%;
     color: #A5E;
     border-radius: 20px;
     padding: 1px 6px;
