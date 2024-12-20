@@ -3,7 +3,7 @@ import { new_chunk, chunk_type_is_singleton } from './chunk';
 import { new_chunk_Fspc_with, new_chunk_RDes_empty, new_chunk_RDes_with, new_chunk_Reso_with } from './chunk';
 import { Blorb } from './blorb';
 import { blorb_chunk_for_key, blorb_first_chunk_for_type, blorb_resentry_for_chunk, blorb_resentry_for_key } from './blorb';
-import { blorb_clear_errors, blorb_update_index_entries, blorb_delete_chunk_by_key, blorb_addone_chunk, blorb_addreplace_chunk } from './blorb';
+import { blorb_clear_errors, blorb_update_index_entries, blorb_delete_chunk_by_key, blorb_add_chunk, blorb_addreplace_chunk } from './blorb';
 import { check_blorb_consistency } from './checkblorb';
 
 export type BlorbEditCmd = (
@@ -236,7 +236,7 @@ function editblorb_add_chunk(blorb: Blorb, chunktype: string, data: Uint8Array) 
         newblorb = blorb_addreplace_chunk(blorb, chunk);
     }
     else {
-        newblorb = blorb_addone_chunk(blorb, chunk);
+        newblorb = blorb_add_chunk(blorb, chunk);
     }
     
     newblorb = check_blorb_consistency(newblorb);
