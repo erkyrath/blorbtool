@@ -337,6 +337,19 @@ export function blorb_delete_chunk_by_key(blorb: Blorb, key: number) : Blorb
     return newblorb;
 }
 
+/* Add a chunk to a blorb. Use this for resource and other chunks,
+   not singleton types.
+*/
+export function blorb_addone_chunk(blorb: Blorb, chunk: Chunk) : Blorb
+{
+    let newchunks = [ ...blorb.chunks, chunk ];
+    let newblorb: Blorb = { ...blorb, chunks:newchunks };
+    
+    newblorb = blorb_recompute_positions(newblorb, blorb.usagemap);
+    
+    return newblorb;
+}
+
 /* Replace a chunk with another of the same type.
    
    This is only meant for singleton chunk types! Don't call it on an

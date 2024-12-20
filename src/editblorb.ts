@@ -1,8 +1,9 @@
 import { Chunk, CTypes } from './chunk';
+import { new_chunk, chunk_type_is_singleton } from './chunk';
 import { new_chunk_Fspc_with, new_chunk_RDes_empty, new_chunk_RDes_with, new_chunk_Reso_with } from './chunk';
 import { Blorb } from './blorb';
 import { blorb_chunk_for_key, blorb_first_chunk_for_type, blorb_resentry_for_chunk, blorb_resentry_for_key } from './blorb';
-import { blorb_clear_errors, blorb_update_index_entries, blorb_delete_chunk_by_key, blorb_addreplace_chunk } from './blorb';
+import { blorb_clear_errors, blorb_update_index_entries, blorb_delete_chunk_by_key, blorb_addone_chunk, blorb_addreplace_chunk } from './blorb';
 import { check_blorb_consistency } from './checkblorb';
 
 export type BlorbEditCmd = (
@@ -38,6 +39,8 @@ export function blorb_apply_change(blorb: Blorb, act: BlorbEditCmd) : Blorb
         return blorb_set_resdesc(blorb, act.usage, act.resnum, act.text);
     case 'delresoentry':
         return blorb_delete_resolution_entry(blorb, act.resnum);
+    case 'addchunk':
+        return blorb_add_chunk(blorb, act.chunktype, act.data);
     default:
         console.log('BUG: Unimplemented command', act);
         return blorb;
@@ -223,6 +226,25 @@ function blorb_delete_resolution_entry(blorb: Blorb, resnum: number) : Blorb
     return newblorb;
 }
 
+function blorb_add_chunk(blorb: Blorb, chunktype: string, data: Uint8Array) : Blorb
+{
+    let [ chunk, chunkerrors ] = new_chunk(chunktype, data);
+
+    let newblorb: Blorb;
+    
+    if (chunk_type_is_singleton(chunktype)) {
+        newblorb = blorb_addreplace_chunk(blorb, chunk);
+    }
+    else {
+        newblorb = blorb_addone_chunk(blorb, chunk);
+    }
+    
+    newblorb = check_blorb_consistency(newblorb);
+    
+    return newblorb;
+}
+
+
 function blorb_update_usage_refs(blorb: Blorb, oldresid: CTypes.ChunkUsageNumber, newresid: CTypes.ChunkUsageNumber|undefined) : Blorb
 {
     let rdes = blorb_first_chunk_for_type(blorb, 'RDes') as CTypes.CTResDescs;
@@ -289,3 +311,4 @@ function blorb_update_usage_refs(blorb: Blorb, oldresid: CTypes.ChunkUsageNumber
     
     return blorb;
 }
+
