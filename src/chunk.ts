@@ -576,59 +576,70 @@ export function new_chunk_Reso_with(window: CTypes.CTResolutionWindow, entries: 
     return reschunk;
 }
 
+type ChunkTypeDesc = {
+    type: string;
+    label: string;
+    isform?: boolean;
+};
+
+const allChunkTypes: ChunkTypeDesc[] = [
+    { type:'FORM/AIFF', isform:true, label:'Audio \u2013 AIFF' },
+    { type:'RIdx', label:'Resource index' },
+    { type:'IFhd', label:'Game identifier' },
+    { type:'Fspc', label:'Frontispiece' },
+    { type:'RDes', label:'Resource descriptions' },
+    { type:'Plte', label:'Color palette' },
+    { type:'IFmd', label:'Metadata' },
+
+    { type:'AUTH', label:'Author' },
+    { type:'(c) ', label:'Copyright message' },
+    { type:'ANNO', label:'Annotation' },
+    { type:'SNam', label:'Story name (deprecated)' },
+
+    { type:'RelN', label:'Release number (Z-code)' },
+    { type:'Reso', label:'Resolution' },
+    { type:'APal', label:'Adaptive palette' },
+    { type:'Loop', label:'Audio looping' },
+       
+    { type:'TEXT', label:'Text' },
+    { type:'BINA', label:'Binary data' },
+
+    { type:'JPEG', label:'Image \u2013 JPEG' },
+    { type:'PNG ', label:'Image \u2013 PNG' },
+    { type:'Rect', label:'Image \u2013 placeholder' },
+        
+    { type:'OGGV', label:'Audio \u2013 Ogg' },
+        
+    { type:'ZCOD', label:'Game file \u2013 Z-code' },
+    { type:'GLUL', label:'Game file \u2013 Glulx' },
+    { type:'TAD2', label:'Game file \u2013 TADS 2' },
+    { type:'TAD3', label:'Game file \u2013 TADS 3' },
+    { type:'HUGO', label:'Game file \u2013 Hugo' },
+    { type:'ALAN', label:'Game file \u2013 Alan' },
+    { type:'ADRI', label:'Game file \u2013 Adrift' },
+    { type:'LEVE', label:'Game file \u2013 Level 9' },
+    { type:'AGT ', label:'Game file \u2013 AGT' },
+    { type:'MAGS', label:'Game file \u2013 Magnetic Scrolls' },
+    { type:'ADVS', label:'Game file \u2013 AdvSys' },
+    { type:'EXEC', label:'Game file \u2013 Executable' },
+];
+
+const chunkTypeMap = new Map(allChunkTypes.map(({ type, label }) => [ type, label ]));
 
 /* Return a human-readable description of a chunk.
  */
 export function chunk_readable_desc(chunk: Chunk) : string
 {
     if (chunk.formtype) {
-        switch (chunk.formtype.stype) {
-        case 'AIFF': return 'Audio \u2013 AIFF';
-        }
+        let label = chunkTypeMap.get('FORM/'+chunk.formtype.stype);
+        if (label)
+            return label;
         return 'Unrecognized form chunk';
     }
-    
-    switch (chunk.type.stype) {
-    case 'RIdx': return 'Resource index';
-        
-    case 'IFhd': return 'Game identifier';
-    case 'Fspc': return 'Frontispiece';
-    case 'RDes': return 'Resource descriptions';
-    case 'Plte': return 'Color palette';
-    case 'IFmd': return 'Metadata';
 
-    case 'AUTH': return 'Author';
-    case '(c) ': return 'Copyright message';
-    case 'ANNO': return 'Annotation';
-    case 'SNam': return 'Story name (deprecated)';
-
-    case 'RelN': return 'Release number (Z-code)';
-    case 'Reso': return 'Resolution';
-    case 'APal': return 'Adaptive palette';
-    case 'Loop': return 'Audio looping';
-       
-    case 'TEXT': return 'Text';
-    case 'BINA': return 'Binary data';
-
-    case 'JPEG': return 'Image \u2013 JPEG';
-    case 'PNG ': return 'Image \u2013 PNG';
-    case 'Rect': return 'Image \u2013 placeholder';
-        
-    case 'OGGV': return 'Audio \u2013 Ogg';
-        
-    case 'ZCOD': return 'Game file \u2013 Z-code';
-    case 'GLUL': return 'Game file \u2013 Glulx';
-    case 'TAD2': return 'Game file \u2013 TADS 2';
-    case 'TAD3': return 'Game file \u2013 TADS 3';
-    case 'HUGO': return 'Game file \u2013 Hugo';
-    case 'ALAN': return 'Game file \u2013 Alan';
-    case 'ADRI': return 'Game file \u2013 Adrift';
-    case 'LEVE': return 'Game file \u2013 Level 9';
-    case 'AGT ': return 'Game file \u2013 AGT';
-    case 'MAGS': return 'Game file \u2013 Magnetic Scrolls';
-    case 'ADVS': return 'Game file \u2013 AdvSys';
-    case 'EXEC': return 'Game file \u2013 Executable';
-    }
+    let label = chunkTypeMap.get(chunk.type.stype);
+    if (label)
+        return label;
     
     return 'Unrecognized chunk';
 }
