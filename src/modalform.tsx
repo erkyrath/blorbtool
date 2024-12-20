@@ -1,7 +1,7 @@
 import React from 'react';
 import { useState, useContext, useRef, useMemo } from 'react';
 
-import { chunk_filename_info } from './chunk';
+import { chunk_filename_info, selectable_chunk_types } from './chunk';
 import { blorb_get_data, blorb_chunk_for_key, blorb_resentry_for_key } from './blorb';
 import { pretty_size } from './readable';
 import { determine_file_type, filetype_readable_desc } from './fileutil';
@@ -287,6 +287,13 @@ function ModalAddChunkThen({ filename, data }: { filename:string, data:Uint8Arra
        Really, the filename/data props are not going to change, so
        we don't have to do this. But this is a practice project, right? */
     let guess = useMemo(() => determine_file_type(filename, data), [ filename, data ]);
+
+    let chunkls = selectable_chunk_types().map((obj) => {
+        let val = (obj.isform ? obj.type.slice(5) : obj.type);
+        return (
+            <option key={ obj.type } value={ obj.type }>{ val }: { obj.label }</option>
+        );
+    });
     
     function evhan_click_add(ev: React.MouseEvent<HTMLElement, MouseEvent>) {
         ev.stopPropagation();
@@ -317,8 +324,7 @@ function ModalAddChunkThen({ filename, data }: { filename:string, data:Uint8Arra
             <div className="ControlRow">
                 Chunk type:{' '}
                 <select name="chunktype" ref={ selectRef }>
-                    <option value="JPEG">JPEG</option>
-                    <option value="PNG ">PNG </option>
+                    { chunkls }
                 </select>
             </div>
             <div className="ControlRow AlignRight">

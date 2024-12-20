@@ -645,6 +645,12 @@ export function chunk_readable_desc(chunk: Chunk) : string
     return 'Unrecognized chunk';
 }
 
+export function selectable_chunk_types() : ChunkTypeDesc[]
+{
+    // Omit RIdx, which is not selectable
+    return allChunkTypes.slice(1);
+}
+
 const singletonTypes = new Set([
     'RIdx', 'IFhd', 'Plte', 'Fspc', 'RDes', 'IFmd',
     'RelN', 'Reso', 'APal', 'Loop', 'SNam',
