@@ -38,6 +38,8 @@ export function DisplayChunkFormatted({ blorb, chunk }: { blorb:Blorb, chunk:Chu
         return <DispChunks.DCReleaseNumber chunk={ chunk as CTypes.CTReleaseNumber } />
     case 'Reso':
         return <DispChunks.DCResolution chunk={ chunk as CTypes.CTResolution } />
+    case 'TEXT':
+        return <DispChunks.DCText chunk={ chunk as CTypes.CTText } />
     case 'AUTH':
     case 'ANNO':
     case '(c) ':

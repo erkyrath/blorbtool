@@ -313,7 +313,7 @@ export function blorb_update_index_entries(blorb: Blorb, entries: CTypes.CTResIn
    affected. (The resource description chunk, the frontispiece chunk,
    etc -- anything that might refer *to* the deleted chunk.) See
    the function in editblorb.ts for the high-level code that deals
-   with this.
+   with that stuff.
  */
 export function blorb_delete_chunk_by_key(blorb: Blorb, key: number) : Blorb
 {
@@ -337,8 +337,8 @@ export function blorb_delete_chunk_by_key(blorb: Blorb, key: number) : Blorb
     return newblorb;
 }
 
-/* Add a chunk to a blorb. Use this for resource and other chunks,
-   not singleton types.
+/* Add a chunk to a blorb. Use this for resources (like images) and other
+   chunks that there can be multiple of. Do not use for singleton types.
 */
 export function blorb_add_chunk(blorb: Blorb, chunk: Chunk) : Blorb
 {

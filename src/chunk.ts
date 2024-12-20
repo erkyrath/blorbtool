@@ -136,7 +136,10 @@ export namespace CTypes {
         imgsize: ImageSize|undefined;
     }
     
-    // Chunk types 'AUTH', 'ANNO', '(c) '.
+    // Chunk types 'TEXT', 'AUTH', 'ANNO', '(c) ', 'SNam'.
+    // Note that the chunk data could have various text encodings. We store
+    // the decoded text here, so the struct doesn't have to distinguish.
+    // Look at chunk.type when re-encoding.
     export interface CTText extends Chunk {
         text: string;
     }
@@ -244,6 +247,8 @@ export function new_chunk(type:string|Uint8Array, data:Uint8Array, origpos?:numb
         return new_chunk_RelN(chunk);
     case 'Reso':
         return new_chunk_Reso(chunk);
+    case 'TEXT':
+        return new_chunk_UTF8Text(chunk);
     case 'AUTH':
         return new_chunk_ASCIIText(chunk);
     case 'ANNO':
@@ -481,6 +486,16 @@ function new_chunk_JPEG(chunk: Chunk) : ChunkWithErrors
 function new_chunk_ASCIIText(chunk: Chunk) : ChunkWithErrors
 {
     let text = u8ToString(chunk.data);
+    let reschunk: CTypes.CTText = { ...chunk, text:text };
+    return [ reschunk, [] ];
+}
+
+/* Create a text chunk from data (bytes).
+   The encoding is assumed to be UTF-8.
+ */
+function new_chunk_UTF8Text(chunk: Chunk) : ChunkWithErrors
+{
+    let text = utf8ToString(chunk.data);
     let reschunk: CTypes.CTText = { ...chunk, text:text };
     return [ reschunk, [] ];
 }
