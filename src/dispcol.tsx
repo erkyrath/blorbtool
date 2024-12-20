@@ -26,16 +26,11 @@ import { AboutPane } from './about';
 */
 export function DisplayColumn({ selected }: { selected:number })
 {
-    const [showhex, setShowHex] = useState(false);
-
     let rctx = useContext(ReactCtx);
     let blorb = rctx.blorb;
 
     let selchunk = blorb.chunks.find(chunk => (chunk.refkey == selected));
     
-    function evhan_change(ev: ChangeEv) {
-        setShowHex(!showhex);
-    }
     function evhan_click_download(ev: React.MouseEvent<HTMLElement, MouseEvent>) {
         rctx.setModalForm({ type:'fetchchunk', key:selected });
     }
@@ -58,7 +53,7 @@ export function DisplayColumn({ selected }: { selected:number })
         break;
     default:
         if (selchunk) {
-            contentpane = <DisplayChunk chunk={ selchunk } showhex={ showhex } />
+            contentpane = <DisplayChunk chunk={ selchunk } />
         }
         else if (blorb.errors.length) {
             contentpane = <DisplayErrors errors={ blorb.errors } />
@@ -72,10 +67,6 @@ export function DisplayColumn({ selected }: { selected:number })
             </div>
             <div className="DisplayHeader">
                 <div className="ControlBox">
-                    <div className="Control">
-                        <input id="control_showraw" type="checkbox" checked={ showhex } onChange={ evhan_change } />
-                        <label htmlFor="control_showraw"> Display hex</label>
-                    </div>
                     <div className="Control">
                         <button disabled={ !selchunk } onClick={ evhan_click_download }>Download</button>
                     </div>
@@ -123,10 +114,11 @@ export function DisplayErrors({ errors }: { errors:ErrorArray })
    showhex flag is set (or if we have no explicit display component
    for the chunk type), we display it as raw hex.
 */
-export function DisplayChunk({ chunk, showhex }: { chunk:Chunk, showhex:boolean })
+export function DisplayChunk({ chunk }: { chunk:Chunk })
 {
     const [editingKey, setEditingKey] = useState(-1);
     const [editError, setEditError] = useState('');
+    const [showhex, setShowHex] = useState(false);
     
     let rctx = useContext(ReactCtx);
     let blorb = rctx.blorb;
@@ -143,6 +135,10 @@ export function DisplayChunk({ chunk, showhex }: { chunk:Chunk, showhex:boolean 
         display = <DisplayChunkFormatted blorb={ blorb} chunk={ chunk } />;
     }
 
+    function evhan_raw_change(ev: ChangeEv) {
+        setShowHex(!showhex);
+    }
+    
     function evhan_edit_usage() {
         setEditError('');
         if (!editing)
@@ -190,6 +186,10 @@ export function DisplayChunk({ chunk, showhex }: { chunk:Chunk, showhex:boolean 
                 </li>
                 <li>
                     <span className="InfoLabel">File position:</span> { chunk.pos }
+                </li>
+                <li>
+                    <label htmlFor="control_showraw" className="InfoLabel">Display as hex data:</label>{' '}
+                    <input id="control_showraw" type="checkbox" checked={ showhex } onChange={ evhan_raw_change } />
                 </li>
             </ul>
             { display }
