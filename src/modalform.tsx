@@ -279,6 +279,7 @@ function ModalAddChunk()
 
 function ModalAddChunkThen({ filename, data }: { filename:string, data:Uint8Array })
 {
+    const [editError, setEditError] = useState('');
     const selectRef = useRefSelect();
     
     let rctx = useContext(ReactCtx);
@@ -337,6 +338,11 @@ function ModalAddChunkThen({ filename, data }: { filename:string, data:Uint8Arra
                     <button onClick={ evhan_click_add }>Add</button>
                 </div>
             </div>
+            { (editError ?
+               <div className="ControlRow ErrorText AlignRight">
+                   { editError }
+               </div>
+               : null) }
         </>
     );
 }
