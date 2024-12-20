@@ -44,6 +44,11 @@ export type Blorb = {
     keymap: Map<number, Chunk>; // chunk.refkey to chunk
     posmap: Map<number, Chunk>; // chunk.pos to chunk
 
+    // Refkey of the last chunk added. This is sometimes used by the
+    // UI (selecting the last chunk), but not always. Set or cleared on
+    // update.
+    lastadded: number|undefined;
+
     // Built on load or update.
     errors: ReadonlyArray<Error>;
 };
@@ -63,6 +68,7 @@ export function new_blorb() : Blorb
         typemap: new Map(),
         keymap: new Map(),
         posmap: new Map(),
+        lastadded: undefined,
         errors: [],
     };
 }
@@ -270,7 +276,7 @@ export function blorb_recompute_positions(blorb: Blorb, oldusagemap?: Map<string
 */
 export function blorb_clear_errors(blorb: Blorb) : Blorb
 {
-    return { ...blorb, errors: [] };
+    return { ...blorb, lastadded: undefined, errors: [] };
 }
 
 /* Update the index chunk with a new list of entries. (Usually this is
@@ -343,7 +349,7 @@ export function blorb_delete_chunk_by_key(blorb: Blorb, key: number) : Blorb
 export function blorb_add_chunk(blorb: Blorb, chunk: Chunk) : Blorb
 {
     let newchunks = [ ...blorb.chunks, chunk ];
-    let newblorb: Blorb = { ...blorb, chunks:newchunks };
+    let newblorb: Blorb = { ...blorb, chunks:newchunks, lastadded:chunk.refkey };
     
     newblorb = blorb_recompute_positions(newblorb, blorb.usagemap);
     
@@ -361,20 +367,19 @@ export function blorb_add_chunk(blorb: Blorb, chunk: Chunk) : Blorb
  */
 export function blorb_addreplace_chunk(blorb: Blorb, chunk: Chunk) : Blorb
 {
-
     let pos = blorb.chunks.findIndex((chu) => (chu.type.stype == chunk.type.stype));
 
     let newblorb: Blorb;
     if (pos < 0) {
         let newchunks = [ ...blorb.chunks, chunk ];
-        newblorb = { ...blorb, chunks:newchunks };
+        newblorb = { ...blorb, chunks:newchunks, lastadded:chunk.refkey };
     }
     else {
         let oldchunk = blorb.chunks[pos];
         let keyedchunk = { ...chunk, refkey:oldchunk.refkey };
         let newchunks = [ ...blorb.chunks ];
         newchunks[pos] = keyedchunk;
-        newblorb = { ...blorb, chunks:newchunks };
+        newblorb = { ...blorb, chunks:newchunks, lastadded:keyedchunk.refkey };
     }
 
     newblorb = blorb_recompute_positions(newblorb, blorb.usagemap);
