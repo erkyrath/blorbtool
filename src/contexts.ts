@@ -40,6 +40,7 @@ export type ContextContent = {
     blorb: Blorb;
     loadBlorbFile: (act:LoadBlorbAction) => void;
     editBlorb: (act:BlorbEditCmd) => void;
+    editBlorbAndSelect: (act:BlorbEditCmd) => void;
 };
 
 export const ReactCtx = createContext({
@@ -53,6 +54,7 @@ export const ReactCtx = createContext({
     blorb: new_blorb(),
     loadBlorbFile: (act:LoadBlorbAction) => {},
     editBlorb: (act:BlorbEditCmd) => {},
+    editBlorbAndSelect: (act:BlorbEditCmd) => {},
 } as ContextContent);
 
 

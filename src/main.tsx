@@ -6,7 +6,7 @@ import { Chunk, chunk_readable_desc } from './chunk';
 import { Blorb, new_blorb, blorb_get_data } from './blorb';
 import { blorb_resentry_for_chunk } from './blorb';
 import { parse_blorb, new_blorb_with_index } from './parseblorb';
-import { blorb_apply_change } from './editblorb';
+import { BlorbEditCmd, blorb_apply_change } from './editblorb';
 import { pretty_size } from './readable';
 
 import { AltDisplay, ModalForm, LoadBlorbAction, ContextContent } from './contexts';
@@ -105,6 +105,12 @@ function MyApp()
             setAltDisplay(val);
         }
     }
+    let editBlorbAndSelect = function(cmd: BlorbEditCmd) {
+        let newblorb = blorb_apply_change(blorb, cmd);
+        if (newblorb.lastadded !== undefined)
+            setSelected(newblorb.lastadded);
+        editBlorb({ type:'loadnew', blorb:newblorb });
+    }
 
     /* The whole app is wrapped in a React context. This provides all
        the state and setters used by various components. */
@@ -120,6 +126,7 @@ function MyApp()
         blorb: blorb,
         loadBlorbFile: loadBlorbFile,
         editBlorb: editBlorb,
+        editBlorbAndSelect: editBlorbAndSelect,
     };
     
     return (

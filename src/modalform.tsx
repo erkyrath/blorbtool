@@ -336,7 +336,7 @@ function ModalAddChunkThen({ filename, data }: { filename:string, data:Uint8Arra
             }
             rctx.setModalForm(null);
             console.log('### adding chunktype', chunktype, data);
-            rctx.editBlorb({ type:'addchunk', chunktype:chunktype, data:data });
+            rctx.editBlorbAndSelect({ type:'addchunk', chunktype:chunktype, data:data });
         }
     }
     
