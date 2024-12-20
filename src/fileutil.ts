@@ -36,6 +36,28 @@ export function filetype_readable_desc(filetype: string) : string
     }
 }
 
+/* Pick the best-guess chunk type for a file type. */
+export function filetype_to_chunktype(filetype: string) : string
+{
+    switch (filetype) {
+    case 'TEXT':
+    case 'BINA':
+    case 'IFmd':
+    case 'PNG ':
+    case 'JPEG':
+    case 'OGGV':
+    case 'ZCOD':
+    case 'GLUL':
+        return filetype;
+    case 'AIFF':
+        return 'FORM/AIFF';
+    case 'IFRS':
+        return 'BINA';
+    default:
+        return 'BINA';
+    }
+}
+
 const suffix_to_type_map: Map<string, string> = new Map([
     [ 'txt',  'TEXT' ],
     [ 'text', 'TEXT' ],

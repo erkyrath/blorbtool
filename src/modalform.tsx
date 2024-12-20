@@ -4,7 +4,7 @@ import { useState, useContext, useRef, useMemo } from 'react';
 import { chunk_filename_info, selectable_chunk_types } from './chunk';
 import { blorb_get_data, blorb_chunk_for_key, blorb_resentry_for_key } from './blorb';
 import { pretty_size } from './readable';
-import { determine_file_type, filetype_readable_desc } from './fileutil';
+import { determine_file_type, filetype_readable_desc, filetype_to_chunktype } from './fileutil';
 
 import { ReactCtx, ContextContent } from './contexts';
 import { ArrowDownload, ChunkReadableDesc } from './widgets';
@@ -288,6 +288,8 @@ function ModalAddChunkThen({ filename, data }: { filename:string, data:Uint8Arra
        we don't have to do this. But this is a practice project, right? */
     let guess = useMemo(() => determine_file_type(filename, data), [ filename, data ]);
 
+    let guesstype = filetype_to_chunktype(guess.filetype);
+
     let chunkls = selectable_chunk_types().map((obj) => {
         let val = (obj.isform ? obj.type.slice(5) : obj.type);
         return (
@@ -323,7 +325,7 @@ function ModalAddChunkThen({ filename, data }: { filename:string, data:Uint8Arra
                : null) }
             <div className="ControlRow">
                 Chunk type:{' '}
-                <select name="chunktype" ref={ selectRef }>
+                <select name="chunktype" defaultValue={ guesstype } ref={ selectRef }>
                     { chunkls }
                 </select>
             </div>
