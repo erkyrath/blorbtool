@@ -633,6 +633,17 @@ export function chunk_readable_desc(chunk: Chunk) : string
     return 'Unrecognized chunk';
 }
 
+const singletonTypes = new Set([
+    'RIdx', 'IFhd', 'Plte', 'Fspc', 'RDes', 'IFmd',
+    'RelN', 'Reso', 'APal', 'Loop', 'SNam',
+]);
+
+/* Return whether a chunk type is limited to one per blorb file. */
+export function chunk_type_singleton(chunktype: string) : boolean
+{
+    return singletonTypes.has(chunktype);
+}
+
 /* Return an appropriate filename and mime type for a chunk.
    This is used when downloading the chunk.
 */
