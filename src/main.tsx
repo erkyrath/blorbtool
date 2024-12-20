@@ -92,6 +92,8 @@ function MyApp()
     }
     
     let setSelectedWrap = function(val: number) {
+        /* Set the selected chunk while also cancelling any modal
+           and alt-display option. */
         if (val != selected) {
             setSelected(val);
             setModalForm(null);
@@ -99,6 +101,8 @@ function MyApp()
         }
     };
     let setAltDisplayWrap = function(val: AltDisplay) {
+        /* Set the alt-display field (whether to display the errors pane,
+           etc) while also cancelling any selection and modal. */
         if (val != altdisplay) {
             setSelected(-1);
             setModalForm(null);
