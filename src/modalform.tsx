@@ -4,6 +4,7 @@ import { useState, useContext, useRef, useMemo } from 'react';
 import { chunk_filename_info, selectable_chunk_types, chunk_type_is_singleton } from './chunk';
 import { blorb_get_data, blorb_chunk_for_key, blorb_resentry_for_key, blorb_first_chunk_for_type } from './blorb';
 import { pretty_size } from './readable';
+import { u8ToString } from './datutil';
 import { determine_file_type, filetype_readable_desc, filetype_to_chunktype } from './fileutil';
 
 import { ReactCtx, ContextContent } from './contexts';
@@ -303,11 +304,20 @@ function ModalAddChunkThen({ filename, data }: { filename:string, data:Uint8Arra
         ev.stopPropagation();
         if (selectRef.current) {
             let chunktype = selectRef.current.value;
+            if (chunktype.length > 4) {
+                let formtype = u8ToString(data, 8, 4);
+                if (!chunktype.startsWith('FORM') || chunktype.slice(5) != formtype) {
+                    setEditError(`This file does not appear to be ${chunktype}.`);
+                    return;
+                }
+                chunktype = 'FORM';
+            }
             if (chunk_type_is_singleton(chunktype) && blorb_first_chunk_for_type(blorb, chunktype)) {
                 setEditError(`A chunk of type ${chunktype} already exists.`);
                 return;
             }
             rctx.setModalForm(null);
+            console.log('### adding chunktype', chunktype, data);
             rctx.editBlorb({ type:'addchunk', chunktype:chunktype, data:data });
         }
     }
