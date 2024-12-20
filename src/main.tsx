@@ -106,6 +106,16 @@ function MyApp()
         }
     }
     let editBlorbAndSelect = function(cmd: BlorbEditCmd) {
+        /* This is a bit of a workaround for React's limitations.
+           We might want to add a chunk to a blorb and *also*
+           set the current selection to that chunk. But we don't know
+           the selection value until the edit operation runs.
+           So we call the reducer (just as a function, not as a
+           React hook) to generate updated blorb. Then we can peek
+           at its stashed "lastadded" value, set the selection,
+           and push the new blorb into the reducer hook saying
+           "here, use this one, it's already updated".
+        */
         let newblorb = blorb_apply_change(blorb, cmd);
         if (newblorb.lastadded !== undefined)
             setSelected(newblorb.lastadded);
