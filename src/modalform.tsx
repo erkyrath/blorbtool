@@ -280,19 +280,20 @@ function ModalAddChunk()
 
 function ModalAddChunkThen({ filename, data }: { filename:string, data:Uint8Array })
 {
+    let rctx = useContext(ReactCtx);
+    let blorb = rctx.blorb;
+    
     /* Get fancy and use useMemo() to build-and-cache the file type info.
        Really, the filename/data props are not going to change, so
        we don't have to do this. But this is a practice project, right? */
     let guess = useMemo(() => determine_file_type(filename, data), [ filename, data ]);
 
     let guesstype = filetype_to_chunktype(guess.filetype);
+    let initval = validate(guesstype, data);
 
-    const [editError, setEditError] = useState('');
-    const [canSave, setCanSave] = useState(true);
+    const [editError, setEditError] = useState(initval.error);
+    const [canSave, setCanSave] = useState(initval.cansave);
     const selectRef = useRefSelect();
-    
-    let rctx = useContext(ReactCtx);
-    let blorb = rctx.blorb;
     
     let chunkls = selectable_chunk_types().map((obj) => {
         let val = (obj.isform ? obj.type.slice(5) : obj.type);
@@ -301,26 +302,27 @@ function ModalAddChunkThen({ filename, data }: { filename:string, data:Uint8Arra
         );
     });
 
+    function validate(chunktype: string, data: Uint8Array) : { cansave:boolean, error:string } {
+        if (chunktype.length > 4) {
+            let formtype = u8ToString(data, 8, 4);
+            if (!chunktype.startsWith('FORM') || chunktype.slice(5) != formtype) {
+                return { cansave:false, error:`This file does not appear to be ${chunktype}.` };
+            }
+            chunktype = 'FORM';
+        }
+        if (chunk_type_is_singleton(chunktype) && blorb_first_chunk_for_type(blorb, chunktype)) {
+            return { cansave:false, error:`A chunk of type ${chunktype} already exists.` };
+        }
+        return { cansave:true, error:'' };
+    }
+    
     function evhan_select_change(ev: ChangeSelectEv) {
         if (selectRef.current) {
             let chunktype = selectRef.current.value;
             console.log('### menu select', chunktype);
-            if (chunktype.length > 4) {
-                let formtype = u8ToString(data, 8, 4);
-                if (!chunktype.startsWith('FORM') || chunktype.slice(5) != formtype) {
-                    setEditError(`This file does not appear to be ${chunktype}.`);
-                    setCanSave(false);
-                    return;
-                }
-                chunktype = 'FORM';
-            }
-            if (chunk_type_is_singleton(chunktype) && blorb_first_chunk_for_type(blorb, chunktype)) {
-                setEditError(`A chunk of type ${chunktype} already exists.`);
-                setCanSave(false);
-                return;
-            }
-            setEditError('');
-            setCanSave(true);
+            let { cansave, error } = validate(chunktype, data);
+            setEditError(error);
+            setCanSave(cansave);
         }
     }
     
@@ -330,15 +332,7 @@ function ModalAddChunkThen({ filename, data }: { filename:string, data:Uint8Arra
             let chunktype = selectRef.current.value;
             if (chunktype.length > 4) {
                 let formtype = u8ToString(data, 8, 4);
-                if (!chunktype.startsWith('FORM') || chunktype.slice(5) != formtype) {
-                    setEditError(`This file does not appear to be ${chunktype}.`);
-                    return;
-                }
                 chunktype = 'FORM';
-            }
-            if (chunk_type_is_singleton(chunktype) && blorb_first_chunk_for_type(blorb, chunktype)) {
-                setEditError(`A chunk of type ${chunktype} already exists.`);
-                return;
             }
             rctx.setModalForm(null);
             console.log('### adding chunktype', chunktype, data);
