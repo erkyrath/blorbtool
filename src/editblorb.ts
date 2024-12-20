@@ -30,24 +30,24 @@ export function blorb_apply_change(blorb: Blorb, act: BlorbEditCmd) : Blorb
     case 'loadnew':
         return act.blorb;
     case 'delchunk':
-        return blorb_delete_chunk(blorb, act.refkey);
+        return editblorb_delete_chunk(blorb, act.refkey);
     case 'setchunkusage':
-        return blorb_set_chunk_usage(blorb, act.refkey, act.resid);
+        return editblorb_set_chunk_usage(blorb, act.refkey, act.resid);
     case 'setfrontis':
-        return blorb_set_frontis(blorb, act.refkey);
+        return editblorb_set_frontis(blorb, act.refkey);
     case 'setresdesc':
-        return blorb_set_resdesc(blorb, act.usage, act.resnum, act.text);
+        return editblorb_set_resdesc(blorb, act.usage, act.resnum, act.text);
     case 'delresoentry':
-        return blorb_delete_resolution_entry(blorb, act.resnum);
+        return editblorb_delete_resolution_entry(blorb, act.resnum);
     case 'addchunk':
-        return blorb_add_chunk(blorb, act.chunktype, act.data);
+        return editblorb_add_chunk(blorb, act.chunktype, act.data);
     default:
         console.log('BUG: Unimplemented command', act);
         return blorb;
     }
 }
 
-function blorb_delete_chunk(blorb: Blorb, key: number) : Blorb
+function editblorb_delete_chunk(blorb: Blorb, key: number) : Blorb
 {
     let resentry = blorb_resentry_for_key(blorb, key);
     
@@ -62,7 +62,7 @@ function blorb_delete_chunk(blorb: Blorb, key: number) : Blorb
     return newblorb;
 }
 
-function blorb_set_frontis(blorb: Blorb, key: number) : Blorb
+function editblorb_set_frontis(blorb: Blorb, key: number) : Blorb
 {
     let chunk = blorb.keymap.get(key);
     if (!chunk) {
@@ -89,7 +89,7 @@ function blorb_set_frontis(blorb: Blorb, key: number) : Blorb
     return newblorb;
 }
 
-function blorb_set_chunk_usage(blorb: Blorb, refkey: number, resid: CTypes.ChunkUsageNumber|undefined) : Blorb
+function editblorb_set_chunk_usage(blorb: Blorb, refkey: number, resid: CTypes.ChunkUsageNumber|undefined) : Blorb
 {
     if (!blorb.chunks.length) {
         return blorb;
@@ -142,7 +142,7 @@ function blorb_set_chunk_usage(blorb: Blorb, refkey: number, resid: CTypes.Chunk
     return newblorb;
 }
 
-function blorb_set_resdesc(blorb: Blorb, usage: CTypes.ChunkUsage, resnum: number, text: string) : Blorb
+function editblorb_set_resdesc(blorb: Blorb, usage: CTypes.ChunkUsage, resnum: number, text: string) : Blorb
 {
     let rdes: CTypes.CTResDescs;
     let errors: string[];
@@ -199,7 +199,7 @@ function blorb_set_resdesc(blorb: Blorb, usage: CTypes.ChunkUsage, resnum: numbe
     return newblorb;
 }
 
-function blorb_delete_resolution_entry(blorb: Blorb, resnum: number) : Blorb
+function editblorb_delete_resolution_entry(blorb: Blorb, resnum: number) : Blorb
 {
     let reso: CTypes.CTResolution;
     let errors: string[];
@@ -226,7 +226,7 @@ function blorb_delete_resolution_entry(blorb: Blorb, resnum: number) : Blorb
     return newblorb;
 }
 
-function blorb_add_chunk(blorb: Blorb, chunktype: string, data: Uint8Array) : Blorb
+function editblorb_add_chunk(blorb: Blorb, chunktype: string, data: Uint8Array) : Blorb
 {
     let [ chunk, chunkerrors ] = new_chunk(chunktype, data);
 
