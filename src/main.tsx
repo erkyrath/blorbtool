@@ -80,6 +80,9 @@ function MyApp()
     }
     
     let loadBlorbFile = function(act: LoadBlorbAction) {
+        /* Parse a byte array into a blorb and set it as current.
+           Or, if there is no byte array, create a new empty blorb
+           and set *that* as current. */
         let newblorb: Blorb;
         if (act) {
             newblorb = parse_blorb(act.data, act.filename);
