@@ -67,6 +67,12 @@ export function DisplayColumn({ selected }: { selected:number })
             </div>
             <div className="DisplayHeader">
                 <div className="ControlBox">
+                    {( selchunk ?
+                       <div className="Control">
+                           Chunk:
+                       </div>
+                       : null
+                     )}
                     <div className="Control">
                         <button disabled={ !selchunk } onClick={ evhan_click_download }>Download</button>
                     </div>

@@ -253,10 +253,12 @@ function BlorbInfoHeader()
                : null) }
             <div className="BlorbControls">
                 <div className="Control">
-                    <button onClick={ evhan_click_download }>Download</button>
-                </div>
-                <div className="Control">
                     <button onClick={ evhan_click_addchunk }>Add Chunk</button>
+                </div>
+            </div>
+            <div className="BlorbControls">
+                <div className="Control">
+                    <button onClick={ evhan_click_download }>Download Blorb</button>
                 </div>
             </div>
         </div>

@@ -302,6 +302,8 @@ function ModalAddChunkThen({ filename, data }: { filename:string, data:Uint8Arra
         );
     });
 
+    //### replace as a UI concept
+
     function validate(chunktype: string, data: Uint8Array) : { cansave:boolean, error:string } {
         if (chunktype.length > 4) {
             let formtype = u8ToString(data, 8, 4);
