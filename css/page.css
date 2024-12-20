@@ -122,8 +122,9 @@ body {
     width: 100%;
     top: 0px;
     height: 50px;
-    background: #F8E4FF;
+    background: #FEF6FF;
     overflow: clip;
+    border-bottom: 1px solid #F2DDF2;
 }
 
 .DisplayHeaderBack .DisplayHeaderBackAcross {
