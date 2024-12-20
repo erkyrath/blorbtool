@@ -657,7 +657,7 @@ const singletonTypes = new Set([
 ]);
 
 /* Return whether a chunk type is limited to one per blorb file. */
-export function chunk_type_singleton(chunktype: string) : boolean
+export function chunk_type_is_singleton(chunktype: string) : boolean
 {
     return singletonTypes.has(chunktype);
 }

@@ -1,8 +1,8 @@
 import React from 'react';
 import { useState, useContext, useRef, useMemo } from 'react';
 
-import { chunk_filename_info, selectable_chunk_types } from './chunk';
-import { blorb_get_data, blorb_chunk_for_key, blorb_resentry_for_key } from './blorb';
+import { chunk_filename_info, selectable_chunk_types, chunk_type_is_singleton } from './chunk';
+import { blorb_get_data, blorb_chunk_for_key, blorb_resentry_for_key, blorb_first_chunk_for_type } from './blorb';
 import { pretty_size } from './readable';
 import { determine_file_type, filetype_readable_desc, filetype_to_chunktype } from './fileutil';
 
@@ -283,6 +283,7 @@ function ModalAddChunkThen({ filename, data }: { filename:string, data:Uint8Arra
     const selectRef = useRefSelect();
     
     let rctx = useContext(ReactCtx);
+    let blorb = rctx.blorb;
     
     /* Get fancy and use useMemo() to build-and-cache the file type info.
        Really, the filename/data props are not going to change, so
@@ -302,6 +303,10 @@ function ModalAddChunkThen({ filename, data }: { filename:string, data:Uint8Arra
         ev.stopPropagation();
         if (selectRef.current) {
             let chunktype = selectRef.current.value;
+            if (chunk_type_is_singleton(chunktype) && blorb_first_chunk_for_type(blorb, chunktype)) {
+                setEditError(`A chunk of type ${chunktype} already exists.`);
+                return;
+            }
             rctx.setModalForm(null);
             rctx.editBlorb({ type:'addchunk', chunktype:chunktype, data:data });
         }
