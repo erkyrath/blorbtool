@@ -583,24 +583,12 @@ type ChunkTypeDesc = {
 };
 
 const allChunkTypes: ChunkTypeDesc[] = [
-    { type:'FORM/AIFF', isform:true, label:'Audio \u2013 AIFF' },
     { type:'RIdx', label:'Resource index' },
     { type:'IFhd', label:'Game identifier' },
     { type:'Fspc', label:'Frontispiece' },
     { type:'RDes', label:'Resource descriptions' },
-    { type:'Plte', label:'Color palette' },
     { type:'IFmd', label:'Metadata' },
 
-    { type:'AUTH', label:'Author' },
-    { type:'(c) ', label:'Copyright message' },
-    { type:'ANNO', label:'Annotation' },
-    { type:'SNam', label:'Story name (deprecated)' },
-
-    { type:'RelN', label:'Release number (Z-code)' },
-    { type:'Reso', label:'Resolution' },
-    { type:'APal', label:'Adaptive palette' },
-    { type:'Loop', label:'Audio looping' },
-       
     { type:'TEXT', label:'Text' },
     { type:'BINA', label:'Binary data' },
 
@@ -608,6 +596,7 @@ const allChunkTypes: ChunkTypeDesc[] = [
     { type:'PNG ', label:'Image \u2013 PNG' },
     { type:'Rect', label:'Image \u2013 placeholder' },
         
+    { type:'FORM/AIFF', isform:true, label:'Audio \u2013 AIFF' },
     { type:'OGGV', label:'Audio \u2013 Ogg' },
         
     { type:'ZCOD', label:'Game file \u2013 Z-code' },
@@ -622,6 +611,18 @@ const allChunkTypes: ChunkTypeDesc[] = [
     { type:'MAGS', label:'Game file \u2013 Magnetic Scrolls' },
     { type:'ADVS', label:'Game file \u2013 AdvSys' },
     { type:'EXEC', label:'Game file \u2013 Executable' },
+
+    { type:'AUTH', label:'Author' },
+    { type:'(c) ', label:'Copyright message' },
+    { type:'ANNO', label:'Annotation' },
+    { type:'SNam', label:'Story name (deprecated)' },
+
+    { type:'Plte', label:'Color palette' },
+    { type:'RelN', label:'Release number (Z-code)' },
+    { type:'Reso', label:'Resolution' },
+    { type:'APal', label:'Adaptive palette' },
+    { type:'Loop', label:'Audio looping' },
+       
 ];
 
 const chunkTypeMap = new Map(allChunkTypes.map(({ type, label }) => [ type, label ]));
