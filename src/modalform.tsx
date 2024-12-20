@@ -280,12 +280,6 @@ function ModalAddChunk()
 
 function ModalAddChunkThen({ filename, data }: { filename:string, data:Uint8Array })
 {
-    const [editError, setEditError] = useState('');
-    const selectRef = useRefSelect();
-    
-    let rctx = useContext(ReactCtx);
-    let blorb = rctx.blorb;
-    
     /* Get fancy and use useMemo() to build-and-cache the file type info.
        Really, the filename/data props are not going to change, so
        we don't have to do this. But this is a practice project, right? */
@@ -293,12 +287,42 @@ function ModalAddChunkThen({ filename, data }: { filename:string, data:Uint8Arra
 
     let guesstype = filetype_to_chunktype(guess.filetype);
 
+    const [editError, setEditError] = useState('');
+    const [canSave, setCanSave] = useState(true);
+    const selectRef = useRefSelect();
+    
+    let rctx = useContext(ReactCtx);
+    let blorb = rctx.blorb;
+    
     let chunkls = selectable_chunk_types().map((obj) => {
         let val = (obj.isform ? obj.type.slice(5) : obj.type);
         return (
             <option key={ obj.type } value={ obj.type }>{ val }: { obj.label }</option>
         );
     });
+
+    function evhan_select_change(ev: ChangeSelectEv) {
+        if (selectRef.current) {
+            let chunktype = selectRef.current.value;
+            console.log('### menu select', chunktype);
+            if (chunktype.length > 4) {
+                let formtype = u8ToString(data, 8, 4);
+                if (!chunktype.startsWith('FORM') || chunktype.slice(5) != formtype) {
+                    setEditError(`This file does not appear to be ${chunktype}.`);
+                    setCanSave(false);
+                    return;
+                }
+                chunktype = 'FORM';
+            }
+            if (chunk_type_is_singleton(chunktype) && blorb_first_chunk_for_type(blorb, chunktype)) {
+                setEditError(`A chunk of type ${chunktype} already exists.`);
+                setCanSave(false);
+                return;
+            }
+            setEditError('');
+            setCanSave(true);
+        }
+    }
     
     function evhan_click_add(ev: React.MouseEvent<HTMLElement, MouseEvent>) {
         ev.stopPropagation();
@@ -341,7 +365,7 @@ function ModalAddChunkThen({ filename, data }: { filename:string, data:Uint8Arra
                : null) }
             <div className="ControlRow">
                 Chunk type:{' '}
-                <select name="chunktype" defaultValue={ guesstype } ref={ selectRef }>
+                <select name="chunktype" defaultValue={ guesstype } onChange={ evhan_select_change } ref={ selectRef }>
                     { chunkls }
                 </select>
             </div>
@@ -350,7 +374,7 @@ function ModalAddChunkThen({ filename, data }: { filename:string, data:Uint8Arra
                     <button onClick={ (ev)=>evhan_click_close_modal(ev, rctx) }>Cancel</button>
                 </div>
                 <div className="Control">
-                    <button onClick={ evhan_click_add }>Add</button>
+                    <button disabled={ !canSave } onClick={ evhan_click_add }>Add</button>
                 </div>
             </div>
             { (editError ?
@@ -371,6 +395,7 @@ function evhan_click_close_modal(ev: React.MouseEvent<HTMLElement, MouseEvent>, 
 // Late typedefs (because my editor gets confused)
 
 type ChangeEv = React.ChangeEvent<HTMLInputElement>;
+type ChangeSelectEv = React.ChangeEvent<HTMLSelectElement>;
 type DragEv = React.DragEvent<HTMLDivElement>;
 
 const useRefInput = () => useRef<HTMLInputElement>(null);
