@@ -39,7 +39,6 @@ export function ModalFormOverlay()
         modalpane = <ModalAddChunk />;
         break;
     case 'addchunkthen':
-        console.log('### adding file', modalform.filename, 'len', modalform.data.length); //###
         modalpane = <ModalAddChunkThen filename={ modalform.filename } data={ modalform.data } />;
         break;
     default:
@@ -303,8 +302,6 @@ function ModalAddChunkThen({ filename, data }: { filename:string, data:Uint8Arra
         );
     });
 
-    //### replace as a UI concept
-
     function validate(chunktype: string, data: Uint8Array) : { cansave:boolean, mustreplace:boolean, error:string } {
         if (chunktype.length > 4) {
             let formtype = u8ToString(data, 8, 4);
@@ -322,7 +319,6 @@ function ModalAddChunkThen({ filename, data }: { filename:string, data:Uint8Arra
     function evhan_select_change(ev: ChangeSelectEv) {
         if (selectRef.current) {
             let chunktype = selectRef.current.value;
-            console.log('### menu select', chunktype);
             let { cansave, mustreplace, error } = validate(chunktype, data);
             setEditError(error);
             setCanSave(cansave);
@@ -339,7 +335,6 @@ function ModalAddChunkThen({ filename, data }: { filename:string, data:Uint8Arra
                 chunktype = 'FORM';
             }
             rctx.setModalForm(null);
-            console.log('### adding chunktype', chunktype, data);
             rctx.editBlorbAndSelect({ type:'addchunk', chunktype:chunktype, data:data });
         }
     }
