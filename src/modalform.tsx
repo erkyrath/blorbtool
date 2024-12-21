@@ -293,6 +293,7 @@ function ModalAddChunkThen({ filename, data }: { filename:string, data:Uint8Arra
 
     const [editError, setEditError] = useState(initval.error);
     const [canSave, setCanSave] = useState(initval.cansave);
+    const [mustReplace, setMustReplace] = useState(initval.mustreplace);
     const selectRef = useRefSelect();
     
     let chunkls = selectable_chunk_types().map((obj) => {
@@ -304,27 +305,28 @@ function ModalAddChunkThen({ filename, data }: { filename:string, data:Uint8Arra
 
     //### replace as a UI concept
 
-    function validate(chunktype: string, data: Uint8Array) : { cansave:boolean, error:string } {
+    function validate(chunktype: string, data: Uint8Array) : { cansave:boolean, mustreplace:boolean, error:string } {
         if (chunktype.length > 4) {
             let formtype = u8ToString(data, 8, 4);
             if (!chunktype.startsWith('FORM') || chunktype.slice(5) != formtype) {
-                return { cansave:false, error:`This file does not appear to be ${chunktype}.` };
+                return { cansave:false, mustreplace:false, error:`This file does not appear to be ${chunktype}.` };
             }
             chunktype = 'FORM';
         }
         if (chunk_type_is_singleton(chunktype) && blorb_first_chunk_for_type(blorb, chunktype)) {
-            return { cansave:false, error:`A chunk of type ${chunktype} already exists.` };
+            return { cansave:true, mustreplace:true, error:`A chunk of type ${chunktype} already exists.` };
         }
-        return { cansave:true, error:'' };
+        return { cansave:true, mustreplace:false, error:'' };
     }
     
     function evhan_select_change(ev: ChangeSelectEv) {
         if (selectRef.current) {
             let chunktype = selectRef.current.value;
             console.log('### menu select', chunktype);
-            let { cansave, error } = validate(chunktype, data);
+            let { cansave, mustreplace, error } = validate(chunktype, data);
             setEditError(error);
             setCanSave(cansave);
+            setMustReplace(mustreplace);
         }
     }
     
@@ -370,7 +372,7 @@ function ModalAddChunkThen({ filename, data }: { filename:string, data:Uint8Arra
                     <button onClick={ (ev)=>evhan_click_close_modal(ev, rctx) }>Cancel</button>
                 </div>
                 <div className="Control">
-                    <button disabled={ !canSave } onClick={ evhan_click_add }>Add</button>
+                    <button disabled={ !canSave } onClick={ evhan_click_add }>{ mustReplace ? "Replace" : "Add" }</button>
                 </div>
             </div>
             { (editError ?
