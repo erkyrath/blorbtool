@@ -4,8 +4,8 @@ import replace from '@rollup/plugin-replace';
 import terser from '@rollup/plugin-terser';
 
 const datestr = 'Dec 20, 2024'
-
 const release = false;
+
 const nodeenv = (release ? 'production' : 'development')
 const tersopt = { format: { ascii_only:true } };
 const tersplugin = (release ? terser(tersopt) : null);
