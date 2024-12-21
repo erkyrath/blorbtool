@@ -85,6 +85,11 @@ export namespace CTypes {
     };
 
     /* The chunks, extending the basic Chunk interface. */
+
+    // Chunk type 'FORM', including AIFF.
+    export interface CTForm extends Chunk {
+        children: IFFChunk[];
+    };
     
     // Chunk type 'RIdx'.
     export interface CTResIndex extends Chunk {
@@ -96,7 +101,7 @@ export namespace CTypes {
     // Chunk type 'Fspc'.
     export interface CTFrontispiece extends Chunk {
         picnum: number;
-    }
+    };
 
     // One entry in the resource description chunk.
     export type CTResDescEntry = {
@@ -202,15 +207,10 @@ function new_chunk_noinit(type:string|Uint8Array, data:Uint8Array, origpos?:numb
 {
     let ctype = make_chunk_type(type);
     
-    let formtype: ChunkType|undefined;
-    if (ctype.stype === 'FORM') {
-        formtype = make_chunk_type(data.slice(8, 12));
-    }
-    
     let chunk: Chunk = {
         refkey: keycounter++,
         type: ctype,
-        formtype: formtype,
+        formtype: undefined,
         data: data,
         index: -1,
         pos: origpos || 0,
@@ -225,6 +225,14 @@ function new_chunk_noinit(type:string|Uint8Array, data:Uint8Array, origpos?:numb
 export function new_chunk(type:string|Uint8Array, data:Uint8Array, origpos?:number) : ChunkWithErrors
 {
     let chunk = new_chunk_noinit(type, data, origpos);
+
+    if (chunk.type.stype == 'FORM') {
+        /* Check that this really looks like an IFF form */
+        let formlen = u8read4(data, 4);
+        if (u8ToString(data, 0, 4) == 'FORM' && formlen == data.length-8) {
+            return new_chunk_FORM(chunk);
+        }
+    }
 
     switch (chunk.type.stype) {
     case 'RIdx':
@@ -263,6 +271,31 @@ export function new_chunk(type:string|Uint8Array, data:Uint8Array, origpos?:numb
     }
 
     return [ chunk, [] ];
+}
+
+function new_chunk_FORM(chunk: Chunk) : ChunkWithErrors
+{
+    let errors: string[] = [];
+
+    let formtype = make_chunk_type(chunk.data.slice(8, 12));
+
+    let chunks = parse_iff_form(chunk.data);
+    
+    let reschunk: CTypes.CTForm = { ...chunk, formtype:formtype, children:chunks };
+    return [ reschunk, errors ];
+}
+
+export type IFFChunk = {
+    chunktype: ChunkType;
+    formtype: ChunkType|undefined;
+    data: Uint8Array;
+    children?: IFFChunk[];
+}
+
+export function parse_iff_form(dat: Uint8Array) : IFFChunk[]
+{
+    let chunks: IFFChunk[] = [];
+    return chunks;
 }
 
 /* Create an empty index chunk. It so happens that an empty index chunk
