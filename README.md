@@ -14,10 +14,11 @@ For more information, see the [Blorb web site][blorb].
 
 ## To use BlorbTool
 
-To see BlorbTool in action, visit [this demo page][btsensory].
+To see BlorbTool in action, visit [this demo page][btsensory], which has the sample game [Sensory Jam][sensory] loaded up.
 
 To use BlorbTool on your own file, [go to this page][btloader] and select "Choose File".
 
+[sensory]: https://ifdb.org/viewgame?id=0ulrnusrwihmwefi
 [btsensory]: https://eblong.com/zarf/blorb/blorbtool/run-sensory.html
 [btloader]: https://eblong.com/zarf/blorb/blorbtool/run.html
 
