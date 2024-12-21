@@ -38,7 +38,7 @@ let initialLoader = false;
  */
 export function init(blorbdata: Uint8Array|undefined, filename: string|undefined)
 {
-    //### maybe fix up filename? Remove .js, add .blb
+    //TODO: maybe fix up filename? Remove .js, add .blb
     
     if (blorbdata) {
         initialBlorb = parse_blorb(blorbdata, filename);

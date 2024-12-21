@@ -715,7 +715,13 @@ export function chunk_filename_info(chunk: Chunk, blorb: Blorb)
         mimetype = 'application/x-zmachine';
         suffix = '.z' + chunk.data[0]; // cheap hack, yes
         break;
-    //### others...
+    case 'TEXT':
+    case 'AUTH':
+    case 'ANNO':
+    case '(c) ':
+        mimetype = 'text/plain';
+        suffix = '.txt';
+        break;
     default:
         mimetype = 'application/octet-stream';
         suffix = '.dat';
