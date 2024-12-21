@@ -130,7 +130,7 @@ function ModalFetchBlorb()
                 Export blorb as file ({ pretty_size(data.length) })
             </div>
             <div className="ControlRow AlignCenter">
-                <ArrowDownload data={ data } filename={ filename } mimetype={ mimetype } />{' '}
+                <ArrowDownload data={ data } filename={ filename } mimetype={ mimetype } />{' '}{ filename }
             </div>
             <div className="ControlRow AlignRight">
                 <div className="Control">
@@ -160,7 +160,7 @@ function ModalFetchChunk({ refkey }: { refkey:number })
                 Export this chunk ({ pretty_size(chunk.data.length) })
             </div>
             <div className="ControlRow">
-                <ArrowDownload data={ chunk.data } filename={ filename } mimetype={ mimetype } />{' '}
+                <ArrowDownload data={ chunk.data } filename={ filename } mimetype={ mimetype } />{' '}{ filename }
             </div>
             <div className="ControlRow AlignRight">
                 <div className="Control">
