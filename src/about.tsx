@@ -51,6 +51,12 @@ export function AboutPane()
                 you select is <em>not</em> uploaded to any server.
                 If you close or reload your browser window, the displayed
                 file will be lost.</p>
+            <h3>About</h3>
+            <p>BlorbTool is copyright 2024 by Andrew Plotkin.{' '}
+                <a href="https://github.com/erkyrath/blorbtool">Source repo</a>;
+                distributed under the{' '}
+                <a href="https://github.com/erkyrath/blorbtool/blob/master/LICENSE">MIT license</a>.
+                Last updated { '__BLORBTOOLDATE__' }.</p>
         </>
     );
 }
