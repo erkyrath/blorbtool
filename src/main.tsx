@@ -19,6 +19,11 @@ import { ArrowDownload, ArrowGeneric } from './widgets';
 /* BlorbTool: a browser-based Blorb file editor.
  */
 
+/* Hack alert: we're not running in Node.js here! But the rollup
+   configuration replaces "process.env.NODE_ENV" with a static string,
+   so we can check it. */
+const releaseTarget = process.env.NODE_ENV;
+
 /* The initial Blorb data. This can be set when init() is called. If not,
    we'll display a form which allows the user to "upload" a Blorb
    file.
@@ -70,12 +75,8 @@ function MyApp()
     /* In dev mode, store the current Blorb in the global JS environment
        so we can peek at it.
        (Note that this happens every render, not just at startup. So
-       it's always the *current* Blorb. 
-
-       Hack alert: we're not running in Node.js here! But the rollup
-       configuration replaces "process.env.NODE_ENV" with a static string,
-       so we can pretend to check it. */
-    if (process.env.NODE_ENV == 'development') {
+       it's always the *current* Blorb. */
+    if (releaseTarget == 'development') {
         (window as any).curblorb = blorb;
     }
     
@@ -226,6 +227,7 @@ function IndexColFooter()
             </div>
             <div className="BlorbGloss">
                 BlorbTool
+                { (releaseTarget == 'development') ? ' (dev)' : null }
             </div>
         </div>
     );
