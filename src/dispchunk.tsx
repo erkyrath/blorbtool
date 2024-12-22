@@ -490,6 +490,10 @@ export namespace DispChunks {
                         <span className="InfoLabel">Bits per sample:</span>{' '}
                         { chunk.bitspersample }
                     </li>
+                    <li>
+                        <span className="InfoLabel">Samples per second:</span>{' '}
+                        { chunk.samplespersec }
+                    </li>
                 </ul>
             </>
         );

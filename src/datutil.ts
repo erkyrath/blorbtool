@@ -61,6 +61,25 @@ export function u8write4(arr: Uint8Array, pos: number, val: number)
     arr[pos+3] = (val) & 0xFF;
 }
 
+/* Read a ten-byte (80-bit) float from a given location in a byte array. */
+export function u8readfloat80(arr: Uint8Array, pos: number) : number
+{
+    let sign = arr[pos+0] & 0x80;
+    let expo = (0x100 * (arr[pos+0] & 0x7F) + arr[pos+1]) - 0x3FFF;
+    let mant = (arr[pos+2] * 0x100000000000000
+                + arr[pos+3] * 0x1000000000000
+                + arr[pos+4] * 0x10000000000
+                + arr[pos+5] * 0x100000000
+                + arr[pos+6] * 0x1000000
+                + arr[pos+7] * 0x10000
+                + arr[pos+8] * 0x100
+                + arr[pos+9]) / 0x10000000000000000;
+    
+    let val = mant * Math.pow(2, expo+1);
+    return (sign ? -val : val);
+}
+
+
 /* Create a data: URL containing a byte array. This is an async function.
    
    We don't actually use this one, but it's so neat that I want to

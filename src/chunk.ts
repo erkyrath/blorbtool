@@ -1,5 +1,5 @@
 import { u8ToString, u16ToString, utf8ToString, stringToUtf8, stringToU8 } from './datutil';
-import { u8read4, u8write4 } from './datutil';
+import { u8read4, u8write4, u8readfloat80 } from './datutil';
 import { ImageSize, ImageRatio, find_dimensions_png, find_dimensions_jpeg } from './imgutil';
 import { Blorb, blorb_resentry_for_chunk } from './blorb';
 
@@ -95,6 +95,7 @@ export namespace CTypes {
         channels: number;
         samplecount: number;
         bitspersample: number;
+        samplespersec: number;
     };
     
     // Chunk type 'RIdx'.
@@ -361,8 +362,9 @@ function new_chunk_FORM_AIFF(chunk: CTypes.CTForm, errors: string[]) : ChunkWith
             let channels = 0x100 * chu.data[0] + chu.data[1];
             let samplecount = u8read4(chu.data, 2);
             let bitspersample = 0x100 * chu.data[6] + chu.data[7];
+            let samplespersec = u8readfloat80(chu.data, 8);
             
-            let reschunk: CTypes.CTFormAIFF = { ...chunk, channels, samplecount, bitspersample };
+            let reschunk: CTypes.CTFormAIFF = { ...chunk, channels, samplecount, bitspersample, samplespersec };
 
             return [ reschunk, errors ];
         }
