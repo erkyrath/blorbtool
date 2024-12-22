@@ -279,7 +279,7 @@ function new_chunk_FORM(chunk: Chunk) : ChunkWithErrors
 
     let formtype = make_chunk_type(chunk.data.slice(8, 12));
 
-    let chunks = parse_iff_form(chunk.data);
+    let chunks = parse_iff_form_chunks(chunk.data);
     
     let reschunk: CTypes.CTForm = { ...chunk, formtype:formtype, children:chunks };
     return [ reschunk, errors ];
@@ -292,9 +292,46 @@ export type IFFChunk = {
     children?: IFFChunk[];
 }
 
-export function parse_iff_form(dat: Uint8Array) : IFFChunk[]
+export function parse_iff_form_chunks(dat: Uint8Array) : IFFChunk[]
 {
     let chunks: IFFChunk[] = [];
+
+    let pos = 12;
+    const len = dat.length;
+
+    while (pos < len) {
+        let uctype = dat.slice(pos, pos+4);
+        let ctype = u8ToString(uctype);
+        let clen = u8read4(dat, pos+4);
+        let cpos = pos;
+        pos += 8;
+
+        let formtype: ChunkType|undefined;
+        let children: IFFChunk[]|undefined;
+        
+        let cdat: Uint8Array;
+        if (ctype == 'FORM') {
+            cdat = dat.slice(cpos, pos+clen);
+            formtype = make_chunk_type(cdat.slice(8, 12));
+            children = parse_iff_form_chunks(cdat);
+        }
+        else {
+            cdat = dat.slice(pos, pos+clen);
+        }
+        let chunk: IFFChunk = {
+            chunktype: make_chunk_type(uctype),
+            formtype: formtype,
+            children: children,
+            data: cdat,
+        };
+
+        chunks.push(chunk);
+        
+        pos += clen;
+        if (pos & 1)
+            pos++;
+    }
+    
     return chunks;
 }
 
