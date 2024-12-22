@@ -61,7 +61,9 @@ export function u8write4(arr: Uint8Array, pos: number, val: number)
     arr[pos+3] = (val) & 0xFF;
 }
 
-/* Read a ten-byte (80-bit) float from a given location in a byte array. */
+/* Read a ten-byte (80-bit) float from a given location in a byte array.
+   This is a quick hack; it does not deal with denormals, infinities,
+   or NaN. */
 export function u8readfloat80(arr: Uint8Array, pos: number) : number
 {
     let sign = arr[pos+0] & 0x80;
