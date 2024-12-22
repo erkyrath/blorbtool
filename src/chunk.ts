@@ -369,6 +369,8 @@ function new_chunk_FORM_AIFF(chunk: CTypes.CTForm, errors: string[]) : ChunkWith
             return [ reschunk, errors ];
         }
     }
+
+    errors = [ ...errors, 'AIFF chunk does not have a COMM segment' ];
     
     return [ chunk, errors ];
 }
