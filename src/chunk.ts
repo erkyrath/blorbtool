@@ -285,6 +285,7 @@ function new_chunk_FORM(chunk: Chunk) : ChunkWithErrors
     return [ reschunk, errors ];
 }
 
+/* Represents one chunk inside a FORM chunk. */
 export type IFFChunk = {
     chunktype: ChunkType;
     formtype: ChunkType|undefined;
@@ -292,6 +293,12 @@ export type IFFChunk = {
     children?: IFFChunk[];
 }
 
+/* This is very similar to the parse_blorb() function, except that
+   has blorb-specific logic and this is a generic IFF chunk-format
+   parser. In a more thoughtful world, I would have built parse_blorb()
+   on top of this code. But I didn't! Sorry. It's pretty tiny,
+   anyhow.
+*/
 export function parse_iff_form_chunks(dat: Uint8Array) : IFFChunk[]
 {
     let chunks: IFFChunk[] = [];
