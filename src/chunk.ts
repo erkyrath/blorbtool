@@ -86,9 +86,15 @@ export namespace CTypes {
 
     /* The chunks, extending the basic Chunk interface. */
 
-    // Chunk type 'FORM', including AIFF.
+    // Chunk type 'FORM'.
     export interface CTForm extends Chunk {
         children: IFFChunk[];
+    };
+
+    export interface CTFormAIFF extends CTForm {
+        channels: number;
+        samplecount: number;
+        bitspersample: number;
     };
     
     // Chunk type 'RIdx'.
@@ -282,6 +288,12 @@ function new_chunk_FORM(chunk: Chunk) : ChunkWithErrors
     let chunks = parse_iff_form_chunks(chunk.data);
     
     let reschunk: CTypes.CTForm = { ...chunk, formtype:formtype, children:chunks };
+
+    switch (formtype.stype) {
+    case 'AIFF':
+        return new_chunk_FORM_AIFF(reschunk, errors);
+    }
+    
     return [ reschunk, errors ];
 }
 
@@ -340,6 +352,23 @@ export function parse_iff_form_chunks(dat: Uint8Array) : IFFChunk[]
     }
     
     return chunks;
+}
+
+function new_chunk_FORM_AIFF(chunk: CTypes.CTForm, errors: string[]) : ChunkWithErrors
+{
+    for (let chu of chunk.children) {
+        if (chu.chunktype.stype == 'COMM') {
+            let channels = 0x100 * chu.data[0] + chu.data[1];
+            let samplecount = u8read4(chu.data, 2);
+            let bitspersample = 0x100 * chu.data[6] + chu.data[7];
+            
+            let reschunk: CTypes.CTFormAIFF = { ...chunk, channels, samplecount, bitspersample };
+
+            return [ reschunk, errors ];
+        }
+    }
+    
+    return [ chunk, errors ];
 }
 
 /* Create an empty index chunk. It so happens that an empty index chunk

@@ -18,6 +18,14 @@ export function DisplayChunkFormatted({ blorb, chunk }: { blorb:Blorb, chunk:Chu
     let resentry = blorb_resentry_for_chunk(blorb, chunk);
 
     switch (chunk.type.stype) {
+    case 'FORM':
+        if (chunk.formtype) {
+            switch (chunk.formtype.stype) {
+            case 'AIFF':
+                return <DispChunks.DCAIFF chunk={ chunk as CTypes.CTFormAIFF } resentry={ resentry }/>;
+            }
+        }
+        return <DisplayChunkRaw chunk={ chunk } />;
     case 'RIdx':
         return <DispChunks.DCResIndex chunk={ chunk as CTypes.CTResIndex } />;
     case 'Fspc':
@@ -465,6 +473,28 @@ export namespace DispChunks {
         );
     }
 
+    export function DCAIFF({ chunk, resentry }: { chunk:CTypes.CTFormAIFF, resentry:CTypes.CTResIndexEntry|undefined })
+    {
+        return (
+            <>
+                <ul className="InfoList">
+                    <li>
+                        <span className="InfoLabel">Channels:</span>{' '}
+                        { chunk.channels }
+                    </li>
+                    <li>
+                        <span className="InfoLabel">Samples per channel:</span>{' '}
+                        { chunk.samplecount }
+                    </li>
+                    <li>
+                        <span className="InfoLabel">Bits per sample:</span>{' '}
+                        { chunk.bitspersample }
+                    </li>
+                </ul>
+            </>
+        );
+    }
+    
     /* Chunk display for 'RelN'. */
     export function DCReleaseNumber({ chunk }: { chunk:CTypes.CTReleaseNumber })
     {
@@ -574,7 +604,6 @@ export namespace DispChunks {
             </>
         );
     }
-
 }
 
 
