@@ -49,3 +49,13 @@ export function pretty_size(len: number) : string
     }
     return sval + ' ' + unit;
 }
+
+export function pretty_float(val: number) : string
+{
+    let res = val.toString();
+    let pos = res.indexOf('.');
+    if (pos >= 0) {
+        return res.slice(0, pos+3);
+    }
+    return res;
+}

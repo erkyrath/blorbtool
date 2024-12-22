@@ -3,7 +3,7 @@ import { useState, useContext, useRef } from 'react';
 
 import { Chunk, CTypes } from './chunk';
 import { Blorb, blorb_resentry_for_chunk, blorb_chunk_for_usage, blorb_first_chunk_for_type } from './blorb';
-import { byte_to_hex } from './readable';
+import { byte_to_hex, pretty_float } from './readable';
 import { ReactCtx } from './contexts';
 
 import { ArrowToChunk, EditButton, DeleteButton } from './widgets';
@@ -475,6 +475,8 @@ export namespace DispChunks {
 
     export function DCAIFF({ chunk, resentry }: { chunk:CTypes.CTFormAIFF, resentry:CTypes.CTResIndexEntry|undefined })
     {
+        let duration = chunk.samplecount / chunk.samplespersec;
+        
         return (
             <>
                 <ul className="InfoList">
@@ -493,6 +495,10 @@ export namespace DispChunks {
                     <li>
                         <span className="InfoLabel">Samples per second:</span>{' '}
                         { chunk.samplespersec }
+                    </li>
+                    <li>
+                        <span className="InfoLabel">Duration:</span>{' '}
+                        { pretty_float(duration) } seconds
                     </li>
                 </ul>
             </>
