@@ -1,11 +1,15 @@
 {
   "name": "blorbtool",
-  "version": "0.0.1",
+  "version": "1.0.0",
   "description": "BlorbTool: interactive in-browser Blorb editing",
   "author": "Andrew Plotkin <erkyrath@eblong.com>",
   "license": "MIT",
   "scripts": {
     "build": "npx tsc && npx rollup -c"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/erkyrath/blorbtool.git"
   },
   "bugs": {
     "url": "https://github.com/erkyrath/blorbtool/issues"
