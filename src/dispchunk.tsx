@@ -42,6 +42,8 @@ export function DisplayChunkFormatted({ blorb, chunk }: { blorb:Blorb, chunk:Chu
         return <DispChunks.DCImage chunk={ chunk as CTypes.CTImage } resentry={ resentry } />
     case 'JPEG':
         return <DispChunks.DCImage chunk={ chunk as CTypes.CTImage } resentry={ resentry } />
+    case 'OGGV':
+        return <DispChunks.DCOggV chunk={ chunk } resentry={ resentry } />
     case 'RelN':
         return <DispChunks.DCReleaseNumber chunk={ chunk as CTypes.CTReleaseNumber } />
     case 'Reso':
@@ -500,6 +502,16 @@ export namespace DispChunks {
                         <span className="InfoLabel">Duration:</span>{' '}
                         { pretty_float(duration) } seconds
                     </li>
+                </ul>
+            </>
+        );
+    }
+    
+    export function DCOggV({ chunk, resentry }: { chunk:Chunk, resentry:CTypes.CTResIndexEntry|undefined })
+    {
+        return (
+            <>
+                <ul className="InfoList">
                 </ul>
             </>
         );
