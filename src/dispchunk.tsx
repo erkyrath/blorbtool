@@ -553,6 +553,7 @@ export namespace DispChunks {
     {
         return (
             <>
+                <p><i>(BlorbTool does not support MOD playback.)</i></p>
             </>
         );
     }
