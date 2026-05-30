@@ -2,13 +2,13 @@
 /* Utility functions for dealing with byte arrays. */
 
 /* ASCII (or Latin-1) string to byte array. */
-export function stringToU8(str: string) : Uint8Array
+export function stringToU8(str: string) : Uint8Array<ArrayBuffer>
 {
     return new Uint8Array([ ...str ].map(ch => ch.charCodeAt(0)));
 }
 
 /* Byte array to ASCII string. */
-export function u8ToString(arr: Uint8Array,
+export function u8ToString(arr: Uint8Array<ArrayBuffer>,
     pos?: number, len?: number) : string
 {
     if (pos !== undefined || len !== undefined) {
@@ -87,7 +87,7 @@ export function u8readfloat80(arr: Uint8Array, pos: number) : number
    We don't actually use this one, but it's so neat that I want to
    keep a copy around!
 */
-export function u8ToBase64URL(arr: Uint8Array) : Promise<string|ArrayBuffer|null>
+export function u8ToBase64URL(arr: Uint8Array<ArrayBuffer>) : Promise<string|ArrayBuffer|null>
 {
     let mimetype = "application/octet-stream";
     return new Promise((resolve, reject) => {

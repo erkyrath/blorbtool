@@ -14,7 +14,7 @@ export type BlorbEditCmd = (
     | { type:'setfrontis', refkey:number }
     | { type:'setresdesc', usage:CTypes.ChunkUsage, resnum:number, text:string }
     | { type:'delresoentry', resnum:number }
-    | { type:'addchunk', chunktype:string, data:Uint8Array }
+    | { type:'addchunk', chunktype:string, data:Uint8Array<ArrayBuffer> }
 );
 
 export function blorb_apply_change(blorb: Blorb, act: BlorbEditCmd) : Blorb
@@ -226,7 +226,7 @@ function editblorb_delete_resolution_entry(blorb: Blorb, resnum: number) : Blorb
     return newblorb;
 }
 
-function editblorb_add_chunk(blorb: Blorb, chunktype: string, data: Uint8Array) : Blorb
+function editblorb_add_chunk(blorb: Blorb, chunktype: string, data: Uint8Array<ArrayBuffer>) : Blorb
 {
     let [ chunk, chunkerrors ] = new_chunk(chunktype, data);
 

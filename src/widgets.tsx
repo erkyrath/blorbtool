@@ -97,7 +97,7 @@ export function ShortArrowToChunk({ destkey }: { destkey:number })
 
 /* A clickable arrow for downloading data.
  */
-export function ArrowDownload({ data, filename, mimetype }: { data:Uint8Array, filename:string, mimetype:string })
+export function ArrowDownload({ data, filename, mimetype }: { data:Uint8Array<ArrayBuffer>, filename:string, mimetype:string })
 {
     let dataurl = URL.createObjectURL(
         new Blob([ data ], { type: mimetype })

@@ -11,16 +11,16 @@ import { Blorb, blorb_resentry_for_chunk } from './blorb';
 */
 export type ChunkType = {
     stype: string; // four characters
-    utype: Uint8Array; // four bytes
+    utype: Uint8Array<ArrayBuffer>; // four bytes
 }
 
 /* Polymorphous utility: convert a four-character string *or* a four-byte
    array into a ChunkType.
 */
-function make_chunk_type(type:string|Uint8Array) : ChunkType
+function make_chunk_type(type:string|Uint8Array<ArrayBuffer>) : ChunkType
 {
     let stype: string;
-    let utype: Uint8Array;
+    let utype: Uint8Array<ArrayBuffer>;
     
     if (typeof type === 'string') {
         stype = type;
@@ -57,7 +57,7 @@ export interface Chunk {
     type: ChunkType;
     formtype: ChunkType|undefined, // set if type is 'FORM'
 
-    data: Uint8Array;
+    data: Uint8Array<ArrayBuffer>;
 
     // These values are recomputed every time the blorb updates.
     index: number;
@@ -210,7 +210,7 @@ type ChunkWithErrors = [ Chunk, string[] ];
    at this point. Also the initial position, if we are loading from a
    file.
 */
-function new_chunk_noinit(type:string|Uint8Array, data:Uint8Array, origpos?:number) : Chunk
+function new_chunk_noinit(type:string|Uint8Array<ArrayBuffer>, data:Uint8Array<ArrayBuffer>, origpos?:number) : Chunk
 {
     let ctype = make_chunk_type(type);
     
@@ -229,7 +229,7 @@ function new_chunk_noinit(type:string|Uint8Array, data:Uint8Array, origpos?:numb
 /* Create a chunk from data (bytes). Load up the type-specific contents
    by parsing that data.
 */
-export function new_chunk(type:string|Uint8Array, data:Uint8Array, origpos?:number) : ChunkWithErrors
+export function new_chunk(type:string|Uint8Array<ArrayBuffer>, data:Uint8Array<ArrayBuffer>, origpos?:number) : ChunkWithErrors
 {
     let chunk = new_chunk_noinit(type, data, origpos);
 

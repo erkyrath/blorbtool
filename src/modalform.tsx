@@ -72,7 +72,7 @@ export function ModalFormOverlay()
                 rctx.setModalForm({
                     type: 'addchunkthen',
                     filename: infile.name,
-                    data: new Uint8Array(arr),
+                    data: new Uint8Array<ArrayBuffer>(arr),
                 });
             });
         }
@@ -258,7 +258,7 @@ function ModalAddChunk()
                 rctx.setModalForm({
                     type: 'addchunkthen',
                     filename: infile.name,
-                    data: new Uint8Array(arr),
+                    data: new Uint8Array<ArrayBuffer>(arr),
                 });
             });
         }
@@ -277,7 +277,7 @@ function ModalAddChunk()
     );
 }
 
-function ModalAddChunkThen({ filename, data }: { filename:string, data:Uint8Array })
+function ModalAddChunkThen({ filename, data }: { filename:string, data:Uint8Array<ArrayBuffer> })
 {
     let rctx = useContext(ReactCtx);
     let blorb = rctx.blorb;
@@ -302,7 +302,7 @@ function ModalAddChunkThen({ filename, data }: { filename:string, data:Uint8Arra
         );
     });
 
-    function validate(chunktype: string, data: Uint8Array) : { cansave:boolean, mustreplace:boolean, error:string } {
+    function validate(chunktype: string, data: Uint8Array<ArrayBuffer>) : { cansave:boolean, mustreplace:boolean, error:string } {
         if (chunktype.length > 4) {
             let formtype = u8ToString(data, 8, 4);
             if (!chunktype.startsWith('FORM') || chunktype.slice(5) != formtype) {

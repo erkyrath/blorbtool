@@ -26,7 +26,7 @@ export function LoaderIndex()
             infile.arrayBuffer().then((arr) => {
                 rctx.loadBlorbFile({
                     filename: infile.name,
-                    data: new Uint8Array(arr),
+                    data: new Uint8Array<ArrayBuffer>(arr),
                 });
             });
         }

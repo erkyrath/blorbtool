@@ -36,7 +36,7 @@ let initialLoader = false;
    If blorbdata is provided, we parse it into a Blorb object and stash
    it as the initial Blorb to display. (With optional filename attached.)
  */
-export function init(blorbdata: Uint8Array|undefined, filename: string|undefined)
+export function init(blorbdata: Uint8Array<ArrayBuffer>|undefined, filename: string|undefined)
 {
     //TODO: maybe fix up filename? Remove .js, add .blb
     

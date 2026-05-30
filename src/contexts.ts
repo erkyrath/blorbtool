@@ -10,7 +10,7 @@ import { BlorbEditCmd } from './editblorb';
 export type AltDisplay = 'about' | 'errors' | null;
 export type ChunkCmd = 'download' | 'delete' | null;
 
-export type LoadBlorbAction = { filename:string, data:Uint8Array } | undefined;
+export type LoadBlorbAction = { filename:string, data:Uint8Array<ArrayBuffer> } | undefined;
 
 /* The type that describes the current modal dialogue box. */
 export type ModalForm = (
@@ -19,7 +19,7 @@ export type ModalForm = (
     | { type:'delchunk', key:number }
     | { type:'fetchblorb' }
     | { type:'addchunk' }
-    | { type:'addchunkthen', filename:string, data:Uint8Array }
+    | { type:'addchunkthen', filename:string, data:Uint8Array<ArrayBuffer> }
     | { type:'changefrontis', oldkey:number, key:number }
 );
 

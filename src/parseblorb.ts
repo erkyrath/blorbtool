@@ -18,7 +18,7 @@ export function new_blorb_with_index() : Blorb
     return blorb;
 }
 
-export function parse_blorb(dat: Uint8Array, filename?: string) : Blorb
+export function parse_blorb(dat: Uint8Array<ArrayBuffer>, filename?: string) : Blorb
 {
     let pos = 0;
     const len = dat.length;
