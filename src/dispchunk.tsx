@@ -479,6 +479,10 @@ export namespace DispChunks {
     {
         let duration = chunk.samplecount / chunk.samplespersec;
         
+        let dataurl = URL.createObjectURL(
+            new Blob([ chunk.data ], { type: 'audio/aiff' })
+        );
+    
         return (
             <>
                 <ul className="InfoList">
@@ -503,6 +507,9 @@ export namespace DispChunks {
                         { pretty_float(duration) } seconds
                     </li>
                 </ul>
+                <div>
+                    <audio controls src={ dataurl } />
+                </div>
             </>
         );
     }
