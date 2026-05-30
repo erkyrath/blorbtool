@@ -10,6 +10,12 @@ export function createU8(len: number) : U8Array
     return new Uint8Array<ArrayBuffer>(new ArrayBuffer(len));
 }
 
+/* Create a byte array from an ArrayBuffer. */
+export function arrayToU8(arr: ArrayBuffer) : U8Array
+{
+    return new Uint8Array<ArrayBuffer>(arr);
+}
+
 /* ASCII (or Latin-1) string to byte array. */
 export function stringToU8(str: string) : U8Array
 {

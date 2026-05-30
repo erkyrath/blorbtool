@@ -5,7 +5,7 @@ import { chunk_filename_info, selectable_chunk_types, chunk_type_is_singleton } 
 import { blorb_get_data, blorb_chunk_for_key, blorb_resentry_for_key, blorb_first_chunk_for_type } from './blorb';
 import { pretty_size } from './readable';
 import { U8Array } from './datutil';
-import { u8ToString } from './datutil';
+import { arrayToU8, u8ToString } from './datutil';
 import { determine_file_type, filetype_readable_desc, filetype_to_chunktype } from './fileutil';
 
 import { ReactCtx, ContextContent } from './contexts';
@@ -73,7 +73,7 @@ export function ModalFormOverlay()
                 rctx.setModalForm({
                     type: 'addchunkthen',
                     filename: infile.name,
-                    data: new Uint8Array<ArrayBuffer>(arr),
+                    data: arrayToU8(arr),
                 });
             });
         }
@@ -259,7 +259,7 @@ function ModalAddChunk()
                 rctx.setModalForm({
                     type: 'addchunkthen',
                     filename: infile.name,
-                    data: new Uint8Array<ArrayBuffer>(arr),
+                    data: arrayToU8(arr),
                 });
             });
         }
