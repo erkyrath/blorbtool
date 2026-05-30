@@ -1,4 +1,5 @@
-import { u8ToString, stringToU8 } from './datutil';
+import { U8Array } from './datutil';
+import { createU8, u8ToString, stringToU8 } from './datutil';
 import { u8read4, u8write4 } from './datutil';
 import { Chunk, CTypes } from './chunk';
 
@@ -78,9 +79,9 @@ export function new_blorb() : Blorb
    form up to date. (Or it should!) So this is mostly a matter of
    concatenating them all.
 */
-export function blorb_get_data(blorb: Blorb) : Uint8Array<ArrayBuffer>
+export function blorb_get_data(blorb: Blorb) : U8Array
 {
-    let data = new Uint8Array<ArrayBuffer>(new ArrayBuffer(blorb.totallen));
+    let data = createU8(blorb.totallen);
 
     let pos = 0;
 
@@ -162,7 +163,7 @@ export function blorb_recompute_positions(blorb: Blorb, oldusagemap?: Map<string
                 }
             }
         }
-        let tempridxdata = new Uint8Array<ArrayBuffer>(new ArrayBuffer(4 + 12 * entcount));
+        let tempridxdata = createU8(4 + 12 * entcount);
         ridx = { ...ridx, data:tempridxdata };
 
         origchunksmod = [ ridx, ...(origchunksmod.slice(1)) ];
@@ -229,7 +230,7 @@ export function blorb_recompute_positions(blorb: Blorb, oldusagemap?: Map<string
         newents.sort((ent1, ent2) => (ent1.pos - ent2.pos));
         
         // Rebuild the data (bytes) of ridx so we can save
-        let tempridxdata = new Uint8Array<ArrayBuffer>(new ArrayBuffer(4 + 12 * newents.length));
+        let tempridxdata = createU8(4 + 12 * newents.length);
         let pos = 0;
         u8write4(tempridxdata, pos, newents.length);
         pos += 4;
