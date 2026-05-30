@@ -727,6 +727,7 @@ const allChunkTypes: ChunkTypeDesc[] = [
         
     { type:'FORM/AIFF', isform:true, label:'Audio \u2013 AIFF' },
     { type:'OGGV', label:'Audio \u2013 Ogg' },
+    { type:'MP3 ', label:'Audio \u2013 MP3' },
     { type:'MOD ', label:'Audio \u2013 MOD' },
         
     { type:'ZCOD', label:'Game file \u2013 Z-code' },

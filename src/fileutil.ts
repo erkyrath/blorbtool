@@ -30,6 +30,7 @@ export function filetype_readable_desc(filetype: string) : string
     case 'JPEG': return 'JPEG (image)';
     case 'AIFF': return 'AIFF (audio)';
     case 'OGGV': return 'Ogg (audio)';
+    case 'MP3 ': return 'MP3 (audio)';
     case 'MOD ': return 'MOD (audio)';
     case 'ZCOD': return 'Z-code (game)';
     case 'GLUL': return 'Glulx (game)';
@@ -48,6 +49,7 @@ export function filetype_to_chunktype(filetype: string) : string
     case 'PNG ':
     case 'JPEG':
     case 'OGGV':
+    case 'MP3 ':
     case 'MOD ':
     case 'ZCOD':
     case 'GLUL':
@@ -70,6 +72,7 @@ const suffix_to_type_map: Map<string, string> = new Map([
     [ 'jpeg', 'JPEG' ],
     [ 'aiff', 'AIFF' ],
     [ 'ogg',  'OGGV' ],
+    [ 'mp3',  'MP3 ' ],
     [ 'ifiction', 'IFmd' ],
     [ 'ulx', 'GLUL' ],
     [ 'z1', 'ZCOD' ],

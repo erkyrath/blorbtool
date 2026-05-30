@@ -44,6 +44,8 @@ export function DisplayChunkFormatted({ blorb, chunk }: { blorb:Blorb, chunk:Chu
         return <DispChunks.DCImage chunk={ chunk as CTypes.CTImage } resentry={ resentry } />
     case 'OGGV':
         return <DispChunks.DCOggV chunk={ chunk } resentry={ resentry } />
+    case 'MP3 ':
+        return <DispChunks.DCMP3 chunk={ chunk } resentry={ resentry } />
     case 'MOD ':
         return <DispChunks.DCMOD chunk={ chunk } resentry={ resentry } />
     case 'RelN':
@@ -520,6 +522,21 @@ export namespace DispChunks {
     {
         let dataurl = URL.createObjectURL(
             new Blob([ chunk.data ], { type: 'audio/ogg' })
+        );
+        
+        return (
+            <>
+                <div>
+                    <audio controls src={ dataurl } />
+                </div>
+            </>
+        );
+    }
+    
+    export function DCMP3({ chunk, resentry }: { chunk:Chunk, resentry:CTypes.CTResIndexEntry|undefined })
+    {
+        let dataurl = URL.createObjectURL(
+            new Blob([ chunk.data ], { type: 'audio/mp3' })
         );
         
         return (
