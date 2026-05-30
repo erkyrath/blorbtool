@@ -1,4 +1,5 @@
 
+import { U8Array } from './datutil';
 import { u8ToString } from './datutil';
 
 /* Utility functions for parsing image data. */
@@ -10,7 +11,7 @@ export type ImageRatio = { numerator:number, denominator:number };
 /* Given a PNG file, extract its dimensions. Return a {width,height}
    object, or undefined on error. 
 */
-export function find_dimensions_png(arr: Uint8Array) : ImageSize|undefined
+export function find_dimensions_png(arr: U8Array) : ImageSize|undefined
 {
     let pos = 0;
     if (arr[0] != 0x89 || u8ToString(arr.slice(1,4)) != 'PNG') {
@@ -44,7 +45,7 @@ export function find_dimensions_png(arr: Uint8Array) : ImageSize|undefined
    (This does not account for EXIF orientation tags. I may need to fix
    that eventually.)
 */
-export function find_dimensions_jpeg(arr: Uint8Array) : ImageSize|undefined
+export function find_dimensions_jpeg(arr: U8Array) : ImageSize|undefined
 {
     let pos = 0;
     while (pos < arr.length) {
