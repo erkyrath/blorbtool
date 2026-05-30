@@ -120,7 +120,7 @@ function check_chunk_RIdx(blorb: Blorb, chunk: CTypes.CTResIndex, errors: Error[
             }
         }
         if (ent.usage == 'Snd ') {
-            if (chu.type.stype != 'OGGV'
+            if (chu.type.stype != 'OGGV' && chu.type.stype != 'MOD '
                 && !(chu.type.stype == 'FORM' && chu.formtype && chu.formtype.stype == 'AIFF')) {
                 errors.push(chunkerr(`Resource index refers to ${ent.usage} #${ent.resnum}, but the chunk does not appear to be audio.`, chu));
             }
