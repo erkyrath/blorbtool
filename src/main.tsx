@@ -8,6 +8,7 @@ import { blorb_resentry_for_chunk } from './blorb';
 import { parse_blorb, new_blorb_with_index } from './parseblorb';
 import { BlorbEditCmd, blorb_apply_change } from './editblorb';
 import { pretty_size } from './readable';
+import { U8Array } from './datutil';
 
 import { AltDisplay, ModalForm, LoadBlorbAction, ContextContent } from './contexts';
 import { ReactCtx } from './contexts';
@@ -36,7 +37,7 @@ let initialLoader = false;
    If blorbdata is provided, we parse it into a Blorb object and stash
    it as the initial Blorb to display. (With optional filename attached.)
  */
-export function init(blorbdata: Uint8Array<ArrayBuffer>|undefined, filename: string|undefined)
+export function init(blorbdata: U8Array|undefined, filename: string|undefined)
 {
     //TODO: maybe fix up filename? Remove .js, add .blb
     

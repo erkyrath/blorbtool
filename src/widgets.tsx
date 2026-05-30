@@ -3,6 +3,7 @@ import { useContext } from 'react';
 
 import { Chunk, chunk_readable_desc } from './chunk';
 import { blorb_chunk_for_key, blorb_resentry_for_chunk } from './blorb';
+import { U8Array } from './datutil';
 
 import { ReactCtx } from './contexts';
 
@@ -97,7 +98,7 @@ export function ShortArrowToChunk({ destkey }: { destkey:number })
 
 /* A clickable arrow for downloading data.
  */
-export function ArrowDownload({ data, filename, mimetype }: { data:Uint8Array<ArrayBuffer>, filename:string, mimetype:string })
+export function ArrowDownload({ data, filename, mimetype }: { data:U8Array, filename:string, mimetype:string })
 {
     let dataurl = URL.createObjectURL(
         new Blob([ data ], { type: mimetype })

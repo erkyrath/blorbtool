@@ -1,3 +1,4 @@
+import { U8Array } from './datutil';
 import { u8ToString, u16ToString, utf8ToString, stringToUtf8, stringToU8 } from './datutil';
 import { u8read4, u8write4, u8readfloat80 } from './datutil';
 import { ImageSize, ImageRatio, find_dimensions_png, find_dimensions_jpeg } from './imgutil';
@@ -11,16 +12,16 @@ import { Blorb, blorb_resentry_for_chunk } from './blorb';
 */
 export type ChunkType = {
     stype: string; // four characters
-    utype: Uint8Array<ArrayBuffer>; // four bytes
+    utype: U8Array; // four bytes
 }
 
 /* Polymorphous utility: convert a four-character string *or* a four-byte
    array into a ChunkType.
 */
-function make_chunk_type(type:string|Uint8Array<ArrayBuffer>) : ChunkType
+function make_chunk_type(type:string|U8Array) : ChunkType
 {
     let stype: string;
-    let utype: Uint8Array<ArrayBuffer>;
+    let utype: U8Array;
     
     if (typeof type === 'string') {
         stype = type;
@@ -57,7 +58,7 @@ export interface Chunk {
     type: ChunkType;
     formtype: ChunkType|undefined, // set if type is 'FORM'
 
-    data: Uint8Array<ArrayBuffer>;
+    data: U8Array;
 
     // These values are recomputed every time the blorb updates.
     index: number;
@@ -210,7 +211,7 @@ type ChunkWithErrors = [ Chunk, string[] ];
    at this point. Also the initial position, if we are loading from a
    file.
 */
-function new_chunk_noinit(type:string|Uint8Array<ArrayBuffer>, data:Uint8Array<ArrayBuffer>, origpos?:number) : Chunk
+function new_chunk_noinit(type:string|U8Array, data:U8Array, origpos?:number) : Chunk
 {
     let ctype = make_chunk_type(type);
     
@@ -229,7 +230,7 @@ function new_chunk_noinit(type:string|Uint8Array<ArrayBuffer>, data:Uint8Array<A
 /* Create a chunk from data (bytes). Load up the type-specific contents
    by parsing that data.
 */
-export function new_chunk(type:string|Uint8Array<ArrayBuffer>, data:Uint8Array<ArrayBuffer>, origpos?:number) : ChunkWithErrors
+export function new_chunk(type:string|U8Array, data:U8Array, origpos?:number) : ChunkWithErrors
 {
     let chunk = new_chunk_noinit(type, data, origpos);
 

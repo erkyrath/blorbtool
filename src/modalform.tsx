@@ -4,6 +4,7 @@ import { useState, useContext, useRef, useMemo } from 'react';
 import { chunk_filename_info, selectable_chunk_types, chunk_type_is_singleton } from './chunk';
 import { blorb_get_data, blorb_chunk_for_key, blorb_resentry_for_key, blorb_first_chunk_for_type } from './blorb';
 import { pretty_size } from './readable';
+import { U8Array } from './datutil';
 import { u8ToString } from './datutil';
 import { determine_file_type, filetype_readable_desc, filetype_to_chunktype } from './fileutil';
 
@@ -277,7 +278,7 @@ function ModalAddChunk()
     );
 }
 
-function ModalAddChunkThen({ filename, data }: { filename:string, data:Uint8Array<ArrayBuffer> })
+function ModalAddChunkThen({ filename, data }: { filename:string, data:U8Array })
 {
     let rctx = useContext(ReactCtx);
     let blorb = rctx.blorb;
@@ -302,7 +303,7 @@ function ModalAddChunkThen({ filename, data }: { filename:string, data:Uint8Arra
         );
     });
 
-    function validate(chunktype: string, data: Uint8Array<ArrayBuffer>) : { cansave:boolean, mustreplace:boolean, error:string } {
+    function validate(chunktype: string, data: U8Array) : { cansave:boolean, mustreplace:boolean, error:string } {
         if (chunktype.length > 4) {
             let formtype = u8ToString(data, 8, 4);
             if (!chunktype.startsWith('FORM') || chunktype.slice(5) != formtype) {

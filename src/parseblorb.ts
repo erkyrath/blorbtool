@@ -1,3 +1,4 @@
+import { U8Array } from './datutil';
 import { u8ToString, u8read4 } from './datutil';
 import { Chunk, new_chunk, new_chunk_RIdx_empty } from './chunk';
 import { Blorb, new_blorb } from './blorb';
@@ -18,7 +19,7 @@ export function new_blorb_with_index() : Blorb
     return blorb;
 }
 
-export function parse_blorb(dat: Uint8Array<ArrayBuffer>, filename?: string) : Blorb
+export function parse_blorb(dat: U8Array, filename?: string) : Blorb
 {
     let pos = 0;
     const len = dat.length;

@@ -2,6 +2,7 @@ import { createContext } from 'react';
 
 import { Blorb, new_blorb } from './blorb';
 import { BlorbEditCmd } from './editblorb';
+import { U8Array } from './datutil';
 
 /* React context objects. See MyApp() for how these are set up.
  */
@@ -10,7 +11,7 @@ import { BlorbEditCmd } from './editblorb';
 export type AltDisplay = 'about' | 'errors' | null;
 export type ChunkCmd = 'download' | 'delete' | null;
 
-export type LoadBlorbAction = { filename:string, data:Uint8Array<ArrayBuffer> } | undefined;
+export type LoadBlorbAction = { filename:string, data:U8Array } | undefined;
 
 /* The type that describes the current modal dialogue box. */
 export type ModalForm = (
@@ -19,7 +20,7 @@ export type ModalForm = (
     | { type:'delchunk', key:number }
     | { type:'fetchblorb' }
     | { type:'addchunk' }
-    | { type:'addchunkthen', filename:string, data:Uint8Array<ArrayBuffer> }
+    | { type:'addchunkthen', filename:string, data:U8Array }
     | { type:'changefrontis', oldkey:number, key:number }
 );
 

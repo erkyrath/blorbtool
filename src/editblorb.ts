@@ -5,6 +5,7 @@ import { Blorb } from './blorb';
 import { blorb_chunk_for_key, blorb_first_chunk_for_type, blorb_resentry_for_chunk, blorb_resentry_for_key } from './blorb';
 import { blorb_clear_errors, blorb_update_index_entries, blorb_delete_chunk_by_key, blorb_add_chunk, blorb_addreplace_chunk } from './blorb';
 import { check_blorb_consistency } from './checkblorb';
+import { U8Array } from './datutil';
 
 export type BlorbEditCmd = (
     null 
@@ -14,7 +15,7 @@ export type BlorbEditCmd = (
     | { type:'setfrontis', refkey:number }
     | { type:'setresdesc', usage:CTypes.ChunkUsage, resnum:number, text:string }
     | { type:'delresoentry', resnum:number }
-    | { type:'addchunk', chunktype:string, data:Uint8Array<ArrayBuffer> }
+    | { type:'addchunk', chunktype:string, data:U8Array }
 );
 
 export function blorb_apply_change(blorb: Blorb, act: BlorbEditCmd) : Blorb
@@ -226,7 +227,7 @@ function editblorb_delete_resolution_entry(blorb: Blorb, resnum: number) : Blorb
     return newblorb;
 }
 
-function editblorb_add_chunk(blorb: Blorb, chunktype: string, data: Uint8Array<ArrayBuffer>) : Blorb
+function editblorb_add_chunk(blorb: Blorb, chunktype: string, data: U8Array) : Blorb
 {
     let [ chunk, chunkerrors ] = new_chunk(chunktype, data);
 
