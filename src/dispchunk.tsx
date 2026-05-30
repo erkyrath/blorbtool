@@ -516,10 +516,15 @@ export namespace DispChunks {
     
     export function DCOggV({ chunk, resentry }: { chunk:Chunk, resentry:CTypes.CTResIndexEntry|undefined })
     {
+        let dataurl = URL.createObjectURL(
+            new Blob([ chunk.data ], { type: 'audio/ogg' })
+        );
+        
         return (
             <>
-                <ul className="InfoList">
-                </ul>
+                <div>
+                    <audio controls src={ dataurl } />
+                </div>
             </>
         );
     }
