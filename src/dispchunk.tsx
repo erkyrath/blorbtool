@@ -514,6 +514,7 @@ export namespace DispChunks {
                 <div>
                     <audio controls src={ dataurl } />
                 </div>
+                <p><i>(Many browsers don't support direct AIFF playback.)</i></p>
             </>
         );
     }
