@@ -58,8 +58,6 @@ Only React is part of the final runnable app. Typescript and Rollup are used onl
 Thanks to copious config files, the process of building is very simple. Just type:
 
 ```
-npm install
-npm run build
+pnpm install
+pnpm run build
 ```
-
-
