@@ -44,6 +44,8 @@ export function DisplayChunkFormatted({ blorb, chunk }: { blorb:Blorb, chunk:Chu
         return <DispChunks.DCImage chunk={ chunk as CTypes.CTImage } resentry={ resentry } />
     case 'OGGV':
         return <DispChunks.DCOggV chunk={ chunk } resentry={ resentry } />
+    case 'MOD ':
+        return <DispChunks.DCMOD chunk={ chunk } resentry={ resentry } />
     case 'RelN':
         return <DispChunks.DCReleaseNumber chunk={ chunk as CTypes.CTReleaseNumber } />
     case 'Reso':
@@ -525,6 +527,14 @@ export namespace DispChunks {
                 <div>
                     <audio controls src={ dataurl } />
                 </div>
+            </>
+        );
+    }
+    
+    export function DCMOD({ chunk, resentry }: { chunk:Chunk, resentry:CTypes.CTResIndexEntry|undefined })
+    {
+        return (
+            <>
             </>
         );
     }
