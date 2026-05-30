@@ -32,7 +32,7 @@ export function u8ToString(arr: U8Array,
 
 /* Byte array to string. We assume the byte array encodes pairs of
    bytes, each pair being a 16-bit character. */
-export function u16ToString(arr: Uint8Array)
+export function u16ToString(arr: U8Array)
 {
     let chars: number[] = [];
     for (let ix=0; ix<arr.length; ix += 2) {
@@ -42,27 +42,27 @@ export function u16ToString(arr: Uint8Array)
 }
 
 /* Byte array to string. We assume the byte array is UTF-8. */
-export function utf8ToString(arr: Uint8Array)
+export function utf8ToString(arr: U8Array)
 {
     let td = new TextDecoder();
     return td.decode(arr);
 }
 
 /* String to byte array, UTF-8. */
-export function stringToUtf8(str: string) : Uint8Array
+export function stringToUtf8(str: string) : U8Array
 {
     let te = new TextEncoder();
     return te.encode(str);
 }
 
 /* Read a 32-bit integer from a given location in a byte array. */
-export function u8read4(arr: Uint8Array, pos: number) : number
+export function u8read4(arr: U8Array, pos: number) : number
 {
     return arr[pos] * 0x1000000 + arr[pos+1] * 0x10000 + arr[pos+2] * 0x100 + arr[pos+3];
 }
 
 /* Write a 32-bit integer to a given location in a byte array. */
-export function u8write4(arr: Uint8Array, pos: number, val: number)
+export function u8write4(arr: U8Array, pos: number, val: number)
 {
     arr[pos] = (val >>> 24) & 0xFF;
     arr[pos+1] = (val >>> 16) & 0xFF;
@@ -73,7 +73,7 @@ export function u8write4(arr: Uint8Array, pos: number, val: number)
 /* Read a ten-byte (80-bit) float from a given location in a byte array.
    This is a quick hack; it does not deal with denormals, infinities,
    or NaN. */
-export function u8readfloat80(arr: Uint8Array, pos: number) : number
+export function u8readfloat80(arr: U8Array, pos: number) : number
 {
     let sign = arr[pos+0] & 0x80;
     let expo = (0x100 * (arr[pos+0] & 0x7F) + arr[pos+1]) - 0x3FFF;
@@ -110,7 +110,7 @@ export function u8ToBase64URL(arr: U8Array) : Promise<string|ArrayBuffer|null>
 
 /* Quick and dirty check for whether a byte array is probably
    ASCII text. */
-export function looksLikeAscii(data: Uint8Array) : boolean
+export function looksLikeAscii(data: U8Array) : boolean
 {
     let arr = [ ...data.slice(0, 16) ];
     return arr.every((ch) => {

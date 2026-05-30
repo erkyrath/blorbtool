@@ -1,4 +1,4 @@
-import { U8Array } from './datutil';
+import { U8Array, createU8 } from './datutil';
 import { u8ToString, u16ToString, utf8ToString, stringToUtf8, stringToU8 } from './datutil';
 import { u8read4, u8write4, u8readfloat80 } from './datutil';
 import { ImageSize, ImageRatio, find_dimensions_png, find_dimensions_jpeg } from './imgutil';
@@ -303,7 +303,7 @@ function new_chunk_FORM(chunk: Chunk) : ChunkWithErrors
 export type IFFChunk = {
     chunktype: ChunkType;
     formtype: ChunkType|undefined;
-    data: Uint8Array;
+    data: U8Array;
     children?: IFFChunk[];
 }
 
@@ -313,7 +313,7 @@ export type IFFChunk = {
    on top of this code. But I didn't! Sorry. It's pretty tiny,
    anyhow.
 */
-export function parse_iff_form_chunks(dat: Uint8Array) : IFFChunk[]
+export function parse_iff_form_chunks(dat: U8Array) : IFFChunk[]
 {
     let chunks: IFFChunk[] = [];
 
@@ -330,7 +330,7 @@ export function parse_iff_form_chunks(dat: Uint8Array) : IFFChunk[]
         let formtype: ChunkType|undefined;
         let children: IFFChunk[]|undefined;
         
-        let cdat: Uint8Array;
+        let cdat: U8Array;
         if (ctype == 'FORM') {
             cdat = dat.slice(cpos, pos+clen);
             formtype = make_chunk_type(cdat.slice(8, 12));
@@ -382,7 +382,7 @@ function new_chunk_FORM_AIFF(chunk: CTypes.CTForm, errors: string[]) : ChunkWith
 */
 export function new_chunk_RIdx_empty() : ChunkWithErrors
 {
-    return new_chunk('RIdx', new Uint8Array(4));
+    return new_chunk('RIdx', createU8(4));
 }
 
 /* Create an index chunk from data (bytes).
@@ -444,7 +444,7 @@ function new_chunk_Fspc(chunk: Chunk) : ChunkWithErrors
 */
 export function new_chunk_Fspc_with(picnum: number) : Chunk
 {
-    let data = new Uint8Array(4);
+    let data = createU8(4);
     u8write4(data, 0, picnum);
     
     let chunk = new_chunk_noinit('Fspc', data);
@@ -491,7 +491,7 @@ function new_chunk_RDes(chunk: Chunk) : ChunkWithErrors
 */
 export function new_chunk_RDes_with(entries: CTypes.CTResDescEntry[]) : Chunk
 {
-    let datals: Uint8Array[] = [];
+    let datals: U8Array[] = [];
 
     let usagemap: Map<string, string> = new Map();
     let len = 4;
@@ -502,7 +502,7 @@ export function new_chunk_RDes_with(entries: CTypes.CTResDescEntry[]) : Chunk
         usagemap.set(ent.usage+':'+ent.resnum, ent.text);
     }
 
-    let data = new Uint8Array(len);
+    let data = createU8(len);
 
     u8write4(data, 0, entries.length);
     let counter = 0;
@@ -530,7 +530,7 @@ export function new_chunk_RDes_with(entries: CTypes.CTResDescEntry[]) : Chunk
  */
 export function new_chunk_RDes_empty() : ChunkWithErrors
 {
-    return new_chunk('RDes', new Uint8Array(4));
+    return new_chunk('RDes', createU8(4));
 }
 
 /* Create a metadata chunk from data (bytes).
@@ -679,7 +679,7 @@ function new_chunk_Reso(chunk: Chunk) : ChunkWithErrors
 export function new_chunk_Reso_with(window: CTypes.CTResolutionWindow, entries: CTypes.CTResolutionEntry[]) : Chunk
 {
     let len = 24 + 28*entries.length;
-    let data = new Uint8Array(len);
+    let data = createU8(len);
 
     u8write4(data, 0, window.winsize.width);
     u8write4(data, 4, window.winsize.height);

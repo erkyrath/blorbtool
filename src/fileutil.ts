@@ -1,3 +1,4 @@
+import { U8Array } from './datutil';
 import { u8ToString, looksLikeAscii } from './datutil';
 import { find_dimensions_png, find_dimensions_jpeg } from './imgutil';
 
@@ -92,7 +93,7 @@ export type FileTypeGuess = {
    The return structure has a filetype and possibly an alttype, if
    we have a second-best guess.
 */
-export function determine_file_type(filename: string, data: Uint8Array) : FileTypeGuess
+export function determine_file_type(filename: string, data: U8Array) : FileTypeGuess
 {
     let fnguess: string|undefined;
     let datguess: string|undefined;
